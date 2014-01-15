@@ -1,61 +1,61 @@
-#include "testApp.h"
+#include "ReactiveSpaceApp.h"
 
 //--------------------------------------------------------------
-void testApp::setup(){
+void ReactiveSpaceApp::setup(){
 
 }
 
 //--------------------------------------------------------------
-void testApp::update(){
+void ReactiveSpaceApp::update(){
 
 }
 
 //--------------------------------------------------------------
-void testApp::draw(){
+void ReactiveSpaceApp::draw(){
 
 }
 
 //--------------------------------------------------------------
-void testApp::keyPressed(int key){
+void ReactiveSpaceApp::keyPressed(int key){
 
 }
 
 //--------------------------------------------------------------
-void testApp::keyReleased(int key){
+void ReactiveSpaceApp::keyReleased(int key){
 
 }
 
 //--------------------------------------------------------------
-void testApp::mouseMoved(int x, int y ){
+void ReactiveSpaceApp::mouseMoved(int x, int y){
 
 }
 
 //--------------------------------------------------------------
-void testApp::mouseDragged(int x, int y, int button){
+void ReactiveSpaceApp::mouseDragged(int x, int y, int button){
 
 }
 
 //--------------------------------------------------------------
-void testApp::mousePressed(int x, int y, int button){
+void ReactiveSpaceApp::mousePressed(int x, int y, int button){
 
 }
 
 //--------------------------------------------------------------
-void testApp::mouseReleased(int x, int y, int button){
+void ReactiveSpaceApp::mouseReleased(int x, int y, int button){
 
 }
 
 //--------------------------------------------------------------
-void testApp::windowResized(int w, int h){
+void ReactiveSpaceApp::windowResized(int w, int h){
 
 }
 
 //--------------------------------------------------------------
-void testApp::gotMessage(ofMessage msg){
+void ReactiveSpaceApp::gotMessage(ofMessage msg){
 
 }
 
 //--------------------------------------------------------------
-void testApp::dragEvent(ofDragInfo dragInfo){ 
+void ReactiveSpaceApp::dragEvent(ofDragInfo dragInfo){
 
 }
