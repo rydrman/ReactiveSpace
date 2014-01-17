@@ -90,8 +90,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\ReactiveSpaceApp.cpp" />
     <ClCompile Include="..\..\..\addons\ofxKinect\src\ofxKinect.cpp" />
     <ClCompile Include="..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\libusb10emu\libusb-1.0\failguard.cpp" />
     <ClCompile Include="..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\libusb10emu\libusb-1.0\libusbemu.cpp" />
@@ -107,9 +105,13 @@
     <ClCompile Include="..\..\..\addons\ofxOpenCv\src\ofxCvHaarFinder.cpp" />
     <ClCompile Include="..\..\..\addons\ofxOpenCv\src\ofxCvImage.cpp" />
     <ClCompile Include="..\..\..\addons\ofxOpenCv\src\ofxCvShortImage.cpp" />
+    <ClCompile Include="src\FirstScene.cpp" />
+    <ClCompile Include="src\IScene.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Particle.cpp" />
+    <ClCompile Include="src\ReactiveSpaceApp.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\ReactiveSpaceApp.h" />
     <ClInclude Include="..\..\..\addons\ofxKinect\src\ofxBase3DVideo.h" />
     <ClInclude Include="..\..\..\addons\ofxKinect\src\ofxKinect.h" />
     <ClInclude Include="..\..\..\addons\ofxKinect\libs\libfreenect\include\libfreenect-registration.h" />
@@ -221,6 +223,9 @@
     <ClInclude Include="..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\video\background_segm.hpp" />
     <ClInclude Include="..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\video\tracking.hpp" />
     <ClInclude Include="..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\video\video.hpp" />
+    <ClInclude Include="src\FirstScene.h" />
+    <ClInclude Include="src\IScene.h" />
+    <ClInclude Include="src\ReactiveSpaceApp.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\libs\openFrameworksCompiled\project\vs\openframeworksLib.vcxproj">

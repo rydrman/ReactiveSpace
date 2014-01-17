@@ -1,8 +1,19 @@
 #pragma once
 
 #include "ofMain.h"
+#include <vector>
+#include "IScene.h"
+#include "FirstScene.h"
+#include "Particle.cpp"
+
+using std::vector;
 
 class ReactiveSpaceApp : public ofBaseApp{
+
+	vector<Particle>* pPeople;
+
+	vector<IScene*> m_scenes;
+	IScene* pCurrentScene;
 
 	public:
 		void setup();
