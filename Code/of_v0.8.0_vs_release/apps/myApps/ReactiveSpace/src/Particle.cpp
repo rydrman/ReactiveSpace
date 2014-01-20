@@ -4,4 +4,5 @@
 
 struct Particle {
 	ofPoint pos;
+	ofVec3f speed;
 };
