@@ -46,11 +46,11 @@
     <ClCompile Include="..\..\..\addons\ofxKinect\libs\libfreenect\src\usb_libusb10.c">
       <Filter>Addons</Filter>
     </ClCompile>
-    <ClCompile Include="src\FirstScene.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ReactiveSpaceApp.cpp" />
     <ClCompile Include="src\IScene.cpp" />
     <ClCompile Include="src\Particle.cpp" />
+    <ClCompile Include="src\GridScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\flann\all_indices.h">
@@ -386,9 +386,9 @@
     <ClInclude Include="..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\core\wimage.hpp">
       <Filter>Addons</Filter>
     </ClInclude>
-    <ClInclude Include="src\FirstScene.h" />
     <ClInclude Include="src\ReactiveSpaceApp.h" />
     <ClInclude Include="src\IScene.h" />
+    <ClInclude Include="src\GridScene.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Addons">

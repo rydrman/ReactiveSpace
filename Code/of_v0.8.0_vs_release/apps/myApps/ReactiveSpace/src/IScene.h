@@ -13,7 +13,7 @@ public:
 	IScene(vector<Particle>* people);
 	
 	virtual void Render() = 0;
-	virtual void Update() = 0;
+	virtual void Update(int deltaTime) = 0;
 
 	void OnEnterPassiveUser();
 	void OnUserInteraction();

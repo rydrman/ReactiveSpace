@@ -3,7 +3,7 @@
 #include "ofMain.h"
 #include <vector>
 #include "IScene.h"
-#include "FirstScene.h"
+#include "GridScene.h"
 #include "Particle.cpp"
 
 using std::vector;

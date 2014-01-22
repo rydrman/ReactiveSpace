@@ -10,7 +10,7 @@ void ReactiveSpaceApp::setup()
 
 	pPeople = new vector<Particle>();
 
-	m_scenes.push_back(new FirstScene(pPeople));
+	m_scenes.push_back(new GridScene(pPeople));
 
 	pCurrentScene = m_scenes[0];
 }
@@ -55,11 +55,19 @@ void ReactiveSpaceApp::update(){
 
 	//set last step time to current time
 	stepTimeLast = stepTime;
+
+	//step scene
+	pCurrentScene->Update(stepTimeDelta);
 }
 
 //--------------------------------------------------------------
 void ReactiveSpaceApp::draw(){
 	pCurrentScene->Render();
+
+	//debug stuff
+	ofSetColor(200, 255, 0, 255);
+	ofFill();
+	ofDrawBitmapString("Framerate: " + ofToString(ofGetFrameRate(), 2), 10.f, 10.f);
 }
 
 //--------------------------------------------------------------

@@ -105,7 +105,7 @@
     <ClCompile Include="..\..\..\addons\ofxOpenCv\src\ofxCvHaarFinder.cpp" />
     <ClCompile Include="..\..\..\addons\ofxOpenCv\src\ofxCvImage.cpp" />
     <ClCompile Include="..\..\..\addons\ofxOpenCv\src\ofxCvShortImage.cpp" />
-    <ClCompile Include="src\FirstScene.cpp" />
+    <ClCompile Include="src\GridScene.cpp" />
     <ClCompile Include="src\IScene.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Particle.cpp" />
@@ -223,7 +223,7 @@
     <ClInclude Include="..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\video\background_segm.hpp" />
     <ClInclude Include="..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\video\tracking.hpp" />
     <ClInclude Include="..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\video\video.hpp" />
-    <ClInclude Include="src\FirstScene.h" />
+    <ClInclude Include="src\GridScene.h" />
     <ClInclude Include="src\IScene.h" />
     <ClInclude Include="src\ReactiveSpaceApp.h" />
   </ItemGroup>
