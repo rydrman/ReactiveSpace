@@ -8,7 +8,7 @@ GridScene::GridScene(vector<Particle>* people)
 	int screenHeight = ofGetScreenHeight();
 	int screenWidth = ofGetScreenWidth();
 	float scale = screenHeight * screenWidth;
-	float particleSize = sqrt(scale) / 80.f;
+	float particleSize = sqrt(scale) / 60.f;
 
 	m_gridWidth = floor(screenWidth / particleSize);
 	m_gridHeight = floor(screenHeight / particleSize);
@@ -71,8 +71,8 @@ void GridScene::Render()
 	//draw grid
 	for (vector<BirdParticle>::iterator p = m_particleList.begin(); p != m_particleList.end(); ++p)
 	{
-		int alpha = ofNoise(p->noiseX) * 255;
-		ofSetColor(alpha); 
+		int col = ofNoise(p->noiseX) * 255;
+		ofSetColor(col); 
 		ofFill();
 
 		ofCircle(p->pos, p->rad);
@@ -83,7 +83,7 @@ void GridScene::Update(int deltaTime)
 {
 	for (vector<BirdParticle>::iterator p = m_particleList.begin(); p != m_particleList.end(); ++p)
 	{
-		p->noiseX += deltaTime/1000.f;
+		p->noiseX += deltaTime / 10000.f;
 	}
 }
 
