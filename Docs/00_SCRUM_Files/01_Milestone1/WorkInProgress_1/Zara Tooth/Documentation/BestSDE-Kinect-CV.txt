@@ -1,0 +1,3 @@
+Best SDE for our project - Visual Studio, since we will be using OpenFrameworks. We are going to work within Visual Studio 2013, but to run the Kinect SDK we need the compilers for 2012.  
+Kinect library to use - Kinect SDK
+Computer Vision Library to use - Open CV, since it works the best with OpenFrameworks
