@@ -2,8 +2,8 @@
 #include "ofMain.h"
 
 
-GridScene::GridScene(vector<Particle>* people)
-: IScene(people)
+GridScene::GridScene(vector<Particle>* people, vector<Vector4>* hands)
+: IScene(people, hands)
 {
 	int screenHeight = ofGetScreenHeight();
 	int screenWidth = ofGetScreenWidth();
@@ -43,39 +43,25 @@ void GridScene::Render()
 {
 	ofBackground(0, 255);
 
-	//for (vector<Particle>::iterator p = pPeople->begin(); p != pPeople->end(); ++p)
-	//{
-	//	ofSetColor(255);
-	//	ofFill();
-	//	ofCircle(p->pos, 10.f);
-
-	//	//create connections
-	//	ofPath connections = ofPath();
-	//	connections.setStrokeColor(ofColor(255));
-	//	connections.setStrokeWidth(3.f);
-	//	connections.setMode(ofPath::POLYLINES);
-	//	for (vector<Particle>::iterator p2 = pPeople->begin(); p2 != pPeople->end(); ++p2)
-	//	{
-	//		if (p < p2
-	//			&& p->pos.squareDistance(p2->pos) < 80000)
-	//		{
-	//			connections.moveTo(p->pos);
-	//			connections.lineTo(p2->pos);
-	//		}
-	//	}
-
-	//	//draw connections
-	//	connections.draw();
-	//}
-
 	//draw grid
-	for (vector<BirdParticle>::iterator p = m_particleList.begin(); p != m_particleList.end(); ++p)
+	/*for (vector<BirdParticle>::iterator p = m_particleList.begin(); p != m_particleList.end(); ++p)
 	{
 		int col = ofNoise(p->noiseX) * 255;
 		ofSetColor(col); 
 		ofFill();
 
 		ofCircle(p->pos, p->rad);
+	}*/
+
+	//draw hands
+	for (vector<Vector4>::iterator h = pHandPositions->begin(); h != pHandPositions->end(); ++h)
+	{
+		ofSetColor(255, 0, 0, 255);
+		ofFill();
+
+		ofPoint pos = ofPoint( h->x * ofGetScreenWidth(), h->y * ofGetScreenHeight() );
+
+		ofCircle(pos, 50);
 	}
 }
 

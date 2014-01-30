@@ -15,7 +15,7 @@ class GridScene : public IScene
 	BirdParticle** m_particleGrid;
 
 public:
-	GridScene(vector<Particle>* people);
+	GridScene(vector<Particle>* people, vector<Vector4>* hands);
 	
 	virtual void Render();
 	virtual void Update(int deltaTime);

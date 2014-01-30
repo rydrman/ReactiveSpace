@@ -9,14 +9,17 @@ void ReactiveSpaceApp::setup()
 	stepTimeLast = ofGetElapsedTimeMillis();
 	crowdLastGenerated = 0;
 
+	//open CV stuff
 	pPeople = new vector<Particle>();
 
-	m_scenes.push_back(new GridScene(pPeople));
-
-	pCurrentScene = m_scenes[0];
-
 	//kinect
+	pHandPositions = new vector<Vector4>();
 	kinectManager = new KinectManager();
+	kinectManager->initialize();
+
+	//fill scene vector
+	m_scenes.push_back(new GridScene(pPeople, pHandPositions));
+	pCurrentScene = m_scenes[0];
 }
 
 //--------------------------------------------------------------
@@ -27,12 +30,11 @@ void ReactiveSpaceApp::update()
 	stepTimeDelta = stepTime - stepTimeLast;
 
 	//update kinect
-	HRESULT hr = kinectManager->update( stepTimeDelta );
+	HRESULT hr = kinectManager->update( stepTimeDelta, pHandPositions );
 
 	if (FAILED(hr))
 	{
 		//do something so user knows
-		cout << "kinect is broken... :(";
 	}
 
 	//simulate crowd if necessary

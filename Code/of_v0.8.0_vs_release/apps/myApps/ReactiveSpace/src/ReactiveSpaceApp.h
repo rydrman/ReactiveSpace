@@ -25,6 +25,7 @@ class ReactiveSpaceApp : public ofBaseApp{
 
 	//for kinect
 	KinectManager* kinectManager;
+	vector<Vector4>* pHandPositions;
 	
 	//for crowd simulation
 	int crowdLastGenerated;
