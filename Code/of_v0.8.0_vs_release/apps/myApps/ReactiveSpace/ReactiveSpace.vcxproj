@@ -43,6 +43,7 @@
     <TargetName>$(ProjectName)_debug</TargetName>
     <LinkIncremental>true</LinkIncremental>
     <GenerateManifest>true</GenerateManifest>
+    <IncludePath>$(KINECTSDK10_DIR)\inc;$(KINECTSDK10_DIR)\lib\x86;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>bin\</OutDir>
@@ -58,16 +59,15 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\..\addons\ofxKinect\libs;..\..\..\addons\ofxKinect\src;..\..\..\addons\ofxKinect\libs\libfreenect;..\..\..\addons\ofxKinect\libs\libfreenect\include;..\..\..\addons\ofxKinect\libs\libfreenect\platform;..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows;..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\inf;..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\inf\xbox nui audio;..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\inf\xbox nui audio\amd64;..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\inf\xbox nui audio\ia64;..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\inf\xbox nui audio\license;..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\inf\xbox nui audio\license\libusb-win32;..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\inf\xbox nui audio\x86;..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\inf\xbox nui camera;..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\inf\xbox nui camera\amd64;..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\inf\xbox nui camera\ia64;..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\inf\xbox nui camera\license;..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\inf\xbox nui camera\license\libusb-win32;..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\inf\xbox nui camera\x86;..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\inf\xbox nui motor;..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\inf\xbox nui motor\amd64;..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\inf\xbox nui motor\ia64;..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\inf\xbox nui motor\license;..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\inf\xbox nui motor\license\libusb-win32;..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\inf\xbox nui motor\x86;..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\libusb10emu;..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\libusb10emu\libusb-1.0;..\..\..\addons\ofxKinect\libs\libfreenect\src;..\..\..\addons\ofxKinect\libs\libusb-1.0;..\..\..\addons\ofxKinect\libs\libusb-1.0\include;..\..\..\addons\ofxKinect\libs\libusb-1.0\include\libusb-1.0;..\..\..\addons\ofxKinect\libs\libusb-1.0\lib;..\..\..\addons\ofxKinect\libs\libusb-win32;..\..\..\addons\ofxKinect\libs\libusb-win32\include;..\..\..\addons\ofxKinect\libs\libusb-win32\lib;..\..\..\addons\ofxKinect\libs\libusb-win32\lib\vs;..\..\..\addons\ofxOpenCv\libs;..\..\..\addons\ofxOpenCv\src;..\..\..\addons\ofxOpenCv\libs\opencv;..\..\..\addons\ofxOpenCv\libs\opencv\include;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\calib3d;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\contrib;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\core;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\features2d;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\flann;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\gpu;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\highgui;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\imgproc;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\legacy;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\ml;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\objdetect;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\ts;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\video;..\..\..\addons\ofxOpenCv\libs\opencv\lib;..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\..\addons\ofxOpenCv\libs;..\..\..\addons\ofxOpenCv\src;..\..\..\addons\ofxOpenCv\libs\opencv;..\..\..\addons\ofxOpenCv\libs\opencv\include;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\calib3d;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\contrib;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\core;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\features2d;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\flann;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\gpu;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\highgui;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\imgproc;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\legacy;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\ml;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\objdetect;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\ts;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\video;..\..\..\addons\ofxOpenCv\libs\opencv\lib;..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs;$(KINECTSDK10_DIR)\include</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
-      <AdditionalDependencies>%(AdditionalDependencies);libusbd.lib;opencv_calib3d231d.lib;opencv_contrib231d.lib;opencv_core231d.lib;opencv_features2d231d.lib;opencv_flann231d.lib;opencv_gpu231d.lib;opencv_haartraining_engined.lib;opencv_highgui231d.lib;opencv_imgproc231d.lib;opencv_legacy231d.lib;opencv_ml231d.lib;opencv_objdetect231d.lib;opencv_video231d.lib;zlibd.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);..\..\..\addons\ofxKinect\libs\libusb-win32\lib\vs;..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs</AdditionalLibraryDirectories>
-      <Profile>true</Profile>
+      <AdditionalDependencies>%(AdditionalDependencies);opencv_calib3d231d.lib;opencv_contrib231d.lib;opencv_core231d.lib;opencv_features2d231d.lib;opencv_flann231d.lib;opencv_gpu231d.lib;opencv_haartraining_engined.lib;opencv_highgui231d.lib;opencv_imgproc231d.lib;opencv_legacy231d.lib;opencv_ml231d.lib;opencv_objdetect231d.lib;opencv_video231d.lib;zlibd.lib;kinect10.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs;$(KINECTSDK10_DIR)\lib\x86</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -76,7 +76,7 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\..\addons\ofxKinect\libs;..\..\..\addons\ofxKinect\src;..\..\..\addons\ofxKinect\libs\libfreenect;..\..\..\addons\ofxKinect\libs\libfreenect\include;..\..\..\addons\ofxKinect\libs\libfreenect\platform;..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows;..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\inf;..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\inf\xbox nui audio;..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\inf\xbox nui audio\amd64;..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\inf\xbox nui audio\ia64;..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\inf\xbox nui audio\license;..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\inf\xbox nui audio\license\libusb-win32;..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\inf\xbox nui audio\x86;..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\inf\xbox nui camera;..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\inf\xbox nui camera\amd64;..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\inf\xbox nui camera\ia64;..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\inf\xbox nui camera\license;..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\inf\xbox nui camera\license\libusb-win32;..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\inf\xbox nui camera\x86;..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\inf\xbox nui motor;..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\inf\xbox nui motor\amd64;..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\inf\xbox nui motor\ia64;..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\inf\xbox nui motor\license;..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\inf\xbox nui motor\license\libusb-win32;..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\inf\xbox nui motor\x86;..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\libusb10emu;..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\libusb10emu\libusb-1.0;..\..\..\addons\ofxKinect\libs\libfreenect\src;..\..\..\addons\ofxKinect\libs\libusb-1.0;..\..\..\addons\ofxKinect\libs\libusb-1.0\include;..\..\..\addons\ofxKinect\libs\libusb-1.0\include\libusb-1.0;..\..\..\addons\ofxKinect\libs\libusb-1.0\lib;..\..\..\addons\ofxKinect\libs\libusb-win32;..\..\..\addons\ofxKinect\libs\libusb-win32\include;..\..\..\addons\ofxKinect\libs\libusb-win32\lib;..\..\..\addons\ofxKinect\libs\libusb-win32\lib\vs;..\..\..\addons\ofxOpenCv\libs;..\..\..\addons\ofxOpenCv\src;..\..\..\addons\ofxOpenCv\libs\opencv;..\..\..\addons\ofxOpenCv\libs\opencv\include;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\calib3d;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\contrib;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\core;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\features2d;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\flann;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\gpu;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\highgui;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\imgproc;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\legacy;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\ml;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\objdetect;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\ts;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\video;..\..\..\addons\ofxOpenCv\libs\opencv\lib;..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\..\addons\ofxOpenCv\libs;..\..\..\addons\ofxOpenCv\src;..\..\..\addons\ofxOpenCv\libs\opencv;..\..\..\addons\ofxOpenCv\libs\opencv\include;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\calib3d;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\contrib;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\core;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\features2d;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\flann;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\gpu;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\highgui;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\imgproc;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\legacy;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\ml;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\objdetect;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\ts;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\video;..\..\..\addons\ofxOpenCv\libs\opencv\lib;..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs;$(KINECTSDK10_DIR)\include</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
@@ -86,19 +86,15 @@
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
-      <AdditionalDependencies>%(AdditionalDependencies);libusb.lib;opencv_calib3d231.lib;opencv_contrib231.lib;opencv_core231.lib;opencv_features2d231.lib;opencv_flann231.lib;opencv_gpu231.lib;opencv_haartraining_engine.lib;opencv_highgui231.lib;opencv_imgproc231.lib;opencv_legacy231.lib;opencv_ml231.lib;opencv_objdetect231.lib;opencv_video231.lib;zlib.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);..\..\..\addons\ofxKinect\libs\libusb-win32\lib\vs;..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies);opencv_calib3d231.lib;opencv_contrib231.lib;opencv_core231.lib;opencv_features2d231.lib;opencv_flann231.lib;opencv_gpu231.lib;opencv_haartraining_engine.lib;opencv_highgui231.lib;opencv_imgproc231.lib;opencv_legacy231.lib;opencv_ml231.lib;opencv_objdetect231.lib;opencv_video231.lib;zlib.lib;kinect10.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs;$(KINECTSDK10_DIR)\lib\x86</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\addons\ofxKinect\src\ofxKinect.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\libusb10emu\libusb-1.0\failguard.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\libusb10emu\libusb-1.0\libusbemu.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxKinect\libs\libfreenect\src\cameras.c" />
-    <ClCompile Include="..\..\..\addons\ofxKinect\libs\libfreenect\src\core.c" />
-    <ClCompile Include="..\..\..\addons\ofxKinect\libs\libfreenect\src\registration.c" />
-    <ClCompile Include="..\..\..\addons\ofxKinect\libs\libfreenect\src\tilt.c" />
-    <ClCompile Include="..\..\..\addons\ofxKinect\libs\libfreenect\src\usb_libusb10.c" />
+    <ClCompile Include="src\GridScene.cpp" />
+    <ClCompile Include="src\IScene.cpp" />
+    <ClCompile Include="src\KinectManager.cpp" />
+    <ClCompile Include="src\main.cpp" />
     <ClCompile Include="..\..\..\addons\ofxOpenCv\src\ofxCvColorImage.cpp" />
     <ClCompile Include="..\..\..\addons\ofxOpenCv\src\ofxCvContourFinder.cpp" />
     <ClCompile Include="..\..\..\addons\ofxOpenCv\src\ofxCvFloatImage.cpp" />
@@ -106,31 +102,10 @@
     <ClCompile Include="..\..\..\addons\ofxOpenCv\src\ofxCvHaarFinder.cpp" />
     <ClCompile Include="..\..\..\addons\ofxOpenCv\src\ofxCvImage.cpp" />
     <ClCompile Include="..\..\..\addons\ofxOpenCv\src\ofxCvShortImage.cpp" />
-    <ClCompile Include="src\GridScene.cpp" />
-    <ClCompile Include="src\IScene.cpp" />
-    <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Particle.cpp" />
     <ClCompile Include="src\ReactiveSpaceApp.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\addons\ofxKinect\src\ofxBase3DVideo.h" />
-    <ClInclude Include="..\..\..\addons\ofxKinect\src\ofxKinect.h" />
-    <ClInclude Include="..\..\..\addons\ofxKinect\libs\libfreenect\include\libfreenect-registration.h" />
-    <ClInclude Include="..\..\..\addons\ofxKinect\libs\libfreenect\include\libfreenect.h" />
-    <ClInclude Include="..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\libusb10emu\libusb-1.0\failguard.h" />
-    <ClInclude Include="..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\libusb10emu\libusb-1.0\libusb.h" />
-    <ClInclude Include="..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\libusb10emu\libusb-1.0\libusbemu_internal.h" />
-    <ClInclude Include="..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\libusb10emu\libusb-1.0\libusbemu_threads.h" />
-    <ClInclude Include="..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\libusb10emu\libusb-1.0\libusbemu_threads_win32.h" />
-    <ClInclude Include="..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\stdbool.h" />
-    <ClInclude Include="..\..\..\addons\ofxKinect\libs\libfreenect\platform\windows\unistd.h" />
-    <ClInclude Include="..\..\..\addons\ofxKinect\libs\libfreenect\src\cameras.h" />
-    <ClInclude Include="..\..\..\addons\ofxKinect\libs\libfreenect\src\freenect_internal.h" />
-    <ClInclude Include="..\..\..\addons\ofxKinect\libs\libfreenect\src\loader.h" />
-    <ClInclude Include="..\..\..\addons\ofxKinect\libs\libfreenect\src\registration.h" />
-    <ClInclude Include="..\..\..\addons\ofxKinect\libs\libfreenect\src\usb_libusb10.h" />
-    <ClInclude Include="..\..\..\addons\ofxKinect\libs\libusb-1.0\include\libusb-1.0\libusb.h" />
-    <ClInclude Include="..\..\..\addons\ofxKinect\libs\libusb-win32\include\lusb0_usb.h" />
     <ClInclude Include="..\..\..\addons\ofxOpenCv\src\ofxCvBlob.h" />
     <ClInclude Include="..\..\..\addons\ofxOpenCv\src\ofxCvColorImage.h" />
     <ClInclude Include="..\..\..\addons\ofxOpenCv\src\ofxCvConstants.h" />
@@ -226,6 +201,7 @@
     <ClInclude Include="..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\video\video.hpp" />
     <ClInclude Include="src\GridScene.h" />
     <ClInclude Include="src\IScene.h" />
+    <ClInclude Include="src\KinectManager.h" />
     <ClInclude Include="src\ReactiveSpaceApp.h" />
   </ItemGroup>
   <ItemGroup>

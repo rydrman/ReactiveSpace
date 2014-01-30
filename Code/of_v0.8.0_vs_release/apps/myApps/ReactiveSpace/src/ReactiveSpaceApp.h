@@ -5,6 +5,8 @@
 #include "IScene.h"
 #include "GridScene.h"
 #include "Particle.cpp"
+#include "KinectManager.h"
+#include <NuiApi.h>
 
 using std::vector;
 
@@ -20,6 +22,9 @@ class ReactiveSpaceApp : public ofBaseApp{
 
 	float stepTimeDelta;
 	float stepTimeLast;
+
+	//for kinect
+	KinectManager* kinectManager;
 	
 	//for crowd simulation
 	int crowdLastGenerated;
@@ -38,5 +43,4 @@ public:
 	void windowResized(int w, int h);
 	void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);
-		
 };

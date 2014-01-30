@@ -1,4 +1,5 @@
 #include "ReactiveSpaceApp.h"
+#include <stdio.h>
 
 //--------------------------------------------------------------
 void ReactiveSpaceApp::setup()
@@ -13,15 +14,27 @@ void ReactiveSpaceApp::setup()
 	m_scenes.push_back(new GridScene(pPeople));
 
 	pCurrentScene = m_scenes[0];
+
+	//kinect
+	kinectManager = new KinectManager();
 }
 
 //--------------------------------------------------------------
-void ReactiveSpaceApp::update(){
-
+void ReactiveSpaceApp::update()
+{
 	//get time since last step
 	float stepTime = ofGetElapsedTimeMillis();
 	stepTimeDelta = stepTime - stepTimeLast;
-	
+
+	//update kinect
+	HRESULT hr = kinectManager->update( stepTimeDelta );
+
+	if (FAILED(hr))
+	{
+		//do something so user knows
+		cout << "kinect is broken... :(";
+	}
+
 	//simulate crowd if necessary
 	if (SIMULATE_CROWD)
 	{
@@ -61,7 +74,8 @@ void ReactiveSpaceApp::update(){
 }
 
 //--------------------------------------------------------------
-void ReactiveSpaceApp::draw(){
+void ReactiveSpaceApp::draw()
+{
 	pCurrentScene->Render();
 
 	//debug stuff
@@ -71,22 +85,26 @@ void ReactiveSpaceApp::draw(){
 }
 
 //--------------------------------------------------------------
-void ReactiveSpaceApp::keyPressed(int key){
+void ReactiveSpaceApp::keyPressed(int key)
+{
 
 }
 
 //--------------------------------------------------------------
-void ReactiveSpaceApp::keyReleased(int key){
+void ReactiveSpaceApp::keyReleased(int key)
+{
 
 }
 
 //--------------------------------------------------------------
-void ReactiveSpaceApp::mouseMoved(int x, int y){
+void ReactiveSpaceApp::mouseMoved(int x, int y)
+{
 
 }
 
 //--------------------------------------------------------------
-void ReactiveSpaceApp::mouseDragged(int x, int y, int button){
+void ReactiveSpaceApp::mouseDragged(int x, int y, int button)
+{
 
 }
 
@@ -99,21 +117,25 @@ void ReactiveSpaceApp::mousePressed(int x, int y, int button)
 }
 
 //--------------------------------------------------------------
-void ReactiveSpaceApp::mouseReleased(int x, int y, int button){
+void ReactiveSpaceApp::mouseReleased(int x, int y, int button)
+{
 
 }
 
 //--------------------------------------------------------------
-void ReactiveSpaceApp::windowResized(int w, int h){
+void ReactiveSpaceApp::windowResized(int w, int h)
+{
 
 }
 
 //--------------------------------------------------------------
-void ReactiveSpaceApp::gotMessage(ofMessage msg){
+void ReactiveSpaceApp::gotMessage(ofMessage msg)
+{
 
 }
 
 //--------------------------------------------------------------
-void ReactiveSpaceApp::dragEvent(ofDragInfo dragInfo){
+void ReactiveSpaceApp::dragEvent(ofDragInfo dragInfo)
+{
 
 }
