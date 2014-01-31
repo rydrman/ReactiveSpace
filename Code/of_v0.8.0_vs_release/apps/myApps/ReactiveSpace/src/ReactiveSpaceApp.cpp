@@ -19,7 +19,15 @@ void ReactiveSpaceApp::setup()
 
 	//fill scene vector
 	m_scenes.push_back(new GridScene(pPeople, pHandPositions));
+	m_scenes.push_back(new LightScene(pPeople, pHandPositions));
+	m_scenes.push_back(new RainScene(pPeople, pHandPositions));
+	m_scenes.push_back(new GeoScene(pPeople, pHandPositions));
 	pCurrentScene = m_scenes[0];
+
+	//graphics
+	ofSetFrameRate(60);
+	ofSetVerticalSync(false);
+	ofBackground(0, 0, 0);
 }
 
 //--------------------------------------------------------------
@@ -78,12 +86,15 @@ void ReactiveSpaceApp::update()
 //--------------------------------------------------------------
 void ReactiveSpaceApp::draw()
 {
+
 	pCurrentScene->Render();
 
 	//debug stuff
-	ofSetColor(200, 255, 0, 255);
-	ofFill();
-	ofDrawBitmapString("Framerate: " + ofToString(ofGetFrameRate(), 2), 10.f, 10.f);
+	ofPushMatrix();
+		ofSetColor(200, 255, 0, 255);
+		ofFill();
+		ofDrawBitmapString("Framerate: " + ofToString(ofGetFrameRate(), 2), 10.f, 10.f);
+	ofPopMatrix();
 }
 
 //--------------------------------------------------------------

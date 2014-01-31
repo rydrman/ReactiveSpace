@@ -1,6 +1,7 @@
 #include "GridScene.h"
 #include "ofMain.h"
 
+static const float PARTICLE_ANGRY_DIST_SQRD = 40000;
 
 GridScene::GridScene(vector<Particle>* people, vector<Vector4>* hands)
 : IScene(people, hands)
@@ -16,6 +17,7 @@ GridScene::GridScene(vector<Particle>* people, vector<Vector4>* hands)
 
 	m_particleList = vector<BirdParticle>(m_gridHeight * m_gridWidth);
 	m_particleGrid = new BirdParticle*[m_gridWidth];
+
 	for (int i = 0; i < m_gridWidth; ++i)
 	{
 		m_particleGrid[i] = new BirdParticle[m_gridHeight];
@@ -26,42 +28,59 @@ GridScene::GridScene(vector<Particle>* people, vector<Vector4>* hands)
 		for (int j = 0; j < m_gridHeight; ++j)
 		{
 			BirdParticle p = BirdParticle();
-			p.pos.x = i * m_gridSpacing;
-			p.pos.y = j * m_gridSpacing;
+			p.pos.x = (i + 0.5) * m_gridSpacing;
+			p.pos.y = (j + 0.5) * m_gridSpacing;
 			p.color = 255;
 			p.rad = particleSize * 0.4;
-			p.speed = ofPoint(0.f, 0.f);
-			p.noiseX = i * j;
+			p.vel = ofVec2f(0.f, 0.f);
+			p.noiseX = i;
+			p.noiseY = j;
 
 			m_particleList.push_back(p);
 			m_particleGrid[i][j] = p;
 		}
 	}
+
+	//load resources
+	particleImage = new ofImage();
+	particleImage->loadImage("GridScene/GridParticle.png");
+	particleImage->resize(particleSize * 0.8, particleSize * 0.8);
 }
 
 void GridScene::Render()
 {
-	ofBackground(0, 255);
-
 	//draw grid
-	/*for (vector<BirdParticle>::iterator p = m_particleList.begin(); p != m_particleList.end(); ++p)
+	ofSetColor(255);
+	for (vector<BirdParticle>::iterator p = m_particleList.begin(); p != m_particleList.end(); ++p)
 	{
-		int col = ofNoise(p->noiseX) * 255;
-		ofSetColor(col); 
-		ofFill();
+		//check distance to hands
+		ofPoint pos;
+		float dist;
+		float red = PARTICLE_ANGRY_DIST_SQRD;
+		for (vector<Vector4>::iterator h = pHandPositions->begin(); h != pHandPositions->end(); ++h)
+		{
+			dist = ofDistSquared(p->pos.x, p->pos.y, h->x, h->y);
+			red = (dist < red) ? dist : red;
+		}
 
-		ofCircle(p->pos, p->rad);
-	}*/
+		red = ofMap(red, 0, PARTICLE_ANGRY_DIST_SQRD, 0, 255, true);
+
+		ofPushMatrix();
+			ofTranslate(p->pos);
+			int alpha = ofNoise(p->noiseX, p->noiseY) * 150 + 50;
+			ofSetColor(255, red, red, alpha); 
+			particleImage->draw(-p->rad, -p->rad);
+		ofPopMatrix();
+	}
 
 	//draw hands
+	ofSetColor(255, 0, 0, 255);
+	ofFill();
+	ofPoint pos;
 	for (vector<Vector4>::iterator h = pHandPositions->begin(); h != pHandPositions->end(); ++h)
 	{
-		ofSetColor(255, 0, 0, 255);
-		ofFill();
-
-		ofPoint pos = ofPoint( h->x * ofGetScreenWidth(), h->y * ofGetScreenHeight() );
-
-		ofCircle(pos, 50);
+		pos = ofPoint( h->x , h->y );
+		ofCircle(pos, 20);
 	}
 }
 
@@ -70,6 +89,7 @@ void GridScene::Update(int deltaTime)
 	for (vector<BirdParticle>::iterator p = m_particleList.begin(); p != m_particleList.end(); ++p)
 	{
 		p->noiseX += deltaTime / 10000.f;
+		p->noiseY += deltaTime / 10000.f;
 	}
 }
 

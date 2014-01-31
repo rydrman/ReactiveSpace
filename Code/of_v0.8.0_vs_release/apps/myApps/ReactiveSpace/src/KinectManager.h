@@ -23,7 +23,7 @@ public:
 
 	HRESULT update(int dt, vector<Vector4>* pHandPos);
 
-	Vector4 handPositionToScreenPercent(Vector4 pos);
+	Vector4 handPositionToScreenPosition(Vector4 pos);
 
 	~KinectManager();
 };

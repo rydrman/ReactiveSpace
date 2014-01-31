@@ -8,11 +8,15 @@ using std::vector;
 
 class GridScene : public IScene
 {
+	//static vars
 	int m_gridHeight;
 	int m_gridWidth;
 	float m_gridSpacing;
 	vector<BirdParticle> m_particleList;
 	BirdParticle** m_particleGrid;
+
+	//resources
+	ofImage* particleImage;
 
 public:
 	GridScene(vector<Particle>* people, vector<Vector4>* hands);

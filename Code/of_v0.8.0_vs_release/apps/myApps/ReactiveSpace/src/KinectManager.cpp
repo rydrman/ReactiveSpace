@@ -115,7 +115,7 @@ HRESULT KinectManager::update(int dt, vector<Vector4>* pHandPos)
 
 	if (SUCCEEDED(hr))
 	{
-		pHandPos->empty();
+		pHandPos->clear();
 		for (int i = 0; i < NUI_SKELETON_COUNT; i++)
 		{
 			//if its a tracked skeleton
@@ -123,11 +123,11 @@ HRESULT KinectManager::update(int dt, vector<Vector4>* pHandPos)
 			{
 				//found skeleton, push hand positions
 				pHandPos->push_back(
-					handPositionToScreenPercent(
+					handPositionToScreenPosition(
 					pSkeletonFrame->SkeletonData[i].SkeletonPositions[NUI_SKELETON_POSITION_HAND_LEFT]
 					));
 				pHandPos->push_back(
-					handPositionToScreenPercent(
+					handPositionToScreenPosition(
 					pSkeletonFrame->SkeletonData[i].SkeletonPositions[NUI_SKELETON_POSITION_HAND_RIGHT]
 					));
 			}
@@ -146,14 +146,14 @@ HRESULT KinectManager::update(int dt, vector<Vector4>* pHandPos)
 	return hr;
 }
 
-Vector4 KinectManager::handPositionToScreenPercent(Vector4 pos)
+Vector4 KinectManager::handPositionToScreenPosition(Vector4 pos)
 {
 	float xPos;
 	float yPos;
 	NuiTransformSkeletonToDepthImage(pos, &xPos, &yPos, NUI_IMAGE_RESOLUTION_1280x960);
 
-	pos.x = xPos / 1280;
-	pos.y = yPos / 960;
+	pos.x = xPos / 1280 * ofGetScreenWidth();
+	pos.y = yPos / 960 * ofGetScreenHeight();
 
 	return pos;
 }

@@ -40,6 +40,15 @@
     <ClCompile Include="src\KinectManager.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\RainScene.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GeoScene.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LightScene.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -399,6 +408,15 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\KinectManager.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RainScene.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GeoScene.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LightScene.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
