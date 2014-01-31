@@ -86,8 +86,13 @@ void ReactiveSpaceApp::update()
 //--------------------------------------------------------------
 void ReactiveSpaceApp::draw()
 {
+	glClearColor( 0.0, 0.0, 0.0, 1.0 );
+	glClear( GL_COLOR_BUFFER_BIT || GL_DEPTH_BUFFER_BIT );
 
 	pCurrentScene->Render();
+
+	glDisable( GL_CULL_FACE );
+	
 
 	//debug stuff
 	ofPushMatrix();

@@ -17,6 +17,8 @@ class GridScene : public IScene
 
 	//resources
 	ofImage* particleImage;
+	ofVbo m_particleVbo;
+	ofShader m_particleShader;
 
 public:
 	GridScene(vector<Particle>* people, vector<Vector4>* hands);
