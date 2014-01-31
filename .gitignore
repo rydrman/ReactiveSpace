@@ -47,8 +47,8 @@ local.properties
 [Rr]elease/
 x64/
 build/
-[Bb]in/
-![Bb/in.[Dd]ata
+[Bb]in/*.*
+![Bb/in.[Dd]ata/*
 [Oo]bj/
 obj\
 Debug\
