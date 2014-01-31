@@ -1,0 +1,1 @@
+I also worked on final design of both the design document and UI specifications document.
