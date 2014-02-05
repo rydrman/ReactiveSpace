@@ -1,16 +1,11 @@
-uniform vec4 vColor;
-uniform sampler2DRect tex0;
+#version 120
+#extension GL_ARB_texture_rectangle : enable
 
-in vec2 texCoord;
-
-out vec4 color;
+uniform vec4 uColor;
+uniform sampler2D tex0;
 
 void main (void)  
-{      
-   color = vColor;
-   //color = texture(tex0, gl_PointCoord);
-    
-	//if(gl_PointCoord.s > 0.f)
-		//color = vec4(1.0, 0.0, 0.0, 1.0);
-  
+{   
+	gl_FragColor = uColor;  
+	gl_FragColor.a = texture2D(tex0, gl_TexCoord[0].st).a;
 } 
