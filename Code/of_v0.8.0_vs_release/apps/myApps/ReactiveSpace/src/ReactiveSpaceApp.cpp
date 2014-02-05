@@ -25,6 +25,7 @@ void ReactiveSpaceApp::setup()
 	pCurrentScene = m_scenes[0];
 
 	//graphics
+	//ofDisableArbTex();
 	ofSetFrameRate(60);
 	ofSetVerticalSync(false);
 	ofBackground(0, 0, 0);
@@ -49,13 +50,12 @@ void ReactiveSpaceApp::update()
 	if (SIMULATE_CROWD)
 	{
 		//generate a person each second
-		if (stepTime - crowdLastGenerated > 1000)
+		if (stepTime - crowdLastGenerated > 5000)
 		{
 			Particle p = Particle();
 			int winH = ofGetWindowHeight();
 			p.pos.y = ofRandom(winH * 0.25, winH * 0.75);
-			p.pos.z = ofRandom(500);
-			p.speed.x = ofRandom(0.1f, 1.f);
+			p.vel = ofVec2f(ofRandom(0.3f, 1.f), 0.f);
 			pPeople->push_back(p);
 			crowdLastGenerated = stepTime;
 		}
@@ -63,7 +63,7 @@ void ReactiveSpaceApp::update()
 		//move people across screen or remove them
 		for (vector<Particle>::iterator p = pPeople->begin(); p != pPeople->end(); )
 		{
-			p->pos.x += p->speed.x * 0.1f * stepTimeDelta;
+			particle_updatePosition((Particle*)p._Ptr);// stepTimeDelta;
 
 			if (p->pos.x > ofGetWindowWidth())
 			{

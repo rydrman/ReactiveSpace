@@ -12,11 +12,12 @@ class GridScene : public IScene
 	int m_gridHeight;
 	int m_gridWidth;
 	float m_gridSpacing;
+	bool particleUpdateOffset;
 	vector<BirdParticle> m_particleList;
 	BirdParticle** m_particleGrid;
 
 	//resources
-	ofImage* particleImage;
+	ofImage particleImage;
 	ofVbo m_particleVbo;
 	ofShader m_particleShader;
 

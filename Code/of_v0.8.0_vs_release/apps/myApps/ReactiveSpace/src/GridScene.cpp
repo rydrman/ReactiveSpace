@@ -1,50 +1,46 @@
 #include "GridScene.h"
 #include "ofMain.h"
 
-static const float PARTICLE_ANGRY_DIST_SQRD = 40000;
+static const float PARTICLE_ANGRY_DIST_SQRD = 22500;
+static const float PARTICLE_HAPPY_DIST_SQRD = 10000;
+static const float PARTICLE_ANGRY_DIST = 150;
+static const float PARTICLE_HAPPY_DIST = 100;
 
 const ofVec2f s_quadVerts[] = {
   ofVec2f( -1.0f, -1.0f ),
-  ofVec2f( 1.0f, -1.0f ),
+  ofVec2f( 1.0f, -1.f ),
   ofVec2f( 1.0f, 1.0f ),
   ofVec2f( -1.0f, 1.0f )
 };
 
 const ofVec2f s_quadTexCoords[] = {
   ofVec2f(0.0f, 0.0f),
-  ofVec2f(64.0f, 0.0f),
+  ofVec2f(0.0f, 64.0f),
   ofVec2f(64.0f, 64.0f),
-  ofVec2f(0.0f, 64.0f)
-};
-
-const ofFloatColor s_quadColors[] = {
-  ofFloatColor(1.0, 0.0f, 0.0f, 1.0f),
-  ofFloatColor(1.0, 1.0f, 0.0f, 1.0f),
-  ofFloatColor(0.0, 0.0f, 1.0f, 1.0f),
-  ofFloatColor(0.0, 1.0f, 1.0f, 1.0f)
+  ofVec2f(64.0f, 0.0f)
 };
 
 GridScene::GridScene(vector<Particle>* people, vector<Vector4>* hands)
 : IScene(people, hands)
 {
-	//ofDisableArbTex();
 
 	int screenHeight = ofGetScreenHeight();
 	int screenWidth = ofGetScreenWidth();
 	float scale = screenHeight * screenWidth;
-	float particleSize = sqrt(scale) / 60.f;
+	float particleSize = sqrt(scale) / 50.f;
+
+	particleUpdateOffset = false;
 
 	m_gridWidth = floor(screenWidth / particleSize);
 	m_gridHeight = floor(screenHeight / particleSize);
 	m_gridSpacing = (float)screenWidth / (float)m_gridWidth;
 
-	m_particleList = vector<BirdParticle>(m_gridHeight * m_gridWidth);
+	m_particleList = vector<BirdParticle>();
 	m_particleGrid = new BirdParticle*[m_gridWidth];
 
 	// full viewport quad vbo
 	m_particleVbo.setVertexData( &s_quadVerts[0], 4, GL_STATIC_DRAW );
 	m_particleVbo.setTexCoordData( &s_quadTexCoords[0], 4, GL_STATIC_DRAW );
-	m_particleVbo.setColorData( &s_quadColors[0], 4, GL_STATIC_DRAW );
 
 	for (int i = 0; i < m_gridWidth; ++i)
 	{
@@ -56,13 +52,20 @@ GridScene::GridScene(vector<Particle>* people, vector<Vector4>* hands)
 		for (int j = 0; j < m_gridHeight; ++j)
 		{
 			BirdParticle p = BirdParticle();
+
+			//set positions
 			p.pos.x = (i + 0.5) * m_gridSpacing;
 			p.pos.y = (j + 0.5) * m_gridSpacing;
+			p.originalPos.x = (i + 0.5) * m_gridSpacing;
+			p.originalPos.y = (j + 0.5) * m_gridSpacing;
+
+			//other vars
 			p.color = 255;
 			p.rad = particleSize * 0.4;
 			p.vel = ofVec2f(0.f, 0.f);
-			p.noiseX = i;
-			p.noiseY = j;
+			p.noiseX = i + 0.f;
+			p.noiseY = j + 1000.f;
+			p.mood = 0.5;
 
 			m_particleList.push_back(p);
 			m_particleGrid[i][j] = p;
@@ -70,13 +73,10 @@ GridScene::GridScene(vector<Particle>* people, vector<Vector4>* hands)
 	}
 
 	//load resources
-	particleImage = new ofImage();
-	particleImage->loadImage("GridScene/GridParticle.png");
+	particleImage = ofImage();
+	particleImage.loadImage("GridScene/GridParticle.png");
 	m_particleShader.load("GridScene/gridParticle");
 	//particleImage->resize(particleSize * 0.8, particleSize * 0.8);
-
-	glEnable( GL_CULL_FACE );
-	glCullFace( GL_FRONT );
 }
 
 void GridScene::Render()
@@ -84,46 +84,52 @@ void GridScene::Render()
 	//draw grid
 	ofSetColor(255);
 
-//		GLint textureId = particleImage->getTextureReference().texData.textureID;
-//		glEnable( GL_TEXTURE_2D );
-	//	glActiveTexture( GL_TEXTURE0 );
-//		glBindTexture( GL_TEXTURE_2D, textureId );
-
-	particleImage->getTextureReference().bind();
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_FRONT);
+	
+	particleImage.getTextureReference().bind();
 	m_particleVbo.bind();
+    //m_particleShader.setUniformTexture("tex0", particleImage.getTextureReference(), 0);
 	m_particleShader.begin();
-
-	for (vector<BirdParticle>::iterator p = m_particleList.begin(); p != m_particleList.end(); ++p)
+	
+	for (vector<BirdParticle>::iterator p = m_particleList.begin(); p < m_particleList.end(); ++p)
 	{
-		//check distance to hands
-		ofPoint pos;
-		float dist;
-		float red = PARTICLE_ANGRY_DIST_SQRD;
-		for (vector<Vector4>::iterator h = pHandPositions->begin(); h != pHandPositions->end(); ++h)
-		{
-			dist = ofDistSquared(p->pos.x, p->pos.y, h->x, h->y);
-			red = (dist < red) ? dist : red;
-		}
 
-		red = ofMap(red, 0, PARTICLE_ANGRY_DIST_SQRD, 0, 1, true);
-
-		m_particleShader.setUniform4f("vColor", 1.f, red, red, 1.f);
+		m_particleShader.setUniform4f("vColor", 
+									  1.f - p->mood, 
+									  (p->mood > 0.5) ? ofMap(p->mood, 0.5f, 1.f, 0.5f, 0.7f) : 0.5f, 
+									  p->mood, 
+									  1.f);
 
 		ofPushMatrix();
 
 			ofTranslate(p->pos);
-			ofScale(8.0, 8.0);
-			int alpha = ofNoise(p->noiseX, p->noiseY) * 150 + 50;
-			//ofSetColor(255, red, red, alpha); 
-
+			ofScale(10.0, 10.0);
+			//int alpha = ofNoise(p->noiseX, p->noiseY) * 150 + 50;
 
 			glDrawArrays( GL_QUADS, 0, 4 );
 
 		ofPopMatrix();
 
+		
+
 	}
 	
-	particleImage->getTextureReference().unbind();
+	//draw people
+	m_particleShader.setUniform4f("vColor", 1.f, 1.f, 1.f, 1.f);
+	for (vector<Particle>::iterator p = pPeople->begin(); p != pPeople->end(); ++p)
+	{
+		ofPushMatrix();
+
+			ofTranslate(p->pos);
+			ofScale(20.0, 20.0);
+
+			glDrawArrays(GL_QUADS, 0, 4);
+
+		ofPopMatrix();
+	}
+
+	particleImage.getTextureReference().unbind();
 	m_particleVbo.unbind();
 	m_particleShader.end();
 
@@ -140,11 +146,85 @@ void GridScene::Render()
 
 void GridScene::Update(int deltaTime)
 {
+	int i = 0;
 	for (vector<BirdParticle>::iterator p = m_particleList.begin(); p != m_particleList.end(); ++p)
 	{
 		p->noiseX += deltaTime / 10000.f;
 		p->noiseY += deltaTime / 10000.f;
+
+		if ((particleUpdateOffset && i % 2 == 0)
+			|| (!particleUpdateOffset && i % 2 != 0))
+		{
+			//check distance to hands
+			bool edit = false;
+			float dist;
+			for (vector<Vector4>::iterator h = pHandPositions->begin(); h != pHandPositions->end(); ++h)
+			{
+				dist = ofDistSquared(p->pos.x, p->pos.y, h->x, h->y);
+				if (dist < PARTICLE_ANGRY_DIST_SQRD)
+				{
+					//change mood
+					p->mood -= (1.f - dist / PARTICLE_ANGRY_DIST_SQRD) * 0.1f;
+					edit = true;
+
+					//push away
+					float angle = atan2f(p->pos.y - h->y, p->pos.x - h->x);
+					float forceMag = 1.f * (1.f - dist / PARTICLE_ANGRY_DIST_SQRD);
+					particle_applyForce((Particle*)p._Ptr, cosf(angle) * forceMag, sinf(angle) * forceMag);
+				}
+			}
+
+			//distance to people
+			float happiness = 0;
+			for (vector<Particle>::iterator ppl = pPeople->begin(); ppl != pPeople->end(); ++ppl)
+			{
+				//simple check before distance
+				if (p->pos.x > ppl->pos.x + PARTICLE_HAPPY_DIST
+					|| p->pos.x < ppl->pos.x - PARTICLE_HAPPY_DIST
+					|| p->pos.y > ppl->pos.y + PARTICLE_HAPPY_DIST
+					|| p->pos.y < ppl->pos.y - PARTICLE_HAPPY_DIST)
+					continue;
+
+				//check distance
+				dist = (p->pos.x - ppl->pos.x) * (p->pos.x - ppl->pos.x) + (p->pos.y - ppl->pos.y) * (p->pos.y - ppl->pos.y);
+				if (dist < PARTICLE_HAPPY_DIST_SQRD)
+				{
+					//change mood
+					p->mood += (1.f - dist / PARTICLE_HAPPY_DIST_SQRD) * 0.1f;
+					edit = true;
+
+					//move away
+					//float percDist = dist / PARTICLE_HAPPY_DIST_SQRD;
+				}
+			}
+
+			//otherwise approach normal
+			if (!edit)
+			{
+				//approach 0.5
+				p->mood += (0.5 - p->mood) * 0.1f;
+
+				//approach original position
+				dist = (p->pos.x - p->originalPos.x) * (p->pos.x - p->originalPos.x) + (p->pos.y - p->originalPos.y) * (p->pos.y - p->originalPos.y);
+				if (dist > 1)
+				{
+					float angle = atan2f(p->originalPos.y - p->pos.y, p->originalPos.x - p->pos.x);
+					particle_applyForce((Particle*)p._Ptr, cosf(angle) * 0.1f, sinf(angle) * 0.1f);
+				}
+			}
+
+			p->mood = ofClamp(p->mood, 0.f, 1.f);
+		}
+
+
+
+		++i;
+
+		//update it 
+		particle_updatePosition((Particle*)p._Ptr);
 	}
+
+	particleUpdateOffset = !particleUpdateOffset;
 }
 
 GridScene::~GridScene()
