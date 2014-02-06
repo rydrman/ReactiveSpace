@@ -22,7 +22,7 @@ void ReactiveSpaceApp::setup()
 	m_scenes.push_back(new LightScene(pPeople, pHandPositions));
 	m_scenes.push_back(new RainScene(pPeople, pHandPositions));
 	m_scenes.push_back(new GeoScene(pPeople, pHandPositions));
-	pCurrentScene = m_scenes[0];
+	pCurrentScene = m_scenes[1];
 
 	//graphics
 	//ofDisableArbTex();
