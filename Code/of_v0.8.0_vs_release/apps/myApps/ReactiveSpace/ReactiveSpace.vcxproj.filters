@@ -25,29 +25,32 @@
     <ClCompile Include="..\..\..\addons\ofxOpenCv\src\ofxCvShortImage.cpp">
       <Filter>addons\ofxOpenCv\src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Particle.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\ReactiveSpaceApp.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\GeoScene.cpp">
+      <Filter>src\Scene Files</Filter>
+    </ClCompile>
     <ClCompile Include="src\GridScene.cpp">
-      <Filter>src</Filter>
+      <Filter>src\Scene Files</Filter>
     </ClCompile>
     <ClCompile Include="src\IScene.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\KinectManager.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\RainScene.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\GeoScene.cpp">
-      <Filter>src</Filter>
+      <Filter>src\Scene Files</Filter>
     </ClCompile>
     <ClCompile Include="src\LightScene.cpp">
-      <Filter>src</Filter>
+      <Filter>src\Scene Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RainScene.cpp">
+      <Filter>src\Scene Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\KinectManager.cpp">
+      <Filter>src\System Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Particle.cpp">
+      <Filter>src\Particle Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BirdParticle.cpp">
+      <Filter>src\Particle Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -116,6 +119,15 @@
     </Filter>
     <Filter Include="addons\ofxOpenCv\libs\opencv\include\opencv2\video">
       <UniqueIdentifier>{61E04F54-C77F-B674-C2AB-FEC2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Scene Files">
+      <UniqueIdentifier>{abc66121-a348-4875-92e4-ae22c98b266f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\System Files">
+      <UniqueIdentifier>{d66f3ee4-010f-4439-aa94-49d7f98341c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Particle Files">
+      <UniqueIdentifier>{65a37be3-fdd6-4130-a900-a8586d78e264}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -401,23 +413,32 @@
     <ClInclude Include="src\ReactiveSpaceApp.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\GeoScene.h">
+      <Filter>src\Scene Files</Filter>
+    </ClInclude>
     <ClInclude Include="src\GridScene.h">
-      <Filter>src</Filter>
+      <Filter>src\Scene Files</Filter>
     </ClInclude>
     <ClInclude Include="src\IScene.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\KinectManager.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\RainScene.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\GeoScene.h">
-      <Filter>src</Filter>
+      <Filter>src\Scene Files</Filter>
     </ClInclude>
     <ClInclude Include="src\LightScene.h">
-      <Filter>src</Filter>
+      <Filter>src\Scene Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RainScene.h">
+      <Filter>src\Scene Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\KinectManager.h">
+      <Filter>src\System Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Particle.h">
+      <Filter>src\Particle Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BirdParticle.h">
+      <Filter>src\Particle Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ParticleMain.h">
+      <Filter>src\Particle Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

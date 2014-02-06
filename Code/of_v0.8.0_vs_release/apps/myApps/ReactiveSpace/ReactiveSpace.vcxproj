@@ -91,6 +91,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\BirdParticle.cpp" />
     <ClCompile Include="src\GeoScene.cpp" />
     <ClCompile Include="src\GridScene.cpp" />
     <ClCompile Include="src\IScene.cpp" />
@@ -202,11 +203,14 @@
     <ClInclude Include="..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\video\background_segm.hpp" />
     <ClInclude Include="..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\video\tracking.hpp" />
     <ClInclude Include="..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\video\video.hpp" />
+    <ClInclude Include="src\BirdParticle.h" />
     <ClInclude Include="src\GeoScene.h" />
     <ClInclude Include="src\GridScene.h" />
     <ClInclude Include="src\IScene.h" />
     <ClInclude Include="src\KinectManager.h" />
     <ClInclude Include="src\LightScene.h" />
+    <ClInclude Include="src\Particle.h" />
+    <ClInclude Include="src\ParticleMain.h" />
     <ClInclude Include="src\RainScene.h" />
     <ClInclude Include="src\ReactiveSpaceApp.h" />
   </ItemGroup>
