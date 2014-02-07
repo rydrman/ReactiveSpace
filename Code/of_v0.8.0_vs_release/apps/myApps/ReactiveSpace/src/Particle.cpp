@@ -1,31 +1,52 @@
-#pragma once
+#include "Particle.h"
 
-#include "ofMain.h"
-
-struct Particle {
-	ofVec2f pos;
-	ofVec2f vel;
-	ofVec2f accel;
-};
-
-struct BirdParticle :
-	Particle{
-	ofVec2f originalPos;
-	float rad;
-	float color;
-	float noiseX;
-	float noiseY;
-	float mood;  //0 -> 1, angry -> happy
-};
-
-static void particle_applyForce(Particle* p, float x, float y)
+Particle::Particle(ofVec2f _pos)
 {
-	p->accel.x += x;
-	p->accel.y += y;
+	pos = _pos;
+	vel = ofVec2f(0.f, 0.f);
+	accel = ofVec2f(0.f, 0.f);
+	maxSpeed = std::numeric_limits<float>::max();
+	maxForce = std::numeric_limits<float>::max();
 }
 
-static void particle_updatePosition(Particle* p)
+void Particle::applyForce(float x, float y)
 {
-	p->vel += p->accel;
-	p->pos += p->vel;
+	accel.x += x;
+	accel.y += y;
+}
+
+void Particle::update()
+{
+	vel += accel;
+	pos += vel;
+
+	//reset accel
+	accel *= 0;
+}
+
+void Particle::seek(ofVec2f target, bool slowToTarget)
+{
+	ofVec2f steerVec = ofVec2f(0.f, 0.f);
+	ofVec2f desired = target - pos;
+	float distSqrd = desired.lengthSquared();
+
+	if (distSqrd > 0)
+	{
+		desired.normalize();
+		desired *= maxSpeed;
+
+		if (slowToTarget && distSqrd < 10000)
+		{
+			desired *= (distSqrd / 10000);
+		}
+
+		steerVec = desired - vel;
+		steerVec.limit(maxForce);
+	}
+
+	accel += steerVec;
+}
+
+Particle::~Particle()
+{
 }

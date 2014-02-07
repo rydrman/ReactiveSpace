@@ -7,7 +7,7 @@
 #include "RainScene.h"
 #include "GeoScene.h"
 #include "LightScene.h"
-#include "Particle.cpp"
+#include "ParticleMain.h"
 #include "KinectManager.h"
 #include <NuiApi.h>
 

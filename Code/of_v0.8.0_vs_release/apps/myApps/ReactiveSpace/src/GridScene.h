@@ -1,7 +1,7 @@
 #pragma once
 
 #include "IScene.h"
-#include "Particle.cpp"
+#include "ParticleMain.h"
 #include <vector>
 
 using std::vector;
@@ -17,7 +17,7 @@ class GridScene : public IScene
 	BirdParticle** m_particleGrid;
 
 	//resources
-	ofImage particleImage;
+	ofImage m_particleImage;
 	ofVbo m_particleVbo;
 	ofShader m_particleShader;
 

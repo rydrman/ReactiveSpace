@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include "Particle.cpp"
+#include "ParticleMain.h"
 #include <Windows.h>
 #include <Ole2.h>
 #include <NuiApi.h>

@@ -4,6 +4,9 @@
 //--------------------------------------------------------------
 void ReactiveSpaceApp::setup()
 {
+	//graphics
+	ofDisableArbTex();
+
 	//init time stuff
 	stepTimeDelta = 0;
 	stepTimeLast = ofGetElapsedTimeMillis();
@@ -25,7 +28,6 @@ void ReactiveSpaceApp::setup()
 	pCurrentScene = m_scenes[1];
 
 	//graphics
-	//ofDisableArbTex();
 	ofSetFrameRate(60);
 	ofSetVerticalSync(false);
 	ofBackground(0, 0, 0);
@@ -52,9 +54,11 @@ void ReactiveSpaceApp::update()
 		//generate a person each second
 		if (stepTime - crowdLastGenerated > 5000)
 		{
-			Particle p = Particle();
 			int winH = ofGetWindowHeight();
-			p.pos.y = ofRandom(winH * 0.25, winH * 0.75);
+			Particle p = Particle(
+				ofVec2f(0.f, ofRandom(winH * 0.25, winH * 0.75))
+				);
+
 			p.vel = ofVec2f(ofRandom(0.3f, 1.f), 0.f);
 			pPeople->push_back(p);
 			crowdLastGenerated = stepTime;
@@ -63,7 +67,7 @@ void ReactiveSpaceApp::update()
 		//move people across screen or remove them
 		for (vector<Particle>::iterator p = pPeople->begin(); p != pPeople->end(); )
 		{
-			particle_updatePosition((Particle*)p._Ptr);// stepTimeDelta;
+			p->update();// stepTimeDelta;
 
 			if (p->pos.x > ofGetWindowWidth())
 			{
@@ -90,9 +94,6 @@ void ReactiveSpaceApp::draw()
 	glClear( GL_COLOR_BUFFER_BIT || GL_DEPTH_BUFFER_BIT );
 
 	pCurrentScene->Render();
-
-	glDisable( GL_CULL_FACE );
-	
 
 	//debug stuff
 	ofPushMatrix();
@@ -129,8 +130,11 @@ void ReactiveSpaceApp::mouseDragged(int x, int y, int button)
 //--------------------------------------------------------------
 void ReactiveSpaceApp::mousePressed(int x, int y, int button)
 {
-	Particle p;
-	p.pos = ofPoint(x, y);
+	Particle p = Particle(
+		ofVec2f(x, y)
+		);
+
+	p.vel = ofVec2f(ofRandom(0.3f, 1.f), 0.f);
 	pPeople->push_back(p);
 }
 
