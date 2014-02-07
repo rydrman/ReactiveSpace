@@ -152,10 +152,15 @@ Vector4 KinectManager::handPositionToScreenPosition(Vector4 pos)
 	float yPos;
 	NuiTransformSkeletonToDepthImage(pos, &xPos, &yPos, NUI_IMAGE_RESOLUTION_1280x960);
 
-	pos.x = xPos / 1280 * ofGetScreenWidth();
-	pos.y = yPos / 960 * ofGetScreenHeight();
+	pos.x = xPos / 1280 * ofGetWidth();
+	pos.y = yPos / 960 * ofGetHeight();
 
 	return pos;
+}
+
+bool KinectManager::isFailed()
+{
+	return kinectFailed;
 }
 
 

@@ -8,13 +8,16 @@ using std::vector;
 
 class GridScene : public IScene
 {
-	//static vars
 	int m_gridHeight;
 	int m_gridWidth;
+	int m_numParticles;
 	float m_gridSpacing;
 	bool particleUpdateOffset;
-	vector<BirdParticle> m_particleList;
-	BirdParticle** m_particleGrid;
+
+	//store particles
+	BirdParticle* m_particleList;
+	vector<BirdParticle*> m_angryParticles;
+	//BirdParticle** m_particleGrid;
 
 	//resources
 	ofImage m_particleImage;

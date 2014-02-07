@@ -14,11 +14,12 @@ public:
 	Particle(ofVec2f _pos);
 
 	//useful functions
+	void applyForce(ofVec2f f);
 	void applyForce(float x, float y);
-	void seek(ofVec2f target, bool slowToTarget = false);
+	void seek(ofVec2f target, float strength = 1.f, bool slowToTarget = false, float* homeDistRatio = new float);
 
-	//overrideable functions
-	virtual void update();
+	//update velocity
+	void update();
 
 	~Particle();
 };

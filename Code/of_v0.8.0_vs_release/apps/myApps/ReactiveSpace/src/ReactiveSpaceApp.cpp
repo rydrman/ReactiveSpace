@@ -5,6 +5,9 @@
 void ReactiveSpaceApp::setup()
 {
 	//graphics
+	ofSetFrameRate(60);
+	ofSetVerticalSync(true);
+	ofBackground(0, 0, 0);
 	ofDisableArbTex();
 
 	//init time stuff
@@ -27,10 +30,6 @@ void ReactiveSpaceApp::setup()
 	m_scenes.push_back(new GeoScene(pPeople, pHandPositions));
 	pCurrentScene = m_scenes[0];
 
-	//graphics
-	ofSetFrameRate(60);
-	ofSetVerticalSync(false);
-	ofBackground(0, 0, 0);
 }
 
 //--------------------------------------------------------------
@@ -106,7 +105,6 @@ void ReactiveSpaceApp::draw()
 //--------------------------------------------------------------
 void ReactiveSpaceApp::keyPressed(int key)
 {
-
 }
 
 //--------------------------------------------------------------
@@ -130,12 +128,17 @@ void ReactiveSpaceApp::mouseDragged(int x, int y, int button)
 //--------------------------------------------------------------
 void ReactiveSpaceApp::mousePressed(int x, int y, int button)
 {
-	Particle p = Particle(
-		ofVec2f(x, y)
-		);
+	if (kinectManager->isFailed())
+	{
+		pHandPositions->clear();
 
-	p.vel = ofVec2f(ofRandom(0.3f, 1.f), 0.f);
-	pPeople->push_back(p);
+		Vector4 pos = Vector4();
+
+		pos.x = x;
+		pos.y = y;
+
+		pHandPositions->push_back(pos);
+	}
 }
 
 //--------------------------------------------------------------

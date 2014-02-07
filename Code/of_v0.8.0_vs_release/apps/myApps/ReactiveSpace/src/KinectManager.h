@@ -25,6 +25,8 @@ public:
 
 	Vector4 handPositionToScreenPosition(Vector4 pos);
 
+	bool isFailed();
+
 	~KinectManager();
 };
 
