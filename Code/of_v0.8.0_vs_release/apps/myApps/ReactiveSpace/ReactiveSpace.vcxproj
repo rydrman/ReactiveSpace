@@ -94,8 +94,10 @@
     <ClCompile Include="src\BirdParticle.cpp" />
     <ClCompile Include="src\GeoScene.cpp" />
     <ClCompile Include="src\GridScene.cpp" />
+    <ClCompile Include="src\HexagonParticle.cpp" />
     <ClCompile Include="src\IScene.cpp" />
     <ClCompile Include="src\KinectManager.cpp" />
+    <ClCompile Include="src\Light.cpp" />
     <ClCompile Include="src\LightScene.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="..\..\..\addons\ofxOpenCv\src\ofxCvColorImage.cpp" />
@@ -206,8 +208,10 @@
     <ClInclude Include="src\BirdParticle.h" />
     <ClInclude Include="src\GeoScene.h" />
     <ClInclude Include="src\GridScene.h" />
+    <ClInclude Include="src\HexagonParticle.h" />
     <ClInclude Include="src\IScene.h" />
     <ClInclude Include="src\KinectManager.h" />
+    <ClInclude Include="src\Light.h" />
     <ClInclude Include="src\LightScene.h" />
     <ClInclude Include="src\Particle.h" />
     <ClInclude Include="src\ParticleMain.h" />

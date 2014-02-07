@@ -1,19 +1,13 @@
 #pragma once
 #include "IScene.h"
-
-struct light
-{
-	float x;
-	bool isOn;
-};
+#include "Light.h"
 
 class LightScene : public IScene
 {
 	ofPolyline m_hexShape;
 	ofImage m_hexImg;
 	ofImage m_lightImg;
-	float m_distance;
-	vector<light> m_lights;
+	vector<Light> m_lights;
 
 public:
 	LightScene(vector<Particle>* people, vector<Vector4>* hands);

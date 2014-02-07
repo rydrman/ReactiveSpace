@@ -9,27 +9,17 @@ LightScene::LightScene(vector<Particle>* people, vector<Vector4>* hands)
 	pPeople = people;
 	
 	m_hexImg.loadImage("LightScene/hex.png");
-
 	m_lightImg.loadImage("LightScene/light.png");
 
-	m_lights = vector<light>();
+	m_lights = vector<Light>();
 
 	
 	for(int i = 0; i < ofGetWidth(); i += m_lightImg.width){
-		light l = light();
+		Light l = Light();
 		l.isOn = false;
 		l.x = i;
 		m_lights.push_back(l);	
 	}
-	m_hexShape = ofPolyline();
-
-	m_hexShape.addVertex(0,0);
-	m_hexShape.addVertex(5,5);
-	m_hexShape.addVertex(8.5,5);
-	m_hexShape.addVertex(11.5,0);
-	m_hexShape.addVertex(8.5,-5);
-	m_hexShape.addVertex(5,-5);
-	m_hexShape.close();
 	
 }
 
@@ -37,46 +27,46 @@ void LightScene::Render()
 {
 	//draw lights
 	ofPushMatrix();
-		ofScale(1.0f,1.0f,1.0f);
-		ofSetColor(255);
+
+	ofScale(1.0f,1.0f,1.0f);
+	ofSetColor(255);
 	
-	for(vector<light>::iterator l = m_lights.begin(); l != m_lights.end(); ++l){
-		m_lightImg.draw(l->x, 0, 0);
+	for(vector<Light>::iterator l = m_lights.begin(); l != m_lights.end(); ++l){
+		if(l->isOn == true){
+			m_lightImg.draw(l->x, 0, 0);
+		}
 	}
 
 	//draw a hexagon for each person in people
 	for(vector<Particle>::iterator p = pPeople->begin(); p != pPeople->end(); ++p)
 	{
 		ofPushMatrix();
-			ofNoFill();
-			ofSetLineWidth(3);
 			ofTranslate(p->pos);
+			ofSetColor(50, ofRandom(50,150), ofRandom(150,255), 200);
+			//ofSetColor(hexColor);
 			m_hexImg.draw(0,0,0);
-			//m_hexShape.draw();
 		ofPopMatrix();
 	}
-	for(vector<Particle>::iterator p = pPeople->begin(); p != pPeople->end(); ++p){
-		for(vector<light>::iterator l = m_lights.begin(); l != m_lights.end(); ++l){
-			m_distance = p->pos.x - l->x;
-
-			if(m_distance <= 0)
-				l->isOn = true;
-		}
-	}
-	// I AM ATTEMPTING TO MAKE LIGHT 
-	ofLight mylight = ofLight();
-	//ofEnableLighting();
-	mylight.setPointLight();
-	mylight.setSpecularColor(100);
-	
-	mylight.setGlobalPosition(200,200, 50);
 
 	ofPopMatrix();
 }
 
 void LightScene::Update(int deltaTime)
 {
+	float distance;
+	
+	for(vector<Light>::iterator l = m_lights.begin(); l != m_lights.end(); ++l){
+		l->isOn = false;
+	}
 
+	for(vector<Particle>::iterator p = pPeople->begin(); p != pPeople->end(); ++p){
+		for(vector<Light>::iterator l = m_lights.begin(); l != m_lights.end(); ++l){
+
+			if(p->pos.x < l->x+m_lightImg.width && p->pos.x+m_hexImg.width > l->x){
+				l->isOn = true;
+			}
+		}
+	}
 }
 
 LightScene::~LightScene()
