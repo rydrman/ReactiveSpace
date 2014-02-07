@@ -1,6 +1,7 @@
 #pragma once
 #include "IScene.h"
 #include "Light.h"
+#include "HexagonParticle.h"
 
 class LightScene : public IScene
 {
@@ -10,10 +11,13 @@ class LightScene : public IScene
 	vector<Light> m_lights;
 
 public:
-	LightScene(vector<Particle>* people, vector<Vector4>* hands);
+	LightScene(vector<Particle*>* people, vector<Vector4>* hands);
 
-	virtual void Render();
-	virtual void Update(int deltaTime);
+	void Render();
+	void Update(int deltaTime);
+
+	void convertPeopleVector();
+	Particle* addParticleOfProperType(ofVec3f _pos);
 
 	~LightScene();
 };

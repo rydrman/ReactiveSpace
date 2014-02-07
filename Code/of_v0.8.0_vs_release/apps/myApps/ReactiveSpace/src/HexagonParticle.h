@@ -8,7 +8,7 @@ class HexagonParticle
 public : 
 	ofColor hexColor;
 
-
-	HexagonParticle(ofVec2f _pos);
+	HexagonParticle(Particle _old);
+	HexagonParticle(ofVec3f _pos);
 	~HexagonParticle();
 };

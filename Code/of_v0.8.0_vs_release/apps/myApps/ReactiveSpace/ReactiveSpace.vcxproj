@@ -108,6 +108,7 @@
     <ClCompile Include="..\..\..\addons\ofxOpenCv\src\ofxCvHaarFinder.cpp" />
     <ClCompile Include="..\..\..\addons\ofxOpenCv\src\ofxCvImage.cpp" />
     <ClCompile Include="..\..\..\addons\ofxOpenCv\src\ofxCvShortImage.cpp" />
+    <ClCompile Include="src\OpenCVManager.cpp" />
     <ClCompile Include="src\Particle.cpp" />
     <ClCompile Include="src\RainScene.cpp" />
     <ClCompile Include="src\ReactiveSpaceApp.cpp" />
@@ -214,6 +215,7 @@
     <ClInclude Include="src\KinectManager.h" />
     <ClInclude Include="src\Light.h" />
     <ClInclude Include="src\LightScene.h" />
+    <ClInclude Include="src\OpenCVManager.h" />
     <ClInclude Include="src\Particle.h" />
     <ClInclude Include="src\ParticleMain.h" />
     <ClInclude Include="src\RainScene.h" />

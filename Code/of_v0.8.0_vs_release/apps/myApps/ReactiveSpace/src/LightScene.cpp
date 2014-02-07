@@ -1,7 +1,7 @@
 #include "LightScene.h"
 
 
-LightScene::LightScene(vector<Particle>* people, vector<Vector4>* hands)
+LightScene::LightScene(vector<Particle*>* people, vector<Vector4>* hands)
 : IScene(people, hands)
 {
 	ofBackground(0, 255);
@@ -38,10 +38,10 @@ void LightScene::Render()
 	}
 
 	//draw a hexagon for each person in people
-	for(vector<Particle>::iterator p = pPeople->begin(); p != pPeople->end(); ++p)
+	for(vector<Particle*>::iterator p = pPeople->begin(); p != pPeople->end(); ++p)
 	{
 		ofPushMatrix();
-			ofTranslate(p->pos);
+			ofTranslate((*p)->pos);
 			ofSetColor(50, ofRandom(50,150), ofRandom(150,255), 200);
 			//ofSetColor(hexColor);
 			m_hexImg.draw(0,0,0);
@@ -59,14 +59,32 @@ void LightScene::Update(int deltaTime)
 		l->isOn = false;
 	}
 
-	for(vector<Particle>::iterator p = pPeople->begin(); p != pPeople->end(); ++p){
+	for(vector<Particle*>::iterator p = pPeople->begin(); p != pPeople->end(); ++p){
 		for(vector<Light>::iterator l = m_lights.begin(); l != m_lights.end(); ++l){
 
-			if(p->pos.x < l->x+m_lightImg.width && p->pos.x+m_hexImg.width > l->x){
+			if((*p)->pos.x < l->x+m_lightImg.width && (*p)->pos.x+m_hexImg.width > l->x){
 				l->isOn = true;
 			}
 		}
 	}
+}
+
+void LightScene::convertPeopleVector()
+{
+	vector<Particle*> newPeople = vector<Particle*>();
+
+	for (vector<Particle*>::iterator pOld = pPeople->begin(); pOld != pPeople->end(); ++pOld)
+	{
+		HexagonParticle* p = new HexagonParticle(**pOld._Ptr);
+		newPeople.push_back(p);
+	}
+	*pPeople = newPeople;
+}
+Particle* LightScene::addParticleOfProperType(ofVec3f _pos)
+{
+	HexagonParticle* p = new HexagonParticle(_pos);
+	pPeople->push_back(p);
+	return p;
 }
 
 LightScene::~LightScene()

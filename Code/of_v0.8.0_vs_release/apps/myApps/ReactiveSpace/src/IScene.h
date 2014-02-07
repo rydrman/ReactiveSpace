@@ -11,13 +11,16 @@ using std::vector;
 class IScene
 {
 public:
-	vector<Particle>* pPeople;
+	vector<Particle*>* pPeople;
 	vector<Vector4>* pHandPositions;
 
-	IScene(vector<Particle>* people, vector<Vector4>* hands);
+	IScene(vector<Particle*>* people, vector<Vector4>* hands);
 	
 	virtual void Render() = 0;
 	virtual void Update(int deltaTime) = 0;
+
+	virtual void convertPeopleVector();
+	virtual Particle* addParticleOfProperType(ofVec3f _pos);
 
 	void OnEnterPassiveUser();
 	void OnUserInteraction();

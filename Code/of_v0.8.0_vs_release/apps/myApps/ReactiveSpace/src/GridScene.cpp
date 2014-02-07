@@ -20,7 +20,7 @@ const ofVec2f s_quadTexCoords[] = {
 	ofVec2f(0.0f, 1.0f)
 };
 
-GridScene::GridScene(vector<Particle>* people, vector<Vector4>* hands)
+GridScene::GridScene(vector<Particle*>* people, vector<Vector4>* hands)
 : IScene(people, hands)
 {
 
@@ -115,13 +115,13 @@ void GridScene::Render()
 	for (vector<BirdParticle*>::iterator p = m_angryParticles.begin(); p != m_angryParticles.end(); ++p)
 	{
 		m_particleShader.setUniform4f("uColor",
-			1.f - p[0]->mood,
-			(p[0]->mood > 0.5) ? ofMap(p[0]->mood, 0.5f, 1.f, 0.5f, 0.7f) : p[0]->mood,
-			p[0]->mood,
+			1.f -(*p)->mood,
+			((*p)->mood > 0.5) ? ofMap((*p)->mood, 0.5f, 1.f, 0.5f, 0.7f) :(*p)->mood,
+			(*p)->mood,
 			alpha);
 
 		ofPushMatrix();
-			ofTranslate(p[0]->pos);
+			ofTranslate((*p)->pos);
 			ofScale(10.0, 10.0);
 			glDrawArrays(GL_QUADS, 0, 4);
 		ofPopMatrix();
@@ -129,10 +129,10 @@ void GridScene::Render()
 	
 	//draw people
 	m_particleShader.setUniform4f("uColor", 1.f, 1.f, 1.f, 1.f);
-	for (vector<Particle>::iterator p = pPeople->begin(); p != pPeople->end(); ++p)
+	for (vector<Particle*>::iterator p = pPeople->begin(); p != pPeople->end(); ++p)
 	{
 		ofPushMatrix();
-			ofTranslate(p->pos);
+			ofTranslate((*p)->pos);
 			ofScale(20.0, 20.0);
 			glDrawArrays(GL_QUADS, 0, 4);
 		ofPopMatrix();
@@ -194,17 +194,17 @@ void GridScene::Update(int deltaTime)
 
 		//distance to people
 		float happiness = 0;
-		for (vector<Particle>::iterator ppl = pPeople->begin(); ppl != pPeople->end(); ++ppl)
+		for (vector<Particle*>::iterator ppl = pPeople->begin(); ppl != pPeople->end(); ++ppl)
 		{
 			//simple check before distance
-			if (p->pos.x > ppl->pos.x + PARTICLE_HAPPY_DIST
-				|| p->pos.x < ppl->pos.x - PARTICLE_HAPPY_DIST
-				|| p->pos.y > ppl->pos.y + PARTICLE_HAPPY_DIST
-				|| p->pos.y < ppl->pos.y - PARTICLE_HAPPY_DIST)
+			if (p->pos.x > ppl[0]->pos.x + PARTICLE_HAPPY_DIST
+				|| p->pos.x < ppl[0]->pos.x - PARTICLE_HAPPY_DIST
+				|| p->pos.y > ppl[0]->pos.y + PARTICLE_HAPPY_DIST
+				|| p->pos.y < ppl[0]->pos.y - PARTICLE_HAPPY_DIST)
 				continue;
 
 			//check distance
-			dist = (p->pos.x - ppl->pos.x) * (p->pos.x - ppl->pos.x) + (p->pos.y - ppl->pos.y) * (p->pos.y - ppl->pos.y);
+			dist = (p->pos.x - ppl[0]->pos.x) * (p->pos.x - ppl[0]->pos.x) + (p->pos.y - ppl[0]->pos.y) * (p->pos.y - ppl[0]->pos.y);
 			if (dist < PARTICLE_HAPPY_DIST_SQRD)
 			{
 				//change mood

@@ -9,7 +9,10 @@
 #include "LightScene.h"
 #include "ParticleMain.h"
 #include "KinectManager.h"
+#include "OpenCVManager.h"
 #include <NuiApi.h>
+
+#define DEBUG_DRAW 1
 
 using std::vector;
 
@@ -19,9 +22,6 @@ class ReactiveSpaceApp : public ofBaseApp{
 	vector<IScene*> m_scenes;
 	IScene* pCurrentScene;
 
-	static const bool SIMULATE_CROWD = true;
-	static const bool SIMULATE_GESTURE = true;
-
 	float stepTimeDelta;
 	float stepTimeLast;
 
@@ -30,10 +30,19 @@ class ReactiveSpaceApp : public ofBaseApp{
 	vector<Vector4>* pHandPositions;
 
 	//for openCV
-	vector<Particle>* pPeople;
+	OpenCVManager* openCVManager;
+	vector<Particle*> pPeople;
 	
 	//for crowd simulation
 	int crowdLastGenerated;
+
+	//for debugging
+#ifdef DEBUG_DRAW
+	long kinectUpdateMS;
+	long openCVUpdateMS;
+	long sceneUpdateMS;
+	long sceneDrawMS;
+#endif
 
 public:
 	void setup();

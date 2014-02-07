@@ -23,21 +23,21 @@ void BirdParticle::update(vector<BirdParticle*>* angryParticles)
 	for (vector<BirdParticle*>::iterator p = angryParticles->begin(); p != angryParticles->end(); ++p)
 	{
 		//look for close particles
-		float distSqrd = ofDistSquared(p[0]->pos.x, p[0]->pos.y, pos.x, pos.y);
+		float distSqrd = ofDistSquared((*p)->pos.x,(*p)->pos.y, pos.x, pos.y);
 		if (distSqrd < s_neighbourDistSqrd)
 		{
 			//do flocking calculations
 			//seperation
 			if (distSqrd < s_desiredSeperationSqrd && distSqrd > 0)
 			{
-				steerVecSep += ( (pos - p[0]->pos).normalize() / sqrt(distSqrd) );
+				steerVecSep += ( (pos -(*p)->pos).normalize() / sqrt(distSqrd) );
 			}
 
 			//cohesion
-			sumCoh += p[0]->pos;
+			sumCoh +=(*p)->pos;
 
 			//alignment
-			sumAlign += p[0]->vel;
+			sumAlign +=(*p)->vel;
 
 			++count;
 		}

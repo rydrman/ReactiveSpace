@@ -58,6 +58,9 @@
     <ClCompile Include="src\HexagonParticle.cpp">
       <Filter>src\Particle Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\OpenCVManager.cpp">
+      <Filter>src\System Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -454,6 +457,9 @@
     </ClInclude>
     <ClInclude Include="src\HexagonParticle.h">
       <Filter>src\Particle Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OpenCVManager.h">
+      <Filter>src\System Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

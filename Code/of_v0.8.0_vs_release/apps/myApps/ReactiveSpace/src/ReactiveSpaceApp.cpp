@@ -19,7 +19,9 @@ void ReactiveSpaceApp::setup()
 	crowdLastGenerated = 0;
 
 	//open CV stuff
-	pPeople = new vector<Particle>();
+	pCurrentScene = nullptr;
+	pPeople = vector<Particle*>();
+	openCVManager = new OpenCVManager(&pPeople, &pCurrentScene);
 
 	//kinect
 	pHandPositions = new vector<Vector4>();
@@ -27,13 +29,19 @@ void ReactiveSpaceApp::setup()
 	kinectManager->initialize();
 
 	//fill scene vector
-	m_scenes.push_back(new GridScene(pPeople, pHandPositions));
-	m_scenes.push_back(new LightScene(pPeople, pHandPositions));
-	m_scenes.push_back(new RainScene(pPeople, pHandPositions));
-	m_scenes.push_back(new GeoScene(pPeople, pHandPositions));
+	m_scenes.push_back(new GridScene(&pPeople, pHandPositions));
+	m_scenes.push_back(new LightScene(&pPeople, pHandPositions));
+	m_scenes.push_back(new RainScene(&pPeople, pHandPositions));
+	m_scenes.push_back(new GeoScene(&pPeople, pHandPositions));
 	pCurrentScene = m_scenes[m_currentSceneNum];
+	pCurrentScene->convertPeopleVector();
 
-	
+#ifdef _DEBUG
+	kinectUpdateMS = 0;
+	openCVUpdateMS = 0;
+	sceneUpdateMS = 0;
+	sceneDrawMS = 0;
+#endif
 }
 
 //--------------------------------------------------------------
@@ -43,51 +51,41 @@ void ReactiveSpaceApp::update()
 	float stepTime = ofGetElapsedTimeMillis();
 	stepTimeDelta = stepTime - stepTimeLast;
 
+#ifdef DEBUG_DRAW
+	kinectUpdateMS = ofGetSystemTimeMicros();
+#endif
+
 	//update kinect
 	HRESULT hr = kinectManager->update( stepTimeDelta, pHandPositions );
-
-	if (FAILED(hr))
+	if (FAILED(hr) && !kinectManager->isFailed())
 	{
+		cout << "\nkinect failed to update frame";
 		//do something so user knows
 	}
 
-	//simulate crowd if necessary
-	if (SIMULATE_CROWD)
-	{
-		//generate a person each second
-		if (stepTime - crowdLastGenerated > 5000)
-		{
-			int winH = ofGetWindowHeight();
-			Particle p = Particle(
-				ofVec2f(0.f, ofRandom(winH * 0.25, winH * 0.75))
-				);
+#ifdef DEBUG_DRAW
+	kinectUpdateMS = ofGetSystemTimeMicros() - kinectUpdateMS;
+	openCVUpdateMS = ofGetSystemTimeMicros();
+#endif
 
-			p.vel = ofVec2f(ofRandom(0.3f, 1.f), 0.f);
-			pPeople->push_back(p);
-			crowdLastGenerated = stepTime;
-		}
+	//update open cv
+	openCVManager->update(stepTimeDelta);
 
-		//move people across screen or remove them
-		for (vector<Particle>::iterator p = pPeople->begin(); p != pPeople->end(); )
-		{
-			p->update();// stepTimeDelta;
-
-			if (p->pos.x > ofGetWindowWidth())
-			{
-				p = pPeople->erase(p);
-			}
-			else
-			{
-				++p;
-			}
-		}
-	}
+#ifdef DEBUG_DRAW
+	openCVUpdateMS = ofGetSystemTimeMicros() - openCVUpdateMS;
+#endif
 
 	//set last step time to current time
 	stepTimeLast = stepTime;
 
 	//step scene
+#ifdef DEBUG_DRAW
+	sceneUpdateMS = ofGetSystemTimeMicros();
+#endif
 	pCurrentScene->Update(stepTimeDelta);
+#ifdef DEBUG_DRAW
+	sceneUpdateMS = ofGetSystemTimeMicros() - sceneUpdateMS;
+#endif
 }
 
 //--------------------------------------------------------------
@@ -96,19 +94,59 @@ void ReactiveSpaceApp::draw()
 	glClearColor( 0.0, 0.0, 0.0, 1.0 );
 	glClear( GL_COLOR_BUFFER_BIT || GL_DEPTH_BUFFER_BIT );
 
+#ifdef DEBUG_DRAW
+	sceneDrawMS = ofGetSystemTimeMicros();
+#endif
 	pCurrentScene->Render();
+#ifdef DEBUG_DRAW
+	sceneDrawMS = ofGetSystemTimeMicros() - sceneDrawMS;
+#endif
+	
 
-	//debug stuff
+#ifdef DEBUG_DRAW
 	ofPushMatrix();
 		ofSetColor(200, 255, 0, 255);
 		ofFill();
+		
 		ofDrawBitmapString("Framerate: " + ofToString(ofGetFrameRate(), 2), 10.f, 10.f);
+		ofDrawBitmapString("Kinect Update Time: " + ofToString(kinectUpdateMS * 0.001f, 1), 10.f, 25.f);
+		ofDrawBitmapString("OpenCV Update Time: " + ofToString(openCVUpdateMS * 0.001f, 1), 10.f, 40.f);
+		ofDrawBitmapString("Scene Update Time: " + ofToString(sceneUpdateMS * 0.001f, 1), 10.f, 55.f);
+		ofDrawBitmapString("Scene Draw Time: " + ofToString(sceneDrawMS * 0.001f, 1), 10.f, 70.f);
 	ofPopMatrix();
+
+	openCVManager->debugDraw();
+#endif
 }
 
 //--------------------------------------------------------------
 void ReactiveSpaceApp::keyPressed(int key)
 {
+	switch (key){
+	case 'b':
+		openCVManager->learnBackground();
+		break;
+	case '0':
+		m_currentSceneNum = 0;
+		pCurrentScene = m_scenes[m_currentSceneNum];
+		pCurrentScene->convertPeopleVector();
+		break;
+	case '1':
+		m_currentSceneNum = 1;
+		pCurrentScene = m_scenes[m_currentSceneNum];
+		pCurrentScene->convertPeopleVector();
+		break;
+	case '2':
+		m_currentSceneNum = 2;
+		pCurrentScene = m_scenes[m_currentSceneNum];
+		pCurrentScene->convertPeopleVector();
+		break;
+	case '3':
+		m_currentSceneNum = 3;
+		pCurrentScene = m_scenes[m_currentSceneNum];
+		pCurrentScene->convertPeopleVector();
+		break;
+	}
 }
 
 //--------------------------------------------------------------
