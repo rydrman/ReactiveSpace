@@ -20,8 +20,6 @@ void ReactiveSpaceApp::setup()
 
 	//open CV stuff
 	pPeople = new vector<Particle>();
-	//convert to proper type for each scene
-	convertPeopleVectorForScene();
 
 	//kinect
 	pHandPositions = new vector<Vector4>();
@@ -106,24 +104,6 @@ void ReactiveSpaceApp::draw()
 		ofFill();
 		ofDrawBitmapString("Framerate: " + ofToString(ofGetFrameRate(), 2), 10.f, 10.f);
 	ofPopMatrix();
-}
-
-void ReactiveSpaceApp::convertPeopleVectorForScene()
-{
-	vector<Particle>* newVec;
-	switch (m_currentSceneNum)
-	{
-	default:
-		newVec = new vector<Particle>();
-		break;
-	}
-
-	for (vector<Particle>::iterator p = pPeople->begin(); p != pPeople->end(); ++p)
-	{
-		newVec->push_back(*p);
-	}
-	delete pPeople;
-	pPeople = newVec;
 }
 
 //--------------------------------------------------------------
