@@ -19,6 +19,8 @@ public:
 	virtual void Render() = 0;
 	virtual void Update(int deltaTime) = 0;
 
+	virtual vector<Particle>* getPeopleVector();
+
 	void OnEnterPassiveUser();
 	void OnUserInteraction();
 

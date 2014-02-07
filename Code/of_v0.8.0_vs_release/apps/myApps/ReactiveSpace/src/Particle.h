@@ -5,18 +5,18 @@
 class Particle
 {
 public:
-	ofVec2f pos;
-	ofVec2f vel;
-	ofVec2f accel;
+	ofVec3f pos;
+	ofVec3f vel;
+	ofVec3f accel;
 	float maxSpeed;
 	float maxForce;
 
-	Particle(ofVec2f _pos);
+	Particle(ofVec3f _pos);
 
 	//useful functions
-	void applyForce(ofVec2f f);
+	void applyForce(ofVec3f f);
 	void applyForce(float x, float y);
-	void seek(ofVec2f target, float strength = 1.f, bool slowToTarget = false, float* homeDistRatio = new float);
+	void seek(ofVec3f target, float strength = 1.f, bool slowToTarget = false, float* homeDistRatio = new float);
 
 	//update velocity
 	void update();

@@ -15,21 +15,20 @@ void ReactiveSpaceApp::setup()
 	stepTimeLast = ofGetElapsedTimeMillis();
 	crowdLastGenerated = 0;
 
-	//open CV stuff
-	pPeople = new vector<Particle>();
-
-	//kinect
-	pHandPositions = new vector<Vector4>();
-	kinectManager = new KinectManager();
-	kinectManager->initialize();
-
 	//fill scene vector
 	m_scenes.push_back(new GridScene(pPeople, pHandPositions));
 	m_scenes.push_back(new LightScene(pPeople, pHandPositions));
 	m_scenes.push_back(new RainScene(pPeople, pHandPositions));
 	m_scenes.push_back(new GeoScene(pPeople, pHandPositions));
-	pCurrentScene = m_scenes[1];
+	pCurrentScene = m_scenes[0];
 
+	//open CV stuff
+	pPeople = pCurrentScene->getPeopleVector();
+
+	//kinect
+	pHandPositions = new vector<Vector4>();
+	kinectManager = new KinectManager();
+	kinectManager->initialize();
 }
 
 //--------------------------------------------------------------

@@ -90,20 +90,44 @@ void GridScene::Render()
 	m_particleVbo.bind();
 	
 	BirdParticle* p;
+	float alpha;
 	for (int i = 0; i < m_numParticles; ++i)
 	{
 		p = &m_particleList[i];
-		m_particleShader.setUniform4f("uColor", 
-			1.f - p->mood, 
-			(p->mood > 0.5) ? ofMap(p->mood, 0.5f, 1.f, 0.5f, 0.7f) : 0.5f, 
-			p->mood, 
-			1.f);
+
+		//only draw home particles
+		if (p->isHome)
+		{
+			alpha = ofNoise(p->noiseX * 0.08f, p->noiseY * 0.08f) * 0.5f + 0.5f;
+
+			m_particleShader.setUniform4f("uColor",
+				1.f - p->mood,
+				(p->mood > 0.5) ? ofMap(p->mood, 0.5f, 1.f, 0.5f, 0.7f) : p->mood,
+				p->mood,
+				alpha);
+
+			ofPushMatrix();
+				ofTranslate(p->pos);
+				ofScale(10.0, 10.0);
+				glDrawArrays(GL_QUADS, 0, 4);
+			ofPopMatrix();
+		}
+	}
+
+	//now draw angry particles on top
+	alpha = 1.f;
+	for (vector<BirdParticle*>::iterator p = m_angryParticles.begin(); p != m_angryParticles.end(); ++p)
+	{
+		m_particleShader.setUniform4f("uColor",
+			1.f - p[0]->mood,
+			(p[0]->mood > 0.5) ? ofMap(p[0]->mood, 0.5f, 1.f, 0.5f, 0.7f) : p[0]->mood,
+			p[0]->mood,
+			alpha);
 
 		ofPushMatrix();
-			ofTranslate(p->pos);
+			ofTranslate(p[0]->pos);
 			ofScale(10.0, 10.0);
-			//int alpha = ofNoise(p->noiseX, p->noiseY) * 150 + 50;
-			glDrawArrays( GL_QUADS, 0, 4 );
+			glDrawArrays(GL_QUADS, 0, 4);
 		ofPopMatrix();
 	}
 	
@@ -141,8 +165,9 @@ void GridScene::Update(int deltaTime)
 	{
 		p = &m_particleList[i];
 
-		p->noiseX += deltaTime / 10000.f;
-		p->noiseY += deltaTime / 10000.f;
+		//update noise
+		p->noiseX += deltaTime / 200.f;
+		p->noiseY += deltaTime / 300.f;
 
 		//check distance to hands
 		bool edit = false;

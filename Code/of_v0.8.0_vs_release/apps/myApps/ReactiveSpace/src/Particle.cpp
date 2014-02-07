@@ -1,22 +1,22 @@
 #include "Particle.h"
 
-Particle::Particle(ofVec2f _pos)
+Particle::Particle(ofVec3f _pos)
 {
 	pos = _pos;
-	vel = ofVec2f(0.f, 0.f);
-	accel = ofVec2f(0.f, 0.f);
+	vel = ofVec3f(0.f, 0.f);
+	accel = ofVec3f(0.f, 0.f);
 	maxSpeed = std::numeric_limits<float>::max();
 	maxForce = std::numeric_limits<float>::max();
 }
 
-void Particle::applyForce(ofVec2f f)
+void Particle::applyForce(ofVec3f f)
 {
 	f.limit(maxForce);
 	accel += f;
 }
 void Particle::applyForce(float x, float y)
 {
-	applyForce( ofVec2f(x, y) );
+	applyForce( ofVec3f(x, y) );
 }
 
 void Particle::update()
@@ -29,10 +29,10 @@ void Particle::update()
 	accel *= 0;
 }
 
-void Particle::seek(ofVec2f target, float strength, bool slowToTarget, float* homeDistRatio)
+void Particle::seek(ofVec3f target, float strength, bool slowToTarget, float* homeDistRatio)
 {
-	ofVec2f steerVec = ofVec2f(0.f, 0.f);
-	ofVec2f desired = target - pos;
+	ofVec3f steerVec = ofVec3f(0.f, 0.f);
+	ofVec3f desired = target - pos;
 	float distSqrd = desired.lengthSquared();
 
 	float homeRatio = 0.f;
