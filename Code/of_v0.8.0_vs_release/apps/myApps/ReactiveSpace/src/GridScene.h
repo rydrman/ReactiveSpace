@@ -17,7 +17,6 @@ class GridScene : public IScene
 	//store particles
 	BirdParticle* m_particleList;
 	vector<BirdParticle*> m_angryParticles;
-	//BirdParticle** m_particleGrid;
 
 	//resources
 	ofImage m_particleImage;

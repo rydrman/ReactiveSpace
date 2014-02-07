@@ -79,12 +79,8 @@ GridScene::GridScene(vector<Particle>* people, vector<Vector4>* hands)
 
 void GridScene::Render()
 {
-	//draw grid
-	ofSetColor(255);
 
-	//glEnable(GL_CULL_FACE);
-	//glCullFace(GL_FRONT);
-	
+	ofSetColor(255);
 	m_particleShader.begin();
 	m_particleImage.getTextureReference().bind();
 	m_particleVbo.bind();

@@ -126,12 +126,6 @@ void ReactiveSpaceApp::mouseMoved(int x, int y)
 //--------------------------------------------------------------
 void ReactiveSpaceApp::mouseDragged(int x, int y, int button)
 {
-
-}
-
-//--------------------------------------------------------------
-void ReactiveSpaceApp::mousePressed(int x, int y, int button)
-{
 	if (kinectManager->isFailed())
 	{
 		pHandPositions->clear();
@@ -143,6 +137,12 @@ void ReactiveSpaceApp::mousePressed(int x, int y, int button)
 
 		pHandPositions->push_back(pos);
 	}
+}
+
+//--------------------------------------------------------------
+void ReactiveSpaceApp::mousePressed(int x, int y, int button)
+{
+	
 }
 
 //--------------------------------------------------------------
