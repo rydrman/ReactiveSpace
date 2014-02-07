@@ -6,11 +6,6 @@ IScene::IScene(vector<Particle>* people, vector<Vector4>* hands)
 	pHandPositions = hands;
 }
 
-vector<Particle>* IScene::getPeopleVector()
-{
-	return new vector<Particle>();
-}
-
 void IScene::OnEnterPassiveUser()
 {
 

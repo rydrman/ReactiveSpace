@@ -4,6 +4,9 @@
 //--------------------------------------------------------------
 void ReactiveSpaceApp::setup()
 {
+	//setup vars
+	m_currentSceneNum = 0;
+
 	//graphics
 	ofSetFrameRate(60);
 	ofSetVerticalSync(true);
@@ -15,20 +18,24 @@ void ReactiveSpaceApp::setup()
 	stepTimeLast = ofGetElapsedTimeMillis();
 	crowdLastGenerated = 0;
 
-	//fill scene vector
-	m_scenes.push_back(new GridScene(pPeople, pHandPositions));
-	m_scenes.push_back(new LightScene(pPeople, pHandPositions));
-	m_scenes.push_back(new RainScene(pPeople, pHandPositions));
-	m_scenes.push_back(new GeoScene(pPeople, pHandPositions));
-	pCurrentScene = m_scenes[0];
-
 	//open CV stuff
-	pPeople = pCurrentScene->getPeopleVector();
+	pPeople = new vector<Particle>();
+	//convert to proper type for each scene
+	convertPeopleVectorForScene();
 
 	//kinect
 	pHandPositions = new vector<Vector4>();
 	kinectManager = new KinectManager();
 	kinectManager->initialize();
+
+	//fill scene vector
+	m_scenes.push_back(new GridScene(pPeople, pHandPositions));
+	m_scenes.push_back(new LightScene(pPeople, pHandPositions));
+	m_scenes.push_back(new RainScene(pPeople, pHandPositions));
+	m_scenes.push_back(new GeoScene(pPeople, pHandPositions));
+	pCurrentScene = m_scenes[m_currentSceneNum];
+
+	
 }
 
 //--------------------------------------------------------------
@@ -99,6 +106,24 @@ void ReactiveSpaceApp::draw()
 		ofFill();
 		ofDrawBitmapString("Framerate: " + ofToString(ofGetFrameRate(), 2), 10.f, 10.f);
 	ofPopMatrix();
+}
+
+void ReactiveSpaceApp::convertPeopleVectorForScene()
+{
+	vector<Particle>* newVec;
+	switch (m_currentSceneNum)
+	{
+	default:
+		newVec = new vector<Particle>();
+		break;
+	}
+
+	for (vector<Particle>::iterator p = pPeople->begin(); p != pPeople->end(); ++p)
+	{
+		newVec->push_back(*p);
+	}
+	delete pPeople;
+	pPeople = newVec;
 }
 
 //--------------------------------------------------------------

@@ -53,7 +53,7 @@
       <Filter>src\Particle Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Light.cpp">
-      <Filter>src\SceneItems</Filter>
+      <Filter>src\Scene Items</Filter>
     </ClCompile>
     <ClCompile Include="src\HexagonParticle.cpp">
       <Filter>src\Particle Files</Filter>
@@ -135,7 +135,7 @@
     <Filter Include="src\Particle Files">
       <UniqueIdentifier>{65a37be3-fdd6-4130-a900-a8586d78e264}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\SceneItems">
+    <Filter Include="src\Scene Items">
       <UniqueIdentifier>{72a6e22e-40d7-4667-b28d-ff9ea4484c5e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -450,7 +450,7 @@
       <Filter>src\Particle Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Light.h">
-      <Filter>src\SceneItems</Filter>
+      <Filter>src\Scene Items</Filter>
     </ClInclude>
     <ClInclude Include="src\HexagonParticle.h">
       <Filter>src\Particle Files</Filter>
