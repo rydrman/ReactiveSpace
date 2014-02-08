@@ -1,6 +1,9 @@
 #pragma once
 
+#define DEBUG_DRAW 1
+
 #include "ofMain.h"
+#include <stdio.h>
 #include <vector>
 #include "IScene.h"
 #include "GridScene.h"
@@ -10,9 +13,6 @@
 #include "ParticleMain.h"
 #include "KinectManager.h"
 #include "OpenCVManager.h"
-#include <NuiApi.h>
-
-#define DEBUG_DRAW 1
 
 using std::vector;
 
@@ -27,7 +27,7 @@ class ReactiveSpaceApp : public ofBaseApp{
 
 	//for kinect
 	KinectManager* kinectManager;
-	vector<Vector4>* pHandPositions;
+	vector<Particle*> pHandPositions;
 
 	//for openCV
 	OpenCVManager* openCVManager;

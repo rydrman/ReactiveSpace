@@ -10,7 +10,7 @@ class RainScene : public IScene
 	Particle* m_rainParticles[s_numRainParticles];
 
 public:
-	RainScene(vector<Particle*>* people, vector<Vector4>* hands);
+	RainScene(vector<Particle*>* people, vector<Particle*>* hands);
 
 	virtual void Render();
 	virtual void Update(int deltaTime);

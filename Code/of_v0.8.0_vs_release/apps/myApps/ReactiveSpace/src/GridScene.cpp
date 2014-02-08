@@ -1,6 +1,8 @@
 #include "GridScene.h"
 #include "ofMain.h"
 
+#define DEBUG_DRAW 1
+
 static const float PARTICLE_ANGRY_DIST_SQRD = 22500;
 static const float PARTICLE_HAPPY_DIST_SQRD = 10000;
 static const float PARTICLE_ANGRY_DIST = 150;
@@ -20,7 +22,7 @@ const ofVec2f s_quadTexCoords[] = {
 	ofVec2f(0.0f, 1.0f)
 };
 
-GridScene::GridScene(vector<Particle*>* people, vector<Vector4>* hands)
+GridScene::GridScene(vector<Particle*>* people, vector<Particle*>* hands)
 : IScene(people, hands)
 {
 
@@ -145,11 +147,19 @@ void GridScene::Render()
 	//draw hands
 	ofSetColor(255, 0, 0, 255);
 	ofFill();
-	ofPoint pos;
-	for (vector<Vector4>::iterator h = pHandPositions->begin(); h != pHandPositions->end(); ++h)
+	for (vector<Particle*>::iterator h = pHandPositions->begin(); h != pHandPositions->end(); ++h)
 	{
-		pos = ofPoint( h->x , h->y );
-		ofCircle(pos, 20);
+		ofPushMatrix();
+		ofTranslate((*h)->pos);
+		ofCircle(0.f, 0.f, 0.f, 20.f);
+
+#ifdef DEBUG_DRAW
+		ofSetColor(0, 0, 0, 255);
+		ofFill();
+		ofDrawBitmapString(ofToString((*h)->ID, 0), 0.f, 0.f);
+		ofSetColor(255, 0, 0, 255);
+#endif
+		ofPopMatrix();
 	}
 }
 
@@ -168,9 +178,9 @@ void GridScene::Update(int deltaTime)
 		//check distance to hands
 		bool edit = false;
 		float dist;
-		for (vector<Vector4>::iterator h = pHandPositions->begin(); h != pHandPositions->end(); ++h)
+		for (vector<Particle*>::iterator h = pHandPositions->begin(); h != pHandPositions->end(); ++h)
 		{
-			dist = ofDistSquared(p->pos.x, p->pos.y, h->x, h->y);
+			dist = ofDistSquared(p->pos.x, p->pos.y, (*h)->pos.x, (*h)->pos.y);
 			if (dist < PARTICLE_ANGRY_DIST_SQRD)
 			{
 
@@ -179,7 +189,7 @@ void GridScene::Update(int deltaTime)
 				edit = true;
 
 				//push away
-				float angle = atan2f(p->pos.y - h->y, p->pos.x - h->x);
+				float angle = atan2f(p->pos.y - (*h)->pos.y, p->pos.x - (*h)->pos.x);
 				float forceMag = 1.f * (1.f - dist / PARTICLE_ANGRY_DIST_SQRD);
 				p->applyForce(cosf(angle) * forceMag, sinf(angle) * forceMag);
 

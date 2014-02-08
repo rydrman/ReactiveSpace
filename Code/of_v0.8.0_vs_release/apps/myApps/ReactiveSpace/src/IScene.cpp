@@ -1,6 +1,6 @@
 #include "IScene.h"
 
-IScene::IScene(vector<Particle*>* people, vector<Vector4>* hands)
+IScene::IScene(vector<Particle*>* people, vector<Particle*>* hands)
 {
 	pPeople = people;
 	pHandPositions = hands;
@@ -23,6 +23,25 @@ Particle* IScene::addParticleOfProperType(ofVec3f _pos)
 	Particle* p = new Particle(_pos);
 	pPeople->push_back(p);
 	return p;
+}
+
+void IScene::convertHandVector()
+{
+	vector<Particle*> newHands = vector<Particle*>();
+
+	for (vector<Particle*>::iterator hOld = pHandPositions->begin(); hOld != pHandPositions->end(); ++hOld)
+	{
+		Particle* h = new Particle(**hOld._Ptr);
+		newHands.push_back(h);
+	}
+	*pPeople = newHands;
+}
+
+Particle* IScene::addHandOfProperType(ofVec3f _pos)
+{
+	Particle* h = new Particle(_pos);
+	pHandPositions->push_back(h);
+	return h;
 }
 
 void IScene::OnEnterPassiveUser()

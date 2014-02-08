@@ -11,7 +11,7 @@ class LightScene : public IScene
 	vector<Light> m_lights;
 
 public:
-	LightScene(vector<Particle*>* people, vector<Vector4>* hands);
+	LightScene(vector<Particle*>* people, vector<Particle*>* hands);
 
 	void Render();
 	void Update(int deltaTime);

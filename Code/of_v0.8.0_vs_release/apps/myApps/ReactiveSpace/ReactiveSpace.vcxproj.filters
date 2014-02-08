@@ -25,9 +25,6 @@
     <ClCompile Include="..\..\..\addons\ofxOpenCv\src\ofxCvShortImage.cpp">
       <Filter>addons\ofxOpenCv\src</Filter>
     </ClCompile>
-    <ClCompile Include="src\ReactiveSpaceApp.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\GeoScene.cpp">
       <Filter>src\Scene Files</Filter>
     </ClCompile>
@@ -60,6 +57,9 @@
     </ClCompile>
     <ClCompile Include="src\OpenCVManager.cpp">
       <Filter>src\System Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ReactiveSpaceApp.cpp">
+      <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -1,7 +1,4 @@
 #include "ofMain.h"
-#include <Windows.h>
-#include <Ole2.h>
-#include <NuiApi.h>
 #include "ReactiveSpaceApp.h"
 
 //========================================================================

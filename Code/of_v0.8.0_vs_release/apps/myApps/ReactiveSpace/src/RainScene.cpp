@@ -1,7 +1,7 @@
 #include "RainScene.h"
 
 
-RainScene::RainScene(vector<Particle*>* people, vector<Vector4>* hands)
+RainScene::RainScene(vector<Particle*>* people, vector<Particle*>* hands)
 : IScene(people, hands)
 {
 

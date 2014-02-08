@@ -4,3 +4,4 @@
 
 #include "Particle.h"
 #include "BirdParticle.h"
+#include "HexagonParticle.h"

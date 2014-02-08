@@ -1,11 +1,20 @@
 #pragma once
 #include "ofMain.h"
+
 #include <Windows.h>
 #include <Ole2.h>
 #include <NuiApi.h>
 
+#include "ParticleMain.h"
+#include "IScene.h"
+
+
+
 class KinectManager
 {
+	vector<Particle*>* pHandPositions;
+	IScene** ppCurrentScene;
+
 	bool kinectInitialized;
 	bool kinectFailed;
 
@@ -15,15 +24,19 @@ class KinectManager
 
 	HANDLE colorStream;
 
+	int handParticleTimeout;
+
 public:
-	KinectManager();
+	KinectManager(vector<Particle*>* hands, IScene** currentScene);
 
 	HRESULT initialize();
 	HRESULT startKinect();
 
-	HRESULT update(int dt, vector<Vector4>* pHandPos);
+	HRESULT update(int dt);
 
-	Vector4 handPositionToScreenPosition(Vector4 pos);
+	void addUpdate(ofVec3f pos, int trackingID, int jointIndex);
+
+	ofVec3f handPositionToScreenPosition(Vector4 pos);
 
 	bool isFailed();
 

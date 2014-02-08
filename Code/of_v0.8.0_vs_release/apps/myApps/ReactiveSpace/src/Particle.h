@@ -5,11 +5,18 @@
 class Particle
 {
 public:
+	//generic data members
 	ofVec3f pos;
+	ofVec3f prevPos;
 	ofVec3f vel;
 	ofVec3f accel;
 	float maxSpeed;
 	float maxForce;
+	
+	//for kinect / tracking
+	int ID;
+	int jointIndex;
+	int timer;
 
 	Particle(ofVec3f _pos);
 

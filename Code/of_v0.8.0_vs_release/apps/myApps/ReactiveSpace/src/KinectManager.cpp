@@ -1,11 +1,13 @@
 #include "KinectManager.h"
-#include <NuiApi.h>
 
-
-KinectManager::KinectManager()
+KinectManager::KinectManager(vector<Particle*>* hands, IScene** currentScene)
 {
 	kinectInitialized = false;
 	kinectFailed = false;
+
+	ppCurrentScene = currentScene;
+	pHandPositions = hands;
+	handParticleTimeout = 1000;
 
 	pSkeletonFrame = new NUI_SKELETON_FRAME();
 	colorStream = HANDLE();
@@ -82,8 +84,19 @@ HRESULT KinectManager::startKinect()
 	return hr;
 }
 
-HRESULT KinectManager::update(int dt, vector<Vector4>* pHandPos)
+HRESULT KinectManager::update(int dt)
 {
+	//first add time to particles and remove them if they're dead
+	for (vector<Particle*>::iterator hp = pHandPositions->begin(); hp != pHandPositions->end();)
+	{
+		(*hp)->timer += dt;
+
+		if ((*hp)->timer > handParticleTimeout)
+			hp = pHandPositions->erase(hp);
+		else
+			++hp;
+	}
+
 	if (kinectFailed)
 		return MAKE_HRESULT(0, 0, -1);
 	
@@ -115,21 +128,23 @@ HRESULT KinectManager::update(int dt, vector<Vector4>* pHandPos)
 
 	if (SUCCEEDED(hr))
 	{
-		pHandPos->clear();
+		//pHandPos->clear();
+		ofVec3f pos;
 		for (int i = 0; i < NUI_SKELETON_COUNT; i++)
 		{
 			//if its a tracked skeleton
 			if (pSkeletonFrame->SkeletonData[i].eTrackingState == NUI_SKELETON_TRACKED)
 			{
-				//found skeleton, push hand positions
-				pHandPos->push_back(
-					handPositionToScreenPosition(
+				//left hand
+				pos = handPositionToScreenPosition(
 					pSkeletonFrame->SkeletonData[i].SkeletonPositions[NUI_SKELETON_POSITION_HAND_LEFT]
-					));
-				pHandPos->push_back(
-					handPositionToScreenPosition(
+					);
+				addUpdate(pos, pSkeletonFrame->SkeletonData[i].dwTrackingID, NUI_SKELETON_POSITION_HAND_LEFT);
+
+				pos = handPositionToScreenPosition(
 					pSkeletonFrame->SkeletonData[i].SkeletonPositions[NUI_SKELETON_POSITION_HAND_RIGHT]
-					));
+					);
+				addUpdate(pos, pSkeletonFrame->SkeletonData[i].dwTrackingID, NUI_SKELETON_POSITION_HAND_RIGHT);
 			}
 		}
 	}
@@ -140,17 +155,48 @@ HRESULT KinectManager::update(int dt, vector<Vector4>* pHandPos)
 	if (SUCCEEDED(hr))
 	{
 		//get image stream
-
 	}
 
 	return hr;
 }
 
-Vector4 KinectManager::handPositionToScreenPosition(Vector4 pos)
+void KinectManager::addUpdate(ofVec3f pos, int trackingID, int jointIndex)
 {
+
+	//find matching particle
+	vector<Particle*>::iterator pI;
+	for (pI = pHandPositions->begin(); pI != pHandPositions->end(); ++pI)
+	{
+		if ((*pI)->ID == trackingID && (*pI)->jointIndex == jointIndex)
+			break;
+	}
+
+	//update it or create a new one
+	Particle* p;
+	if (pI != pHandPositions->end())
+	{
+		p = *pI._Ptr;
+		p->vel = (pos - p->pos) * 0.5f;
+		p->timer = 0;
+		p->update();
+	}
+	else
+	{
+		p = (*ppCurrentScene)->addHandOfProperType(pos);
+		p->ID = trackingID;
+		p->jointIndex = jointIndex;
+		p->timer = 0;
+		pHandPositions->push_back(p);
+	}
+}
+
+ofVec3f KinectManager::handPositionToScreenPosition(Vector4 _pos)
+{
+	ofVec3f pos = ofVec3f();
+
 	float xPos;
 	float yPos;
-	NuiTransformSkeletonToDepthImage(pos, &xPos, &yPos, NUI_IMAGE_RESOLUTION_1280x960);
+	NuiTransformSkeletonToDepthImage(_pos, &xPos, &yPos, NUI_IMAGE_RESOLUTION_1280x960);
 
 	pos.x = xPos / 1280 * ofGetWidth();
 	pos.y = yPos / 960 * ofGetHeight();

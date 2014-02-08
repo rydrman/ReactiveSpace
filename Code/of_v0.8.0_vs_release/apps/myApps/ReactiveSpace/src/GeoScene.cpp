@@ -1,7 +1,7 @@
 #include "GeoScene.h"
 
 
-GeoScene::GeoScene(vector<Particle*>* people, vector<Vector4>* hands)
+GeoScene::GeoScene(vector<Particle*>* people, vector<Particle*>* hands)
 : IScene(people, hands)
 {
 }

@@ -3,6 +3,7 @@
 Particle::Particle(ofVec3f _pos)
 {
 	pos = _pos;
+	prevPos = _pos;
 	vel = ofVec3f(0.f, 0.f);
 	accel = ofVec3f(0.f, 0.f);
 	maxSpeed = std::numeric_limits<float>::max();
@@ -23,6 +24,7 @@ void Particle::update()
 {
 	vel += accel;
 	vel.limit(maxSpeed);
+	prevPos = pos;
 	pos += vel;
 
 	//reset accel

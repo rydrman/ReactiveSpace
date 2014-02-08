@@ -1,7 +1,7 @@
 #include "LightScene.h"
 
 
-LightScene::LightScene(vector<Particle*>* people, vector<Vector4>* hands)
+LightScene::LightScene(vector<Particle*>* people, vector<Particle*>* hands)
 : IScene(people, hands)
 {
 	ofBackground(0, 255);
