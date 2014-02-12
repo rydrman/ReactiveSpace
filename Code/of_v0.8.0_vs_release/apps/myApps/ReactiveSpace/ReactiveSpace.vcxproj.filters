@@ -61,6 +61,9 @@
     <ClCompile Include="src\ReactiveSpaceApp.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\GeoParticle.cpp">
+      <Filter>src\Particle Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -460,6 +463,9 @@
     </ClInclude>
     <ClInclude Include="src\OpenCVManager.h">
       <Filter>src\System Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GeoParticle.h">
+      <Filter>src\Particle Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

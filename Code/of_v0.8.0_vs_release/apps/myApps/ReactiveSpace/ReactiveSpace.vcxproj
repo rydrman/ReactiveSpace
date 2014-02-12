@@ -93,6 +93,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\BirdParticle.cpp" />
+    <ClCompile Include="src\GeoParticle.cpp" />
     <ClCompile Include="src\GeoScene.cpp" />
     <ClCompile Include="src\GridScene.cpp" />
     <ClCompile Include="src\HexagonParticle.cpp" />
@@ -208,6 +209,7 @@
     <ClInclude Include="..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\video\tracking.hpp" />
     <ClInclude Include="..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\video\video.hpp" />
     <ClInclude Include="src\BirdParticle.h" />
+    <ClInclude Include="src\GeoParticle.h" />
     <ClInclude Include="src\GeoScene.h" />
     <ClInclude Include="src\GridScene.h" />
     <ClInclude Include="src\HexagonParticle.h" />

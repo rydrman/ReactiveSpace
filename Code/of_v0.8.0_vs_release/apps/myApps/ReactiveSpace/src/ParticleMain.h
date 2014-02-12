@@ -5,3 +5,4 @@
 #include "Particle.h"
 #include "BirdParticle.h"
 #include "HexagonParticle.h"
+#include "GeoParticle.h"
