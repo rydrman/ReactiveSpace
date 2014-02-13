@@ -25,6 +25,9 @@ class OpenCVManager
 	ofxCvColorImage m_prevImg;
 	ofxCvColorImage m_curImg;
 
+	//for tacking
+	cv::SurfFeatureDetector m_detector;
+	vector<cv::KeyPoint> m_keyPoints;
 	//tracking vars
 	/*CvPoint2D32f* m_corners;
 	int m_numCorners;

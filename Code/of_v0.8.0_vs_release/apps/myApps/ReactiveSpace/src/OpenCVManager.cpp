@@ -9,6 +9,9 @@ OpenCVManager::OpenCVManager(vector<Particle*>* people, IScene** currentScene)
 	m_vidGrabber.setVerbose(true);
 	m_vidGrabber.initGrabber(320, 240);
 
+	//for tracking
+	m_detector = cv::SurfFeatureDetector();
+	m_keyPoints = vector<cv::KeyPoint>();
 	//tracking vars
 	/*m_corners = new CvPoint2D32f[0];
 	m_numCorners = 0;
@@ -79,25 +82,11 @@ void OpenCVManager::update(int deltaTime)
 			//setup first frame
 			if (learnBG)
 			{
-				//cv::goodFeaturesToTrack(m_curImg.getCvImage(), m_corners, &m_numCorners, m_cornerQualityLevel, m_minCornerDistance);
-				//learnBG = false;
+				learnBG = false;
 			}
-			//cvCalcOpticalFlowPyrLK(m_prevImg.getPixels(), m_curImg.getPixels(), )
-
-			//get new images
-			//m_colorImg.setFromPixels(m_vidGrabber.getPixels(), 320, 240);
-			//m_grayImg = m_colorImg;
-
-			////learn new background if necessary
-			//if (learnBG)
-			//{
-			//	m_backgroundImg = m_grayImg;
-			//	learnBG = false;
-			//}
-
-			////get the difference between image and background
-			//m_diffImg.absDiff(m_backgroundImg, m_grayImg);
-			//m_diffImg.threshold(diffThresh);
+			
+			//detect points
+			m_detector.detect(m_curImg.getCvImage(), m_keyPoints);
 		}
 	}
 
@@ -112,13 +101,14 @@ void OpenCVManager::debugDraw()
 
 	m_curImg.draw(0, 0);
 
-	/*for (int i = 0; i < sizeof(m_corners) / sizeof(CvPoint2D32f); ++i)
+	ofSetColor(255, 0, 0);
+	for(vector<cv::KeyPoint>::iterator kp = m_keyPoints.begin(); kp != m_keyPoints.end(); ++kp)
 	{
 		ofPushMatrix();
-			ofTranslate(m_corners[i].x, m_corners[i].y);
-			ofEllipse(0, 0, 5.f, 5.f);
+			ofTranslate( kp->pt.x, kp->pt.y );
+			ofEllipse(0.f, 0.f, 0.f, 10.f, 10.f);
 		ofPopMatrix();
-	}*/
+	}
 	ofPopMatrix();
 }
 
