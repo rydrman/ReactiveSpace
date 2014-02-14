@@ -4,7 +4,6 @@
 #include "ofxOpenCv.h"
 #include "IScene.h"
 
-#define SIMULATE_CROWD 1
 
 class OpenCVManager
 {
@@ -15,24 +14,29 @@ class OpenCVManager
 	vector<Particle*>* pPeople;
 	IScene** ppCurrentScene;
 
-#ifdef SIMULATE_CROWD
 	int crowdLastGenerated;
-#endif
 
 	ofVideoGrabber m_vidGrabber;
+	bool firstFrame;
 	
 	//image frames
-	ofxCvColorImage m_prevImg;
 	ofxCvColorImage m_curImg;
+	IplImage* m_oldFrame;
+	IplImage* m_newFrame;
 
-	//for tacking
-	cv::SurfFeatureDetector m_detector;
-	vector<cv::KeyPoint> m_keyPoints;
 	//tracking vars
-	/*CvPoint2D32f* m_corners;
-	int m_numCorners;
-	double m_cornerQualityLevel;
-	double m_minCornerDistance;*/
+	int m_numFeatures;
+	char* m_pointFound;
+	CvPoint2D32f* m_oldImgFeatures;
+	CvPoint2D32f* m_newImgFeatures;
+
+	//for use in algorithms
+	int m_flowFlags;
+	CvTermCriteria m_termCriteria;
+	IplImage* m_eig_image;
+	IplImage* m_tmp_image;
+	IplImage * m_pyramidNew;
+	IplImage * m_pyramidOld;
 
 public:
 	OpenCVManager(vector<Particle*>* people, IScene** currentScene);

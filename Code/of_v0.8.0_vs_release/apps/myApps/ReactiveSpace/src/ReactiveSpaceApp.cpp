@@ -14,7 +14,6 @@ void ReactiveSpaceApp::setup()
 	//init time stuff
 	stepTimeDelta = 0;
 	stepTimeLast = ofGetElapsedTimeMillis();
-	crowdLastGenerated = 0;
 
 	//open CV stuff
 	pCurrentScene = nullptr;
@@ -34,7 +33,7 @@ void ReactiveSpaceApp::setup()
 	pCurrentScene = m_scenes[m_currentSceneNum];
 	pCurrentScene->convertPeopleVector();
 
-#ifdef _DEBUG
+#ifdef DEBUG_DRAW
 	kinectUpdateMS = 0;
 	openCVUpdateMS = 0;
 	sceneUpdateMS = 0;

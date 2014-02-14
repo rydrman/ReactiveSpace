@@ -32,9 +32,6 @@ class ReactiveSpaceApp : public ofBaseApp{
 	//for openCV
 	OpenCVManager* openCVManager;
 	vector<Particle*> pPeople;
-	
-	//for crowd simulation
-	int crowdLastGenerated;
 
 	//for debugging
 #ifdef DEBUG_DRAW
