@@ -8,10 +8,12 @@ class LightScene : public IScene
 	ofPolyline m_hexShape;
 	ofImage m_hexImg;
 	ofImage m_lightImg;
+
 	ofImage m_fogImg;
-	ofShader m_fogShader;
+
+	/*ofShader m_fogShader;
 	ofVbo m_fogVbo;
-	int m_fogInt;
+	int m_fogInt;*/
 
 	vector<Light> m_lights;
 

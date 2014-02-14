@@ -1,28 +1,28 @@
 #include "LightScene.h"
 
-const ofVec2f s_fogTexCoords[] = {
+/*const ofVec2f s_fogTexCoords[] = {
 	ofVec2f(0.0f, 0.0f),
 	ofVec2f(1.0f, 0.0f),
 	ofVec2f(1.0f, 1.0f),
 	ofVec2f(0.0f, 1.0f)
-};
+};*/
 
 LightScene::LightScene(vector<Particle*>* people, vector<Particle*>* hands)
 : IScene(people, hands)
 {
-	const ofVec2f fogVerts[] = {
+	/*const ofVec2f fogVerts[] = {
 		ofVec2f(0.f, 0.f),
 		ofVec2f(0.f, ofGetWidth()),
 		ofVec2f(ofGetWidth(), ofGetHeight()),
 		ofVec2f(0.0f, ofGetHeight())
-	};
+	};*/
 
 	pPeople = people;
 	
 	//load all images 
 	m_hexImg.loadImage("LightScene/hex.png");
 	m_lightImg.loadImage("LightScene/light.png");
-	m_fogImg.loadImage("LightScene/Fog.png");
+	m_fogImg.loadImage("LightScene/fog.png");
 
 	m_lights = vector<Light>();
 
@@ -35,30 +35,32 @@ LightScene::LightScene(vector<Particle*>* people, vector<Particle*>* hands)
 	}
 	
 	//setting up shader for fog
-	m_fogShader = ofShader();
-	m_fogShader.load("LightScene/fog");
-	m_fogVbo = ofVbo();
-	m_fogVbo.setVertexData( &fogVerts[0], 4, GL_STATIC_DRAW);
-	m_fogVbo.setTexCoordData(&s_fogTexCoords[0], 4, GL_STATIC_DRAW);
-	m_fogInt = 0;
+	//m_fogShader = ofShader();
+	//m_fogShader.load("LightScene/fog");
+	//m_fogVbo = ofVbo();
+	//m_fogVbo.setVertexData( &fogVerts[0], 4, GL_STATIC_DRAW);
+	//m_fogVbo.setTexCoordData(&s_fogTexCoords[0], 4, GL_STATIC_DRAW);
+	//m_fogInt = 0;
 
 }
 
 void LightScene::Render()
 {
 
-	m_fogShader.begin();
-	m_fogImg.getTextureReference().bind();
-	m_fogVbo.bind();
+	//m_fogShader.begin();
+	//m_fogImg.getTextureReference().bind();
+	//m_fogVbo.bind();
 
 	//draw fog
-	m_fogShader.setUniform1i("lightsOnBits", m_fogInt);
-	m_fogShader.setUniform1f("numLights", m_lights.size());
-	glDrawArrays(GL_QUADS, 0, 4);
+//	m_fogShader.setUniform1i("lightsOnBits", m_fogInt);
+//	m_fogShader.setUniform1f("numLights", m_lights.size());
+//	glDrawArrays(GL_QUADS, 0, 4);
 
-	m_fogImg.getTextureReference().unbind();
-	m_fogShader.end();
-	m_fogVbo.unbind();
+	//m_fogImg.getTextureReference().unbind();
+	//m_fogShader.end();
+	//m_fogVbo.unbind();
+
+	m_fogImg.draw(0, 0, 10);
 
 	//draw lights
 	ofPushMatrix();
@@ -83,6 +85,8 @@ void LightScene::Render()
 	}
 
 	ofPopMatrix();
+
+	
 }
 
 void LightScene::Update(int deltaTime)
