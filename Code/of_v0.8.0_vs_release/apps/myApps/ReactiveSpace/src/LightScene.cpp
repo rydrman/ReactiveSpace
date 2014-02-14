@@ -22,7 +22,7 @@ LightScene::LightScene(vector<Particle*>* people, vector<Particle*>* hands)
 	//load all images 
 	m_hexImg.loadImage("LightScene/hex.png");
 	m_lightImg.loadImage("LightScene/light.png");
-	m_fogImg.loadImage("LightScene/Fog.png");
+	m_fogImg.loadImage("LightScene/fog.png");
 
 	m_lights = vector<Light>();
 
@@ -46,7 +46,7 @@ LightScene::LightScene(vector<Particle*>* people, vector<Particle*>* hands)
 
 void LightScene::Render()
 {
-
+	glColor4f(1.0, 1.0, 1.0, 1.0);
 	m_fogShader.begin();
 	m_fogImg.getTextureReference().bind();
 	m_fogVbo.bind();
@@ -55,6 +55,8 @@ void LightScene::Render()
 	m_fogShader.setUniform1i("lightsOnBits", m_fogInt);
 	m_fogShader.setUniform1f("numLights", m_lights.size());
 	glDrawArrays(GL_QUADS, 0, 4);
+	
+	ofDrawBitmapString("lightBits: " + ofToString(m_fogInt), 10.f, 85.f);
 
 	m_fogImg.getTextureReference().unbind();
 	m_fogShader.end();

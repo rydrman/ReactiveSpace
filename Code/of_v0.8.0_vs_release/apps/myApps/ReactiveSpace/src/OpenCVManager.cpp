@@ -101,7 +101,7 @@ void OpenCVManager::debugDraw()
 
 	m_curImg.draw(0, 0);
 
-	ofSetColor(255, 0, 0);
+	//ofSetColor(255, 0, 0);
 	for(vector<cv::KeyPoint>::iterator kp = m_keyPoints.begin(); kp != m_keyPoints.end(); ++kp)
 	{
 		ofPushMatrix();
