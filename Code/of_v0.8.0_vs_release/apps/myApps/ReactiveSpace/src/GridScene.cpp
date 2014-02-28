@@ -73,6 +73,8 @@ GridScene::GridScene(vector<Particle*>* people, vector<Particle*>* hands)
 	}
 
 	//load resources
+	m_backgroundImage = ofImage();
+	m_backgroundImage.loadImage("GridScene/GridBackground.png");
 	m_particleImage = ofImage();
 	m_particleImage.loadImage("GridScene/GridParticle.png");
 	m_particleShader = ofShader();
@@ -81,6 +83,7 @@ GridScene::GridScene(vector<Particle*>* people, vector<Particle*>* hands)
 
 void GridScene::Render()
 {
+	m_backgroundImage.draw(0.f, 0.f, 0.f, ofGetWidth(), ofGetHeight());
 
 	ofSetColor(255);
 	m_particleShader.begin();

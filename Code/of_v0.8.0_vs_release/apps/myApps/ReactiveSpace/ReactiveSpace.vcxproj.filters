@@ -471,4 +471,7 @@
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\..\..\Art\Level Final Designs\Grid\Grid - Background\GridBackground.png" />
+  </ItemGroup>
 </Project>

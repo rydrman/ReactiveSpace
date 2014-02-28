@@ -19,6 +19,7 @@ class GridScene : public IScene
 	vector<BirdParticle*> m_angryParticles;
 
 	//resources
+	ofImage m_backgroundImage;
 	ofImage m_particleImage;
 	ofVbo m_particleVbo;
 	ofShader m_particleShader;
