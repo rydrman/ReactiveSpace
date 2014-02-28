@@ -38,6 +38,11 @@ class OpenCVManager
 	IplImage * m_pyramidNew;
 	IplImage * m_pyramidOld;
 
+	//vector field
+	int m_fieldWidth;
+	int m_fieldHeight;
+	Particle* m_vectorField;
+
 public:
 	OpenCVManager(vector<Particle*>* people, IScene** currentScene);
 

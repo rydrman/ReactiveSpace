@@ -2,6 +2,7 @@
 
 static CvSize s_frameSize = cvSize(160, 120);
 static int s_maxFeatures = 300;
+static int s_vectorFieldDensity = 50;
 
 OpenCVManager::OpenCVManager(vector<Particle*>* people, IScene** currentScene)
 {
@@ -28,6 +29,19 @@ OpenCVManager::OpenCVManager(vector<Particle*>* people, IScene** currentScene)
 	//my vars
 	learnBG = true;
 	diffThresh = 50;
+
+	m_fieldWidth = ofGetWidth() / s_vectorFieldDensity;
+	m_fieldHeight = ofGetHeight() / s_vectorFieldDensity;
+	m_vectorField = new Particle[m_fieldWidth * m_fieldHeight];
+	
+	for (int i = 0; i < m_fieldWidth; ++i)
+	{
+		for (int j = 0; j < m_fieldHeight; ++j)
+		{
+			m_vectorField[i*j] = Particle(ofVec3f(i * s_vectorFieldDensity, j * s_vectorFieldDensity));
+			cout << i * s_vectorFieldDensity << ", " << j * s_vectorFieldDensity << endl;
+		}
+	}
 
 	crowdLastGenerated = -5000;
 	lastFrame = 0;
@@ -153,6 +167,23 @@ void OpenCVManager::debugDraw()
 				ofRotate( ofRadToDeg( atan2f( tmpVec.y, tmpVec.x ) ) );
 				ofLine(0.f, 0.f, len * 2.f, 0.f);
 			ofPopMatrix();
+		}
+
+	ofPopMatrix();
+
+	ofPushMatrix();
+		ofFill();
+		ofSetColor(255, 255, 0, 255);
+
+		for (int i = 0; i < m_fieldWidth; ++i)
+		{
+			for (int j = 0; j < m_fieldHeight; ++j)
+			{
+				ofPushMatrix();
+					ofTranslate(m_vectorField[i*j].pos);
+					ofRect(0, 0, 20.f, 20.f);
+				ofPopMatrix();
+			}
 		}
 	ofPopMatrix();
 }

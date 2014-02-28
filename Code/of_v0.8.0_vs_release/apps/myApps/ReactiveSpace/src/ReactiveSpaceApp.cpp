@@ -49,7 +49,8 @@ void ReactiveSpaceApp::update()
 	stepTimeDelta = stepTime - stepTimeLast;
 
 #ifdef DEBUG_DRAW
-	kinectUpdateMS = ofGetSystemTimeMicros();
+	long newMS = kinectUpdateMS;
+	newMS = ofGetSystemTimeMicros();
 #endif
 
 	//update kinect
@@ -61,15 +62,17 @@ void ReactiveSpaceApp::update()
 	}
 
 #ifdef DEBUG_DRAW
-	kinectUpdateMS = ofGetSystemTimeMicros() - kinectUpdateMS;
-	openCVUpdateMS = ofGetSystemTimeMicros();
+	newMS = ofGetSystemTimeMicros() - newMS;
+	kinectUpdateMS = (kinectUpdateMS * 3 + newMS) * 0.25;
+	newMS = ofGetSystemTimeMicros();
 #endif
 
 	//update open cv
 	openCVManager->update(stepTimeDelta);
 
 #ifdef DEBUG_DRAW
-	openCVUpdateMS = ofGetSystemTimeMicros() - openCVUpdateMS;
+	newMS = ofGetSystemTimeMicros() - newMS;
+	openCVUpdateMS = (openCVUpdateMS * 3 + newMS) * 0.25;
 #endif
 
 	//set last step time to current time
@@ -77,11 +80,14 @@ void ReactiveSpaceApp::update()
 
 	//step scene
 #ifdef DEBUG_DRAW
-	sceneUpdateMS = ofGetSystemTimeMicros();
+	newMS = ofGetSystemTimeMicros();
 #endif
+
 	pCurrentScene->Update(stepTimeDelta);
+
 #ifdef DEBUG_DRAW
-	sceneUpdateMS = ofGetSystemTimeMicros() - sceneUpdateMS;
+	newMS = ofGetSystemTimeMicros() - newMS;
+	sceneUpdateMS = (sceneUpdateMS * 3 + newMS) * 0.25;
 #endif
 }
 
@@ -92,11 +98,14 @@ void ReactiveSpaceApp::draw()
 	glClear(GL_COLOR_BUFFER_BIT || GL_DEPTH_BUFFER_BIT);
 
 #ifdef DEBUG_DRAW
-	sceneDrawMS = ofGetSystemTimeMicros();
+	long newMS = ofGetSystemTimeMicros();
 #endif
+
 	pCurrentScene->Render();
+
 #ifdef DEBUG_DRAW
-	sceneDrawMS = ofGetSystemTimeMicros() - sceneDrawMS;
+	newMS = ofGetSystemTimeMicros() - newMS;
+	sceneDrawMS = (sceneDrawMS * 3 + newMS) * 0.25;
 #endif
 
 
