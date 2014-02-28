@@ -1,8 +1,10 @@
 #include "OpenCVManager.h"
 
 static CvSize s_frameSize = cvSize(160, 120);
+static ofVec2f s_frameSizeInv = ofVec2f(1.f/s_frameSize.width, 1.f/s_frameSize.height);
 static int s_maxFeatures = 300;
 static int s_vectorFieldDensity = 50;
+static float s_vectorFieldDensityInv = 1.f/s_vectorFieldDensity;
 
 OpenCVManager::OpenCVManager(vector<Particle*>* people, IScene** currentScene)
 {
@@ -33,13 +35,18 @@ OpenCVManager::OpenCVManager(vector<Particle*>* people, IScene** currentScene)
 	m_fieldWidth = ofGetWidth() / s_vectorFieldDensity;
 	m_fieldHeight = ofGetHeight() / s_vectorFieldDensity;
 	m_vectorField = new Particle[m_fieldWidth * m_fieldHeight];
+	m_vectorFieldNorm = m_fieldWidth * 0.01f;
 	
+	int count = 0;
+
 	for (int i = 0; i < m_fieldWidth; ++i)
 	{
 		for (int j = 0; j < m_fieldHeight; ++j)
 		{
-			m_vectorField[i*j] = Particle(ofVec3f(i * s_vectorFieldDensity, j * s_vectorFieldDensity));
-			cout << i * s_vectorFieldDensity << ", " << j * s_vectorFieldDensity << endl;
+			int pos = (i*m_fieldHeight) + j;
+			m_vectorField[pos] = Particle(ofVec3f(i * s_vectorFieldDensity, j * s_vectorFieldDensity));
+			m_vectorField[pos].vel = ofVec3f(m_vectorFieldNorm, 0.f);
+			m_vectorField[pos].maxSpeed = m_fieldWidth;
 		}
 	}
 
@@ -63,7 +70,7 @@ void OpenCVManager::update(int deltaTime)
 			ofVec2f(0.f, ofRandom(winH * 0.25, winH * 0.75))
 			);
 
-		p->vel = ofVec2f(ofRandom(0.3f, 1.f), 0.f);
+		//p->vel = ofVec2f(ofRandom(0.3f, 1.f), 0.f);
 		crowdLastGenerated = stepTime;
 	}
 
@@ -87,6 +94,24 @@ void OpenCVManager::update(int deltaTime)
 	//  then update vector field  //
 	////////////////////////////////
 
+	//approach normal
+	Particle* vector;
+	for (int i = 0; i < m_fieldWidth; ++i)
+	{
+		for (int j = 0; j < m_fieldHeight; ++j)
+		{
+			vector = &m_vectorField[(i*m_fieldHeight) + j];
+
+			ofVec3f target;
+			if (vector->vel.lengthSquared() > 0.f)
+				target = (vector->vel / vector->vel.length()) * m_vectorFieldNorm;
+			else
+				target = ofVec3f(m_vectorFieldNorm, 0.f);
+			vector->vel += (target - vector->vel) * 0.01;
+		}
+	}
+
+	//update from video
 	if (m_vidGrabber.isInitialized())
 	{
 		bool isNewFrame = false;
@@ -136,6 +161,30 @@ void OpenCVManager::update(int deltaTime)
 				m_flowFlags = CV_LKFLOW_PYR_A_READY;
 				firstFrame = false;
 			}
+
+			//affect vector field
+			ofVec2f deltaVec;
+			Particle* tmpVec;
+
+			for (int i = 0; i < m_numFeatures; ++i)
+			{
+				if (!m_pointFound[i])
+					continue;
+				deltaVec = ofVec2f(m_newImgFeatures[i].x - m_oldImgFeatures[i].x, m_newImgFeatures[i].y - m_oldImgFeatures[i].y);
+				
+				if (deltaVec.lengthSquared() < m_vectorFieldNorm * m_vectorFieldNorm)
+					continue;
+
+				//closest field value
+				int posX = (int) m_newImgFeatures[i].x * s_frameSizeInv.x * ofGetWidth() * s_vectorFieldDensityInv;
+				int posY = (int) m_newImgFeatures[i].y * s_frameSizeInv.y * ofGetHeight() * s_vectorFieldDensityInv;
+				tmpVec = &m_vectorField[(posX * m_fieldHeight) + posY];
+				
+				//tmpVec->vel = (deltaVec - tmpVec->vel);
+				tmpVec->vel += (deltaVec - tmpVec->vel) * 0.5;
+
+				tmpVec->vel.limit(tmpVec->maxSpeed);
+			}
 		}
 	}
 
@@ -172,16 +221,24 @@ void OpenCVManager::debugDraw()
 	ofPopMatrix();
 
 	ofPushMatrix();
-		ofFill();
-		ofSetColor(255, 255, 0, 255);
+		ofSetColor(180, 0, 0, 255);
+		ofTranslate(s_vectorFieldDensity / 2, s_vectorFieldDensity / 2);
 
+		Particle* vector;
 		for (int i = 0; i < m_fieldWidth; ++i)
 		{
 			for (int j = 0; j < m_fieldHeight; ++j)
 			{
+				vector = &m_vectorField[ (i*m_fieldHeight) + j];
+				float len = vector->vel.length();
+
 				ofPushMatrix();
-					ofTranslate(m_vectorField[i*j].pos);
-					ofRect(0, 0, 20.f, 20.f);
+					ofTranslate(vector->pos);
+					ofFill();
+					ofRect(-2.f, -2.f, 2.f, 2.f);
+					ofNoFill();
+					ofRotate(ofRadToDeg(atan2f(vector->vel.y, vector->vel.x)));
+					ofLine(0.f, 0.f, len * 10.f, 0.f);
 				ofPopMatrix();
 			}
 		}

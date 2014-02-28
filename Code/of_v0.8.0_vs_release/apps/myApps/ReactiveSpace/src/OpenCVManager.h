@@ -42,6 +42,7 @@ class OpenCVManager
 	int m_fieldWidth;
 	int m_fieldHeight;
 	Particle* m_vectorField;
+	float m_vectorFieldNorm;
 
 public:
 	OpenCVManager(vector<Particle*>* people, IScene** currentScene);

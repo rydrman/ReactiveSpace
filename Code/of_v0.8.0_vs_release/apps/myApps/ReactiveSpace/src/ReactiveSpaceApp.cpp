@@ -3,7 +3,7 @@
 void ReactiveSpaceApp::setup()
 {
 	//setup vars
-	m_currentSceneNum = 0;
+	m_currentSceneNum = 2;
 
 	//graphics
 	ofSetFrameRate(60);
@@ -96,6 +96,7 @@ void ReactiveSpaceApp::draw()
 {
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT || GL_DEPTH_BUFFER_BIT);
+	ofSetColor(255);
 
 #ifdef DEBUG_DRAW
 	long newMS = ofGetSystemTimeMicros();
