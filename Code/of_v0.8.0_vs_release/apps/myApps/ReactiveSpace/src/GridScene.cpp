@@ -83,9 +83,9 @@ GridScene::GridScene(vector<Particle*>* people, vector<Particle*>* hands)
 
 void GridScene::Render()
 {
+	ofSetColor(255);
 	m_backgroundImage.draw(0.f, 0.f, 0.f, ofGetWidth(), ofGetHeight());
 
-	ofSetColor(255);
 	m_particleShader.begin();
 	m_particleImage.getTextureReference().bind();
 	m_particleVbo.bind();
