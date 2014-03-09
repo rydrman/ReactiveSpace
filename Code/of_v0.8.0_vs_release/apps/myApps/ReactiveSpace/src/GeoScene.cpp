@@ -78,6 +78,7 @@ void GeoScene::Render()
 
 void GeoScene::Update(int deltaTime)
 {
+	//update hands
 	GeoParticle* gp;
 	for (vector<Particle*>::iterator h = pHandPositions->begin(); h != pHandPositions->end(); ++h)
 	{
@@ -85,7 +86,6 @@ void GeoScene::Update(int deltaTime)
 		for (vector<Particle*>::iterator p = pPeople->begin(); p != pPeople->end(); ++p)
 		{
 			gp = (GeoParticle*)(*p);
-			
 			
 			if ((*h)->pos.x > ((*p)->pos.x - radius) && (*h)->pos.x <((*p)->pos.x + radius))
 			{
@@ -106,6 +106,13 @@ void GeoScene::Update(int deltaTime)
 			}
 		}
 
+	}
+
+	//update geo particles
+	for (vector<Particle*>::iterator p = pPeople->begin(); p != pPeople->end(); ++p)
+	{
+		gp = (GeoParticle*)(*p);
+		gp->update();
 	}
 
 }
