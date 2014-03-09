@@ -11,6 +11,7 @@ class GeoScene : public IScene
 	ofImage geoBack;
 	ofImage geoHands;
 
+	ofImage m_gradients;
 
 	int screenW;
 	int screenH;

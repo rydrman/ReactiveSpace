@@ -179,6 +179,10 @@ void OpenCVManager::update(int deltaTime)
 		if (ofRandom(1) > 0.5)
 			x = ofGetWidth() + s_generationBuffer;
 
+		//debug
+		x = ofRandom(ofGetWidth() / 2.f);
+		y = ofRandom(ofGetHeight() / 2.f);
+
 		Particle* p = ppCurrentScene[0]->addParticleOfProperType(
 			ofVec2f(x, y)
 			);

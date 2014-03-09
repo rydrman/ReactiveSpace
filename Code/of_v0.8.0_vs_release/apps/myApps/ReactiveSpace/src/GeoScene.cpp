@@ -35,6 +35,8 @@ GeoScene::GeoScene(vector<Particle*>* people, vector<Particle*>* hands)
 		
 	}*/
 
+	m_gradients.loadImage("GeoScene/gradients.png");
+
 }
 
 void GeoScene::Render()
@@ -56,22 +58,22 @@ void GeoScene::Render()
 		ofPopMatrix();
 	}
 	GeoParticle* gp;
+
+	m_gradients.bind();
+
 	for (vector<Particle*>::iterator p = pPeople->begin(); p != pPeople->end(); ++p)
 	{
 		gp = (GeoParticle*)(*p);
 		ofVec4f  position = (*p)->pos;
 		
-		
-
-
-		ofPushMatrix();
-			
-		    ofTranslate((*p)->pos);
-			ofSetColor(col);
+		//ofPushMatrix();
+		    //ofTranslate((*p)->pos);
+			//ofSetColor(col);
 			gp->draw();
-		ofPopMatrix();
-
+		//ofPopMatrix();
 	}
+
+	m_gradients.unbind();
 }
 
 void GeoScene::Update(int deltaTime)
