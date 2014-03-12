@@ -2,7 +2,7 @@
 
 static CvSize s_frameSize = cvSize(160, 120);
 static ofVec2f s_frameSizeInv = ofVec2f(1.f/s_frameSize.width, 1.f/s_frameSize.height);
-static int s_maxFeatures = 300;
+static int s_maxFeatures = 200;
 static int s_vectorFieldDensity = 50;
 static float s_vectorFieldDensityInv = 1.f/s_vectorFieldDensity;
 static int s_generationBuffer = 100;
@@ -153,10 +153,12 @@ void OpenCVManager::update(int deltaTime)
 
 				//closest field value
 				int posX = (int) m_newImgFeatures[i].x * s_frameSizeInv.x * ofGetWidth() * s_vectorFieldDensityInv;
-				int posY = (int) m_newImgFeatures[i].y * s_frameSizeInv.y * ofGetHeight() * s_vectorFieldDensityInv;
+				int posY = (int) (s_frameSize.height - m_newImgFeatures[i].y) * s_frameSizeInv.y * ofGetHeight() * s_vectorFieldDensityInv;
 				tmpVec = &m_vectorField[(posX * m_fieldHeight) + posY];
 				
-				//tmpVec->vel = (deltaVec - tmpVec->vel);
+				//reverse for cv opposite y coord
+				deltaVec.y *= -1;
+
 				tmpVec->vel += deltaVec * deltaTime * 0.05;
 
 				tmpVec->vel.limit(tmpVec->maxSpeed);
