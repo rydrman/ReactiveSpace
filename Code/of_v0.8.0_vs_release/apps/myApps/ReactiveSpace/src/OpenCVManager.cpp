@@ -215,7 +215,7 @@ void OpenCVManager::update(int deltaTime)
 			{
 				for (int j = -2; j < 3; ++j)
 				{
-					int pos = ((fieldX + i) * m_fieldHeight) + (fieldY * j);
+					int pos = ((fieldX + i) * m_fieldHeight) + (fieldY + j);
 					targetVel += m_vectorField[pos].vel;
 				}
 			}
