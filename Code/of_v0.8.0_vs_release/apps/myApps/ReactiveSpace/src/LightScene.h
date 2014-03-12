@@ -5,16 +5,20 @@
 
 class LightScene : public IScene
 {
-	ofPolyline m_hexShape;
 	ofImage m_hexImg;
 	ofImage m_lightImg;
 	ofImage m_fogImg;
+
 	ofShader m_fogShader;
 	ofVbo m_fogVbo;
 	int m_fogInt;
+	ofTexture m_lightsOnTexture;
+	ofPixels m_lightsOnPixels;
 
 	vector<Light> m_lights;
 
+	float m_distanceToHands;
+	
 public:
 	LightScene(vector<Particle*>* people, vector<Particle*>* hands);
 

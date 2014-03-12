@@ -1,6 +1,6 @@
 #pragma once
 
-#define DEBUG_DRAW 1
+//#define DEBUG_DRAW 1
 
 #include "ofMain.h"
 #include <stdio.h>

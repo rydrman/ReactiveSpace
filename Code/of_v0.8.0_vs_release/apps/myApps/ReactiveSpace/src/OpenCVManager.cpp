@@ -143,7 +143,11 @@ void OpenCVManager::update(int deltaTime)
 
 			for (int i = 0; i < m_numFeatures; ++i)
 			{
-				if (!m_pointFound[i])
+				if (!m_pointFound[i]
+					|| m_newImgFeatures[i].x < 0
+					|| m_newImgFeatures[i].y < 0
+					|| m_newImgFeatures[i].x > ofGetWidth()
+					|| m_newImgFeatures[i].y > ofGetHeight())
 					continue;
 
 				deltaVec = ofVec2f(m_newImgFeatures[i].x - m_oldImgFeatures[i].x, m_newImgFeatures[i].y - m_oldImgFeatures[i].y);
