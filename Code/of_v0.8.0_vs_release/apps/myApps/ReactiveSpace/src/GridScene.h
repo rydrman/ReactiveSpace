@@ -12,6 +12,7 @@ class GridScene : public IScene
 	int m_gridWidth;
 	int m_numParticles;
 	float m_gridSpacing;
+	float m_particleSize;
 	bool particleUpdateOffset;
 
 	//store particles

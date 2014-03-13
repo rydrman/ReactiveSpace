@@ -29,7 +29,8 @@ GridScene::GridScene(vector<Particle*>* people, vector<Particle*>* hands)
 	int screenHeight = ofGetHeight();
 	int screenWidth = ofGetWidth();
 	float scale = screenHeight * screenWidth;
-	float particleSize = sqrt(scale) / 50.f;
+	float particleSize = sqrt(scale) / 30.f;
+	m_particleSize = particleSize * 0.4;
 
 	particleUpdateOffset = false;
 
@@ -109,7 +110,7 @@ void GridScene::Render()
 
 			ofPushMatrix();
 				ofTranslate(p->pos);
-				ofScale(10.0, 10.0);
+				ofScale(m_particleSize, m_particleSize);
 				glDrawArrays(GL_QUADS, 0, 4);
 			ofPopMatrix();
 		}
@@ -127,7 +128,7 @@ void GridScene::Render()
 
 		ofPushMatrix();
 			ofTranslate((*p)->pos);
-			ofScale(10.0, 10.0);
+			ofScale(m_particleSize, m_particleSize);
 			glDrawArrays(GL_QUADS, 0, 4);
 		ofPopMatrix();
 	}

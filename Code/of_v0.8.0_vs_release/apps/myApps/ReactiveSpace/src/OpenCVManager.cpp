@@ -3,7 +3,7 @@
 static CvSize s_frameSize = cvSize(160, 120);
 static ofVec2f s_frameSizeInv = ofVec2f(1.f/s_frameSize.width, 1.f/s_frameSize.height);
 static int s_maxFeatures = 200;
-static int s_vectorFieldDensity = 50;
+static int s_vectorFieldDensity = 75;
 static float s_vectorFieldDensityInv = 1.f/s_vectorFieldDensity;
 static int s_generationBuffer = 100;
 static int s_maxPeopleParticles = 15;
@@ -146,8 +146,8 @@ void OpenCVManager::update(int deltaTime)
 				if (!m_pointFound[i]
 					|| m_newImgFeatures[i].x < 0
 					|| m_newImgFeatures[i].y < 0
-					|| m_newImgFeatures[i].x > ofGetWidth()
-					|| m_newImgFeatures[i].y > ofGetHeight())
+					|| m_newImgFeatures[i].x >= ofGetWidth()
+					|| m_newImgFeatures[i].y >= ofGetHeight())
 					continue;
 
 				deltaVec = ofVec2f(m_newImgFeatures[i].x - m_oldImgFeatures[i].x, m_newImgFeatures[i].y - m_oldImgFeatures[i].y);
@@ -254,6 +254,7 @@ void OpenCVManager::debugDraw()
 	if (firstFrame) return;
 
 	ofSetColor(255);
+	ofSetLineWidth(2);
 	ofPushMatrix();
 		ofTranslate(ofGetWidth() - m_curImg.getWidth() * 2.f, 0);
 		ofScale(2.f, 2.f);
