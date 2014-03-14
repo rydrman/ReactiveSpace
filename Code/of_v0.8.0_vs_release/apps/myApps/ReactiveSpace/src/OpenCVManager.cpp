@@ -86,7 +86,7 @@ void OpenCVManager::update(int timeScale)
 	}
 
 	//update from video
-	if (m_vidGrabber.isInitialized())
+	if (false)//(m_vidGrabber.isInitialized())
 	{
 		bool isNewFrame = false;
 		int id = 0;
@@ -209,7 +209,7 @@ void OpenCVManager::update(int timeScale)
 
 		//calculate vector field that's close
 		//only if theres a webcam
-		if (m_vidGrabber.isInitialized())
+		if (false)//m_vidGrabber.isInitialized())
 		{
 			int fieldX = (*p)->pos.x / s_vectorFieldDensity;
 			int fieldY = (*p)->pos.y / s_vectorFieldDensity;

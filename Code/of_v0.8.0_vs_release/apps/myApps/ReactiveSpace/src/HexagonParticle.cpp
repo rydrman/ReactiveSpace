@@ -1,16 +1,21 @@
 #include "HexagonParticle.h"
 
 HexagonParticle::HexagonParticle(Particle _old)
-:Particle(_old)
 {
-	hexColor = ofColor(50, ofRandom(50, 150), ofRandom(150, 255), 200);
-	
+	HexagonParticle::HexagonParticle(_old.pos);
 }
 
 HexagonParticle::HexagonParticle(ofVec3f _pos)
 : Particle(_pos)
 {
-	hexColor = ofColor(50, ofRandom(50,150), ofRandom(150,255), 200);
+	hexAlpha = 0; 
+	hexColor = ofColor(ofRandom(0,255), ofRandom(0,255), ofRandom(0,255), hexAlpha);
+	hexRotation = (int)ofRandom(0,360);
+	hexSize = 1.0;
+	
+	hexGrowthRate = ofRandom(0.005, 0.5);
+	hexMaxSize = ofRandom(2,5);
+
 }
 
 HexagonParticle::~HexagonParticle(){
