@@ -7,6 +7,7 @@ struct GeoTriangle
 	ofVec2f texCoords[3];
 	ofVec2f center;
 	ofVec2f offset;
+	float angle;
 };
 
 class GeoParticle :
@@ -36,7 +37,8 @@ public:
 
 	//for explosion
 	bool m_isExploding;
-	int m_explodeTime;
+	bool m_isDead;
+	float m_explodeTime;
 
 	GeoParticle(Particle _old);
 	GeoParticle(ofVec3f _pos);
@@ -46,6 +48,7 @@ public:
 	void explode();
 	void setTriangles();
 	void getRandomTexCoord(ofVec2f* coords);
+	ofVec2f rotatePoint(ofVec2f point, ofVec2f center, float angle);
 	void countDown(float dTime);
 	~GeoParticle(void);
 };
