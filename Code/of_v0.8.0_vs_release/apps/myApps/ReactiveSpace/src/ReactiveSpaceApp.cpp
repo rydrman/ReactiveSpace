@@ -3,7 +3,7 @@
 void ReactiveSpaceApp::setup()
 {
 	//setup vars
-	m_currentSceneNum = 1;
+	m_currentSceneNum = 3;
 
 	//graphics
 	ofSetFrameRate(60);
@@ -48,13 +48,15 @@ void ReactiveSpaceApp::update()
 	float stepTime = ofGetElapsedTimeMillis();
 	stepTimeDelta = stepTime - stepTimeLast;
 
+	float timeScale = stepTimeDelta / 16.f;
+
 #ifdef DEBUG_DRAW
 	long newMS = kinectUpdateMS;
 	newMS = ofGetSystemTimeMicros();
 #endif
 
 	//update kinect
-	HRESULT hr = kinectManager->update(stepTimeDelta);
+	HRESULT hr = kinectManager->update(timeScale);
 	if (FAILED(hr) && !kinectManager->isFailed())
 	{
 		cout << "\nkinect failed to update frame";
@@ -68,7 +70,7 @@ void ReactiveSpaceApp::update()
 #endif
 
 	//update open cv
-	openCVManager->update(stepTimeDelta);
+	openCVManager->update(timeScale);
 
 #ifdef DEBUG_DRAW
 	newMS = ofGetSystemTimeMicros() - newMS;
@@ -83,7 +85,7 @@ void ReactiveSpaceApp::update()
 	newMS = ofGetSystemTimeMicros();
 #endif
 
-	pCurrentScene->Update(stepTimeDelta);
+	pCurrentScene->Update(timeScale);
 
 #ifdef DEBUG_DRAW
 	newMS = ofGetSystemTimeMicros() - newMS;

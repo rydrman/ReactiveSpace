@@ -14,7 +14,7 @@ public:
 	IScene(vector<Particle*>* people, vector<Particle*>* hands);
 	
 	virtual void Render() = 0;
-	virtual void Update(int deltaTime) = 0;
+	virtual void Update(int timeScale) = 0;
 
 	virtual void convertPeopleVector();
 	virtual Particle* addParticleOfProperType(ofVec3f _pos);

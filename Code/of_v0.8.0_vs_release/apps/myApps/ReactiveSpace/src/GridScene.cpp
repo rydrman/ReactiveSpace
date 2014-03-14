@@ -167,7 +167,7 @@ void GridScene::Render()
 	}
 }
 
-void GridScene::Update(int deltaTime)
+void GridScene::Update(int timeScale)
 {
 	int i = 0;
 	BirdParticle* p;
@@ -176,8 +176,8 @@ void GridScene::Update(int deltaTime)
 		p = &m_particleList[i];
 
 		//update noise
-		p->noiseX += deltaTime / 200.f;
-		p->noiseY += deltaTime / 300.f;
+		p->noiseX += timeScale / 2.f;
+		p->noiseY += timeScale / 3.f;
 
 		//check distance to hands
 		bool edit = false;

@@ -24,7 +24,7 @@ public:
 	RainScene(vector<Particle*>* people, vector<Particle*>* hands);
 
 	virtual void Render();
-	virtual void Update(int deltaTime);
+	virtual void Update(int timeScale);
 
 	~RainScene();
 };

@@ -1,5 +1,7 @@
 #include "OpenCVManager.h"
 
+#define DO_CAMERA
+
 static CvSize s_frameSize = cvSize(160, 120);
 static ofVec2f s_frameSizeInv = ofVec2f(1.f/s_frameSize.width, 1.f/s_frameSize.height);
 static int s_maxFeatures = 200;
@@ -14,7 +16,9 @@ OpenCVManager::OpenCVManager(vector<Particle*>* people, IScene** currentScene)
 	ppCurrentScene = currentScene;
 
 	m_vidGrabber.setVerbose(true);
+#ifdef DO_CAMERA
 	m_vidGrabber.initGrabber(s_frameSize.width, s_frameSize.height);
+#endif
 	firstFrame = true;
 
 	//tracking vars
@@ -56,9 +60,9 @@ OpenCVManager::OpenCVManager(vector<Particle*>* people, IScene** currentScene)
 	lastFrame = 0;
 }
 
-void OpenCVManager::update(int deltaTime)
+void OpenCVManager::update(int timeScale)
 {
-	int stepTime = lastFrame + deltaTime;
+	int stepTime = lastFrame + timeScale*16.f;
 
 	///////////////////////////
 	//  update vector field  //
@@ -163,7 +167,7 @@ void OpenCVManager::update(int deltaTime)
 				//reverse for cv opposite y coord
 				deltaVec.y *= -1;
 
-				tmpVec->vel += deltaVec * deltaTime * 0.05;
+				tmpVec->vel += deltaVec * timeScale * 0.5;
 
 				tmpVec->vel.limit(tmpVec->maxSpeed);
 			}
@@ -224,7 +228,7 @@ void OpenCVManager::update(int deltaTime)
 				}
 			}
 			targetVel *= 0.04f;
-			(*p)->accel = (targetVel - (*p)->vel) * deltaTime * 0.01f;
+			(*p)->accel = (targetVel - (*p)->vel) * timeScale * 0.1f;
 		}
 		else
 		{

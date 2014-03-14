@@ -1,5 +1,3 @@
-
-
 #include "GeoScene.h"
 
 
@@ -12,28 +10,8 @@ GeoScene::GeoScene(vector<Particle*>* people, vector<Particle*>* hands)
 	screenW = ofGetWidth();
 	screenH = ofGetHeight();	
 
-	//geo1.loadImage("GeoScene/Geometric1.png");
-	//geo2.loadImage("GeoScene/Geometric2.png");
-	//geo3.loadImage("GeoScene/Geometric3.png");
 	geoBack.loadImage("GeoScene/Geometric_Background.jpg");
 	geoHands.loadImage("GeoScene/Hand_White.png");
-
-	/*GeoParticle* gp;
-	for (vector<Particle*>::iterator p = pPeople->begin(); p != pPeople->end(); ++p)
-	{
-	gp = (GeoParticle*)(*p);
-		int whichGeo = ofRandom(1,3);
-		if(whichGeo == 1){
-			gp->m_shapes = geo1;
-		}
-		if(whichGeo == 2){
-			gp->m_shapes = geo2;
-		}
-		if(whichGeo == 3){
-			gp->m_shapes = geo3;
-		}
-		
-	}*/
 
 	m_gradients.loadImage("GeoScene/gradients.png");
 
@@ -76,7 +54,7 @@ void GeoScene::Render()
 	m_gradients.unbind();
 }
 
-void GeoScene::Update(int deltaTime)
+void GeoScene::Update(int timeScale)
 {
 	//update hands
 	GeoParticle* gp;
@@ -87,13 +65,14 @@ void GeoScene::Update(int deltaTime)
 		{
 			gp = (GeoParticle*)(*p);
 			
+
 			if ((*h)->pos.x > ((*p)->pos.x - radius) && (*h)->pos.x <((*p)->pos.x + radius))
 			{
 				if ((*h)->pos.y >((*p)->pos.y - radius) && (*h)->pos.y < ((*p)->pos.y + radius))
 				{
 					//(*p)->vel.x = 0;
 				    //(*p)->vel.y = 0;
-					gp->countDown(deltaTime);
+					gp->countDown(timeScale * 16.f);
 					geoHands.loadImage("GeoScene/Hand_Green.png");
 					
 				}
@@ -112,7 +91,7 @@ void GeoScene::Update(int deltaTime)
 	for (vector<Particle*>::iterator p = pPeople->begin(); p != pPeople->end(); ++p)
 	{
 		gp = (GeoParticle*)(*p);
-		gp->update();
+		gp->update(timeScale);
 	}
 
 }

@@ -87,7 +87,7 @@ void RainScene::Render()
 	}
 }
 
-void RainScene::Update(int deltaTime)
+void RainScene::Update(int timeScale)
 {
 	int screenH = ofGetHeight();
 

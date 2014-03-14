@@ -1,102 +1,137 @@
 #include "GeoParticle.h"
 
+static float s_gradWidth = 1.f / 6.f;
+
 GeoParticle::GeoParticle(Particle _old)
 :Particle(_old)
 {
 }
 
 GeoParticle::GeoParticle(ofVec3f _pos)
-:Particle(_pos)
-{	
+: Particle(_pos)
+{
 	startTime = 0;
-	
-	//assign a random image
-	//int whichGeo = ofRandom(1,6);
-	//GeoSize = ofRandom(1,3);
-		/*if(whichGeo == 1){
-			m_shapes.loadImage("GeoScene/Geometric1.png");
-		}
-		if(whichGeo == 2){
-			m_shapes.loadImage("GeoScene/Geometric2.png");
-		}
-		if(whichGeo == 3){
-			m_shapes.loadImage("GeoScene/Geometric3.png");
-		}*/
+
+	//get a random radius
+	GeoSize = ofRandom(ofGetWidth() * 0.05, ofGetWidth() * 0.1);
 
 	//choose random gradient
-	float grad = floor(ofRandom(0, 6));
-	float gradWidth = 1.f/6.f; 
+	m_gradNum = floor(ofRandom(0, 6));
 
+	//get a random number of triangles
+	m_numTriangles = (int)ofRandom(3, 7);
+	m_trianlges = new GeoTriangle[m_numTriangles];
 
+	m_numVerts = m_numTriangles + 1;
+	m_originalVerts = new ofVec2f[m_numVerts];
+	m_noiseOffsets = new float[m_numVerts];
+	m_currentVerts = new ofVec2f[m_numTriangles * 3];;
+	m_currentTexCoords = new ofVec2f[m_numTriangles * 3];;
 
-	for(int x = 0; x < 3; ++x)
+	float angle = PI*2.f / m_numTriangles;
+
+	m_originalVerts[0] = ofVec2f(0.f, 0.f);
+	for (int i = 1; i < m_numVerts; ++i)
 	{
-		for(int y = 0; y < 3; ++y)
-		{
-			m_noiseOffset[ 3*x + y ] = ofRandom(10000);
-			m_verts[ 3*x + y ] = ofVec2f( -1.f + x + ofNoise( m_noiseOffset[ 3*x + y ] ) * 0.2f, 
-										  -1.f + y + ofNoise( m_noiseOffset[ 3*x + y ] ) * 0.2f );
-		}
-	}
-
-	//texture data
-	for(int t = 0; t < 4; ++t)
-	{
-		for(int i = 0; i < 4; ++i)
-		{
-			m_texCoords[ (t*4) + i ] = ofVec2f( (gradWidth * grad) + ((i > 0 && i < 3) ? gradWidth : 0), (i < 2) ? 0 : 1);
-		}
-	}
-	m_vbo.setTexCoordData( &m_texCoords[0], 16, GL_STATIC_DRAW);
-
-	update();
-}
-
-void GeoParticle::update()
-{
-
-	//update vbo positions
-	for(int x = 0; x < 3; ++x)
-	{
-		for(int y = 0; y < 3; ++y)
-		{
-			m_verts[ 3*x + y ] = ofVec2f( -1 + x - 0.5f + ofNoise( ++m_noiseOffset[ 3*x + y ] * 0.005f ), 
-										  -1 + y - 0.5f + ofNoise( (++m_noiseOffset[ 3*x + y ] + 1000) * 0.005f ));
-		}
+		m_originalVerts[i] = ofVec2f(cos(angle*i), sin(angle*i));
+		m_noiseOffsets[i] = ofRandom(0, 10000);
 	}
 	
-	m_vboVerts[0] = m_verts[0];
-	m_vboVerts[1] = m_verts[3];
-	m_vboVerts[2] = m_verts[4];
-	m_vboVerts[3] = m_verts[1];
+	setTriangles();
 
-	m_vboVerts[4] = m_verts[3];
-	m_vboVerts[5] = m_verts[6];
-	m_vboVerts[6] = m_verts[7];
-	m_vboVerts[7] = m_verts[4];
+	//texture data
+	for(int i = 0; i < m_numTriangles; ++i)
+	{
+		getRandomTexCoord(m_trianlges[i].texCoords);
+	}
+	//set to vbo
+	for (int i = 0; i < m_numTriangles; ++i)
+	{
+		for (int j = 0; j < 3; ++j)
+		{
+			m_currentTexCoords[i * 3 + j] = m_trianlges[i].texCoords[j];
+			cout << "nums: " << i << " " << j << " " << (i * 3 + j) << " : " << m_trianlges[i].texCoords[j] << endl;
+		}
+	}
+	m_vbo.setTexCoordData(&m_currentTexCoords[0], m_numTriangles * 3, GL_STATIC_DRAW);
 
-	m_vboVerts[8] = m_verts[1];
-	m_vboVerts[9] = m_verts[4];
-	m_vboVerts[10] = m_verts[5];
-	m_vboVerts[11] = m_verts[2];
+}
 
-	m_vboVerts[12] = m_verts[4];
-	m_vboVerts[13] = m_verts[7];
-	m_vboVerts[14] = m_verts[8];
-	m_vboVerts[15] = m_verts[5];
+void GeoParticle::update(float timeScale)
+{
+	for (int i = 0; i < m_numVerts; ++i)
+	{
+		m_noiseOffsets[i] += 0.01f * timeScale;
+	}
+	setTriangles();
 
-	m_vbo.setVertexData( &m_vboVerts[0], 16, GL_DYNAMIC_DRAW);
+	//build main vbo
+	for (int i = 0; i < m_numTriangles; ++i)
+	{
+		for (int j = 0; j < 3; ++j)
+		{
+			m_currentVerts[i * 3 + j] = m_trianlges[i].verts[j];
+		}
+	}
+	m_vbo.setVertexData(&m_currentVerts[0], m_numTriangles*3, GL_DYNAMIC_DRAW);
 }
 
 void GeoParticle::draw()
 {
 	ofPushMatrix();
 		ofTranslate(pos.x, pos.y);
-		ofScale(40.f, 40.f);
+		ofScale(GeoSize, GeoSize);
 		m_vbo.bind();
-		glDrawArrays(GL_QUADS, 0, 16);
+		glDrawArrays(GL_TRIANGLES, 0, m_numTriangles*3);
 		m_vbo.unbind();
 	ofPopMatrix();
+}
+
+void GeoParticle::setTriangles()
+{
+	for (int i = 0; i < m_numTriangles; ++i)
+	{
+		m_trianlges[i].verts[0] = m_originalVerts[0] + ofNoise(m_noiseOffsets[0]) * 0.2f;
+		m_trianlges[i].verts[1] = m_originalVerts[i + 1] + ofNoise(m_noiseOffsets[i + 1]) * 0.2f;
+		if (i == m_numTriangles - 1)
+			m_trianlges[i].verts[2] = m_originalVerts[1] + ofNoise(m_noiseOffsets[1]) * 0.2f;
+		else
+			m_trianlges[i].verts[2] = m_originalVerts[i + 2] + ofNoise(m_noiseOffsets[i + 2]) * 0.2f;
+	}
+}
+
+void GeoParticle::getRandomTexCoord(ofVec2f* coords)
+{
+	int startNum = ofRandom(0, 4);
+	float gradLeft = m_gradNum * s_gradWidth;
+
+	for (int i = 0; i < 3; ++i)
+	{
+		switch ((startNum + i) % 4)
+		{
+		case 0:
+			coords[i] = ofVec2f(gradLeft, 0.f);
+			break;
+		case 1:
+			coords[i] = ofVec2f(gradLeft + s_gradWidth, 0.f);
+			break;
+		case 2:
+			coords[i] = ofVec2f(gradLeft + s_gradWidth, 1.f);
+			break;
+		case 3:
+			coords[i] = ofVec2f(gradLeft, 1.f);
+			break;
+		}
+	}
+
+	/*float angle = PI /2.f;
+	float gradMid = m_gradNum * s_gradWidth + s_gradWidth * 0.5f;
+	for (int i = 0; i < 3; ++i)
+	{
+		float a = i * angle + angle * ofRandom(1.f);
+
+		coords[i] = ofVec2f(gradMid + cos(a) * s_gradWidth * 0.5f, 0.5f + sin(a) * 0.5f);
+	}*/
 }
 
 void GeoParticle::countDown(int dTime)
