@@ -11,6 +11,8 @@ GeoParticle::GeoParticle(ofVec3f _pos)
 : Particle(_pos)
 {
 	startTime = 0;
+	m_explodeTime = 0;
+	m_isExploding = false;
 
 	//get a random radius
 	GeoSize = ofRandom(ofGetWidth() * 0.05, ofGetWidth() * 0.1);
@@ -20,7 +22,7 @@ GeoParticle::GeoParticle(ofVec3f _pos)
 
 	//get a random number of triangles
 	m_numTriangles = (int)ofRandom(3, 7);
-	m_trianlges = new GeoTriangle[m_numTriangles];
+	m_triangles = new GeoTriangle[m_numTriangles];
 
 	m_numVerts = m_numTriangles + 1;
 	m_originalVerts = new ofVec2f[m_numVerts];
@@ -39,26 +41,52 @@ GeoParticle::GeoParticle(ofVec3f _pos)
 	
 	setTriangles();
 
+	//calculate triangle centers
+	for (int i = 0; i < m_numTriangles; ++i)
+	{
+		m_triangles[i].center = ofVec2f(0.f, 0.f);
+
+		m_triangles[i].center += m_originalVerts[0] + ofNoise(m_noiseOffsets[0]) * 0.2f;
+		m_triangles[i].center += m_originalVerts[i + 1] + ofNoise(m_noiseOffsets[i + 1]) * 0.2f;
+		if (i == m_numTriangles - 1)
+			m_triangles[i].center += m_originalVerts[1] + ofNoise(m_noiseOffsets[1]) * 0.2f;
+		else
+			m_triangles[i].center += m_originalVerts[i + 2] + ofNoise(m_noiseOffsets[i + 2]) * 0.2f;
+
+		m_triangles[i].center /= 3;
+	}
+
+
 	//texture data
 	for(int i = 0; i < m_numTriangles; ++i)
 	{
-		getRandomTexCoord(m_trianlges[i].texCoords);
+		getRandomTexCoord(m_triangles[i].texCoords);
 	}
 	//set to vbo
 	for (int i = 0; i < m_numTriangles; ++i)
 	{
 		for (int j = 0; j < 3; ++j)
 		{
-			m_currentTexCoords[i * 3 + j] = m_trianlges[i].texCoords[j];
-			cout << "nums: " << i << " " << j << " " << (i * 3 + j) << " : " << m_trianlges[i].texCoords[j] << endl;
+			m_currentTexCoords[i * 3 + j] = m_triangles[i].texCoords[j];
+			cout << "nums: " << i << " " << j << " " << (i * 3 + j) << " : " << m_triangles[i].texCoords[j] << endl;
 		}
 	}
 	m_vbo.setTexCoordData(&m_currentTexCoords[0], m_numTriangles * 3, GL_STATIC_DRAW);
-
 }
 
 void GeoParticle::update(float timeScale)
 {
+	//if exploding, update that sturr
+	if (m_isExploding)
+	{
+		for (int i = 0; i < m_numTriangles; ++i)
+		{
+			float angle = atan2f(m_triangles[i].center.y, m_triangles[i].center.x);
+			m_triangles[i].offset += ofVec2f(cos(angle) * 0.5f * timeScale, sin(angle) * 0.5f * timeScale);
+		}
+	}
+
+	// update noise counters
 	for (int i = 0; i < m_numVerts; ++i)
 	{
 		m_noiseOffsets[i] += 0.01f * timeScale;
@@ -70,7 +98,7 @@ void GeoParticle::update(float timeScale)
 	{
 		for (int j = 0; j < 3; ++j)
 		{
-			m_currentVerts[i * 3 + j] = m_trianlges[i].verts[j];
+			m_currentVerts[i * 3 + j] = m_triangles[i].verts[j] + m_triangles[i].offset;
 		}
 	}
 	m_vbo.setVertexData(&m_currentVerts[0], m_numTriangles*3, GL_DYNAMIC_DRAW);
@@ -91,12 +119,12 @@ void GeoParticle::setTriangles()
 {
 	for (int i = 0; i < m_numTriangles; ++i)
 	{
-		m_trianlges[i].verts[0] = m_originalVerts[0] + ofNoise(m_noiseOffsets[0]) * 0.2f;
-		m_trianlges[i].verts[1] = m_originalVerts[i + 1] + ofNoise(m_noiseOffsets[i + 1]) * 0.2f;
+		m_triangles[i].verts[0] = m_originalVerts[0] + ofNoise(m_noiseOffsets[0]) * 0.2f;
+		m_triangles[i].verts[1] = m_originalVerts[i + 1] + ofNoise(m_noiseOffsets[i + 1]) * 0.2f;
 		if (i == m_numTriangles - 1)
-			m_trianlges[i].verts[2] = m_originalVerts[1] + ofNoise(m_noiseOffsets[1]) * 0.2f;
+			m_triangles[i].verts[2] = m_originalVerts[1] + ofNoise(m_noiseOffsets[1]) * 0.2f;
 		else
-			m_trianlges[i].verts[2] = m_originalVerts[i + 2] + ofNoise(m_noiseOffsets[i + 2]) * 0.2f;
+			m_triangles[i].verts[2] = m_originalVerts[i + 2] + ofNoise(m_noiseOffsets[i + 2]) * 0.2f;
 	}
 }
 
@@ -123,35 +151,22 @@ void GeoParticle::getRandomTexCoord(ofVec2f* coords)
 			break;
 		}
 	}
-
-	/*float angle = PI /2.f;
-	float gradMid = m_gradNum * s_gradWidth + s_gradWidth * 0.5f;
-	for (int i = 0; i < 3; ++i)
-	{
-		float a = i * angle + angle * ofRandom(1.f);
-
-		coords[i] = ofVec2f(gradMid + cos(a) * s_gradWidth * 0.5f, 0.5f + sin(a) * 0.5f);
-	}*/
 }
 
 void GeoParticle::countDown(int dTime)
 {
-	//if (vel.x == 0){
-			startTime = startTime + dTime;
-						
-						
-			if (startTime > 4000){
-				explode();
-				startTime = 0;
-
-			}
-	//}
+		startTime = startTime + dTime;
+									
+		if (startTime > 4000){
+			explode();
+			startTime = 0;
+		}
 }
 
 void GeoParticle::explode()
 {
-	pos.x = 0;
-	
+	m_isExploding = true;
+	m_explodeTime = 0;
 }
 
 
