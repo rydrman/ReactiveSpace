@@ -87,7 +87,7 @@ void LightScene::Render()
 			ofTranslate(hp->pos);
 			ofSetRectMode(OF_RECTMODE_CENTER);
 			ofRotate(hp->hexRotation);
-		//	ofScale(hp->hexSize, hp->hexSize);
+			ofScale(hp->hexSize, hp->hexSize);
 
 			ofSetColor(hp->hexColor);
 			m_hexImgInner.draw(0,0);
@@ -114,12 +114,14 @@ void LightScene::Render()
 				ofLine( (*connectedhands)->pos.x, (*connectedhands)->pos.y, (*p)->pos.x, (*p)->pos.y);
 				
 				hp->hexAlpha += 5;
-
 				if(hp->hexAlpha > 200){
 					hp->hexAlpha = 200;
 				}
-				//hp->hexSize += 0.1;
-				//if (hp->hexSize  > 2){  hp->hexSize = 2; }
+				
+				hp->hexSize += hp->hexGrowthRate;
+				if (hp->hexSize  > 4){  
+					hp->hexSize = 4; 
+				}
 			}
 			closestHand.clear();
 
@@ -131,6 +133,11 @@ void LightScene::Render()
 			if(hp->hexAlpha < 0){
 				hp->hexAlpha = 0;
 			}	
+
+			hp->hexSize -= hp->hexGrowthRate;
+				if (hp->hexSize  < 1){  
+					hp->hexSize = 1; 
+				}
 		}
 		hp->hexColor.a = hp->hexAlpha;	
 	}
