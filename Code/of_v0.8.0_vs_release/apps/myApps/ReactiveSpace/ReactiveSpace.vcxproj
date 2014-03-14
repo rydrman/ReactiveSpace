@@ -92,6 +92,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="lightHands.cpp" />
     <ClCompile Include="src\BirdParticle.cpp" />
     <ClCompile Include="src\GeoParticle.cpp" />
     <ClCompile Include="src\GeoScene.cpp" />
@@ -208,6 +209,7 @@
     <ClInclude Include="..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\video\background_segm.hpp" />
     <ClInclude Include="..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\video\tracking.hpp" />
     <ClInclude Include="..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\video\video.hpp" />
+    <ClInclude Include="lightHands.h" />
     <ClInclude Include="src\BirdParticle.h" />
     <ClInclude Include="src\GeoParticle.h" />
     <ClInclude Include="src\GeoScene.h" />

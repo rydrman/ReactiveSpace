@@ -15,6 +15,7 @@ HexagonParticle::HexagonParticle(ofVec3f _pos)
 	
 	hexGrowthRate = ofRandom(0.005, 0.5);
 	hexMaxSize = ofRandom(2,5);
+	hexToHands.set(0, 0);
 
 }
 

@@ -3,7 +3,7 @@
 void ReactiveSpaceApp::setup()
 {
 	//setup vars
-	m_currentSceneNum = 3;
+	m_currentSceneNum = 1;
 
 	//graphics
 	ofSetFrameRate(60);
@@ -124,7 +124,7 @@ void ReactiveSpaceApp::draw()
 	ofDrawBitmapString("Scene Draw Time: " + ofToString(sceneDrawMS * 0.001f, 1), 10.f, 70.f);
 	ofPopMatrix();
 
-//	openCVManager->debugDraw();
+	openCVManager->debugDraw();
 #endif
 }
 
