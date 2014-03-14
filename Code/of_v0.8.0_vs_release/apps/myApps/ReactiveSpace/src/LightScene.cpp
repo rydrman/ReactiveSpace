@@ -7,13 +7,6 @@ const ofVec2f s_fogTexCoords[] = {
 	ofVec2f(0.0f, 1.0f)
 };
 
-const ofVec2f s_hexTexCoords[] = {
-	ofVec2f(0.0f, 0.0f),
-	ofVec2f(1.0f, 0.0f),
-	ofVec2f(1.0f, 1.0f),
-	ofVec2f(0.0f, 1.0f)
-};
-
 LightScene::LightScene(vector<Particle*>* people, vector<Particle*>* hands)
 : IScene(people, hands)
 {
@@ -26,21 +19,13 @@ LightScene::LightScene(vector<Particle*>* people, vector<Particle*>* hands)
 
 	pPeople = people;
 	pHandPositions = hands;
-	
-	m_distanceToHands = 0;
 
 	//load all images 
-	m_hexImg.loadImage("LightScene/hex.png");
+	m_hexImgBorder.loadImage("LightScene/hex-02.png");
+	m_hexImgInner.loadImage("LightScene/hex-03.png");
 	m_lightImg.loadImage("LightScene/light.png");
 	m_fogImg.loadImage("LightScene/fog.png");
 
-	const ofVec2f hexVerts[] = {
-		ofVec2f(-m_hexImg.width, -m_hexImg.height),
-		ofVec2f(m_hexImg.width, -m_hexImg.height),
-		ofVec2f(m_hexImg.width, m_hexImg.height),
-		ofVec2f(-m_hexImg.width, m_hexImg.height)
-	};
-		
 	m_lights = vector<Light>();
 
 
@@ -64,13 +49,6 @@ LightScene::LightScene(vector<Particle*>* people, vector<Particle*>* hands)
 	m_fogVbo.setTexCoordData(&s_fogTexCoords[0], 4, GL_STATIC_DRAW);
 	m_fogInt = 0;
 
-	//setting up hexagon shader
-	//m_hexShader = ofShader();
-	//m_hexShader.load("LightScene/hex");
-	//m_hexVbo = ofVbo();
-	//m_hexVbo.setVertexData( &hexVerts[0], 4, GL_STATIC_DRAW);
-	//m_hexVbo.setTexCoordData(&s_hexTexCoords[0], 4, GL_STATIC_DRAW);
-
 }
 
 void LightScene::Render()
@@ -92,7 +70,7 @@ void LightScene::Render()
 
 	//draw lights
 	ofSetColor(255);
-
+	ofSetRectMode(OF_RECTMODE_CORNER);
 	for(vector<Light>::iterator l = m_lights.begin(); l != m_lights.end(); ++l){
 		if(l->isOn == true){
 			m_lightImg.draw(l->x, 0, 0);
@@ -100,27 +78,61 @@ void LightScene::Render()
 	}
 
 
+	HexagonParticle* hp;
 	//draw a hexagon for each person in people
 	for(vector<Particle*>::iterator p = pPeople->begin(); p != pPeople->end(); ++p)
 	{
+		hp = (HexagonParticle*) (*p);
 		ofPushMatrix();
-			ofTranslate((*p)->pos);
-			//ofSetColor(50, ofRandom(50,150), ofRandom(150,255), 200);
-			//ofSetColor(hexColor);
-			m_hexImg.draw(0,0);
+			ofTranslate(hp->pos);
+			ofSetRectMode(OF_RECTMODE_CENTER);
+			ofRotate(hp->hexRotation);
+		//	ofScale(hp->hexSize, hp->hexSize);
+
+			ofSetColor(hp->hexColor);
+			m_hexImgInner.draw(0,0);
+
+			ofSetColor(255);
+			m_hexImgBorder.draw(0,0);
 		ofPopMatrix();
 		
 		ofNoFill();
 		ofSetLineWidth(5);
+		float distSqrd = std::numeric_limits<float>::max();
+
 		for(vector<Particle*>::iterator hands = pHandPositions->begin(); hands != pHandPositions->end(); ++hands){
-			float distSqrd = ofDistSquared( (*hands)->pos.x, (*hands)->pos.y, (*p)->pos.x, (*p)->pos.y);
+			distSqrd = ofDistSquared( (*hands)->pos.x, (*hands)->pos.y, (*p)->pos.x, (*p)->pos.y);
 			
-			if (distSqrd < 22500){
-				
-				ofLine( (*hands)->pos.x, (*hands)->pos.y, (*p)->pos.x, (*p)->pos.y);
+			if (distSqrd < 90000){				
+				closestHand.push_back((*hands));							
 			}
+		}
+
+		if(closestHand.size() != 0){
+			for(vector<Particle*>::iterator connectedhands = closestHand.begin(); connectedhands != closestHand.end(); ++connectedhands){
+
+				ofLine( (*connectedhands)->pos.x, (*connectedhands)->pos.y, (*p)->pos.x, (*p)->pos.y);
+				
+				hp->hexAlpha += 5;
+
+				if(hp->hexAlpha > 200){
+					hp->hexAlpha = 200;
+				}
+				//hp->hexSize += 0.1;
+				//if (hp->hexSize  > 2){  hp->hexSize = 2; }
+			}
+			closestHand.clear();
 
 		}
+		else
+		{
+
+			hp->hexAlpha -= 5;
+			if(hp->hexAlpha < 0){
+				hp->hexAlpha = 0;
+			}	
+		}
+		hp->hexColor.a = hp->hexAlpha;	
 	}
 
 }
@@ -142,15 +154,11 @@ void LightScene::Update(int deltaTime)
 	for(vector<Particle*>::iterator p = pPeople->begin(); p != pPeople->end(); ++p){
 		for(vector<Light>::iterator l = m_lights.begin(); l != m_lights.end(); ++l){
 
-			if((*p)->pos.x < l->x+m_lightImg.width && (*p)->pos.x+m_hexImg.width > l->x){
+			if((*p)->pos.x < l->x+m_lightImg.width && (*p)->pos.x+m_hexImgBorder.width > l->x){
 				l->isOn = true;
 				m_lightsOnPixels.setColor(count+1, 1, ofColor(255));
 			}
 			count++;
-		}
-		for(vector<Particle*>::iterator hands = pHandPositions->begin(); hands != pHandPositions->end(); ++hands)
-		{
-			//m_distanceToHands = ofDistSquared( (*hands)->pos.x, (*hands)->pos.y, (*p)->pos.x, (*p)->pos.y);
 		}
 	}
 	m_lightsOnTexture.loadData(m_lightsOnPixels, GL_LUMINANCE);

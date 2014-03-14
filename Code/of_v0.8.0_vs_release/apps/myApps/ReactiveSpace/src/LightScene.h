@@ -5,7 +5,8 @@
 
 class LightScene : public IScene
 {
-	ofImage m_hexImg;
+	ofImage m_hexImgBorder;
+	ofImage m_hexImgInner;
 	ofImage m_lightImg;
 	ofImage m_fogImg;
 
@@ -17,7 +18,7 @@ class LightScene : public IScene
 
 	vector<Light> m_lights;
 
-	float m_distanceToHands;
+	vector<Particle*> closestHand; 
 	
 public:
 	LightScene(vector<Particle*>* people, vector<Particle*>* hands);
