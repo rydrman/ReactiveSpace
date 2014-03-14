@@ -103,8 +103,15 @@ void LightScene::Render()
 		for(vector<Particle*>::iterator hands = pHandPositions->begin(); hands != pHandPositions->end(); ++hands){
 			distSqrd = ofDistSquared( (*hands)->pos.x, (*hands)->pos.y, (*p)->pos.x, (*p)->pos.y);
 			
+			float hextoHandsX = hp->pos.x - (*p)->pos.x;
+
+			float hextoHandsY = hp->pos.y - (*p)->pos.y;
+			
+			hp->hexToHands.set(hextoHandsX, hextoHandsY);
+			
 			if (distSqrd < 90000){				
-				closestHand.push_back((*hands));							
+				closestHand.push_back((*hands));		
+				(*p)->pos += hp->hexToHands;
 			}
 		}
 
@@ -124,7 +131,6 @@ void LightScene::Render()
 				}
 			}
 			closestHand.clear();
-
 		}
 		else
 		{
