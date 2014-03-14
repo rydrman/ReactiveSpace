@@ -167,7 +167,7 @@ void OpenCVManager::update(int timeScale)
 				//reverse for cv opposite y coord
 				deltaVec.y *= -1;
 
-				tmpVec->vel += deltaVec * timeScale * 0.5;
+				tmpVec->vel += deltaVec * timeScale * 0.5f;
 
 				tmpVec->vel.limit(tmpVec->maxSpeed);
 			}
@@ -209,14 +209,14 @@ void OpenCVManager::update(int timeScale)
 
 		//calculate vector field that's close
 		//only if theres a webcam
-		if (false)//m_vidGrabber.isInitialized())
+		if (m_vidGrabber.isInitialized())
 		{
 			int fieldX = (*p)->pos.x / s_vectorFieldDensity;
 			int fieldY = (*p)->pos.y / s_vectorFieldDensity;
 
-			if (fieldX < 1) fieldX = 1;
+			if (fieldX < 2) fieldX = 2;
 			else if (fieldX > m_fieldWidth - 3) fieldX = m_fieldWidth - 3;
-			if (fieldY < 1) fieldY = 1;
+			if (fieldY < 2) fieldY = 2;
 			else if (fieldY > m_fieldHeight - 3) fieldY = m_fieldHeight - 3;
 
 			for (int i = -2; i < 3; ++i)
