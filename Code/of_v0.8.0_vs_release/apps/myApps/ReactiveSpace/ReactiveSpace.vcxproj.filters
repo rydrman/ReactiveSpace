@@ -64,6 +64,9 @@
     <ClCompile Include="src\GeoParticle.cpp">
       <Filter>src\Particle Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\GeoHands.cpp">
+      <Filter>src\Particle Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -465,6 +468,9 @@
       <Filter>src\System Files</Filter>
     </ClInclude>
     <ClInclude Include="src\GeoParticle.h">
+      <Filter>src\Particle Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GeoHands.h">
       <Filter>src\Particle Files</Filter>
     </ClInclude>
   </ItemGroup>

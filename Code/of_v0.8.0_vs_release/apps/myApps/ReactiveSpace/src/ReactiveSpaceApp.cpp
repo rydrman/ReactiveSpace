@@ -124,7 +124,7 @@ void ReactiveSpaceApp::draw()
 	ofDrawBitmapString("Scene Draw Time: " + ofToString(sceneDrawMS * 0.001f, 1), 10.f, 70.f);
 	ofPopMatrix();
 
-//	openCVManager->debugDraw();
+	openCVManager->debugDraw();
 #endif
 }
 

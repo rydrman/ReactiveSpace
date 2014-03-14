@@ -12,6 +12,9 @@ GeoParticle::GeoParticle(ofVec3f _pos)
 {
 	startTime = 0;
 
+	explosionSprite.loadImage("GeoScene/Particles.png");
+
+
 	//get a random radius
 	GeoSize = ofRandom(ofGetWidth() * 0.05, ofGetWidth() * 0.1);
 
@@ -134,13 +137,13 @@ void GeoParticle::getRandomTexCoord(ofVec2f* coords)
 	}*/
 }
 
-void GeoParticle::countDown(int dTime)
+void GeoParticle::countDown(float dTime)
 {
 	//if (vel.x == 0){
-			startTime = startTime + dTime;
+			startTime = startTime + dTime*16.f;
 						
 						
-			if (startTime > 4000){
+			if (startTime > 1000){
 				explode();
 				startTime = 0;
 

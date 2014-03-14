@@ -16,7 +16,7 @@ public:
 	int CountTimer;
 	int Interval;
 	void drawHands();
-	void handCountDown(int deltTime, bool lock);
+	void handCountDown(float deltTime, bool lock);
 	GeoHands(void);
 	~GeoHands(void);
 };

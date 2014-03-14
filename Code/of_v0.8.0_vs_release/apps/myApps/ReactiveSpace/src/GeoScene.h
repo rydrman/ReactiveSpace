@@ -22,6 +22,8 @@ public:
 	virtual void Update(int timeScale);
 	void convertPeopleVector();
 	Particle* addParticleOfProperType(ofVec3f _pos);
+	void convertHandVector();
+	Particle* addHandOfProperType(ofVec3f _pos);
 	~GeoScene();
 };
 

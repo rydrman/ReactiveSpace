@@ -31,15 +31,15 @@ void GeoHands::drawHands()
 	if(Interval ==4){handImgRed.draw(pos.x-185,pos.y-185,0);}
 		
 }
-void GeoHands::handCountDown(int deltTime, bool lock)
+void GeoHands::handCountDown(float deltTime , bool lock)
 {
-	CountTimer = CountTimer + deltTime;
+	CountTimer = CountTimer + deltTime*16.f;
 			
-		//if(lock == true){
+	
 			if (CountTimer > 0){
 				Interval = 1;
 			}		
-			if (CountTimer > 250){
+			if (CountTimer > 1){
 				Interval = 2;
 			}
 			if (CountTimer > 500){
@@ -52,12 +52,7 @@ void GeoHands::handCountDown(int deltTime, bool lock)
 				Interval = 0;
 				CountTimer = 0;
 			}
-		//}
-		//else{
-		//	Interval = 0;
-		//	CountTimer = 0;
-		//}
-	
+
 	
 }
 
@@ -65,4 +60,5 @@ void GeoHands::handCountDown(int deltTime, bool lock)
 GeoHands::~GeoHands(void)
 {
 }
+
 

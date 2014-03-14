@@ -13,6 +13,7 @@ class GeoParticle :
 public:
 	
 	ofImage m_shapes;
+	ofImage explosionSprite;
 	
 	ofImage GeoShape;
 	int GeoSize;
@@ -39,6 +40,7 @@ public:
 	void explode();
 	void setTriangles();
 	void getRandomTexCoord(ofVec2f* coords);
-	void countDown(int dTime);
+	void countDown(float dTime);
 	~GeoParticle(void);
 };
+
