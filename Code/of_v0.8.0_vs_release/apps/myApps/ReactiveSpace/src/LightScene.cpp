@@ -21,8 +21,8 @@ LightScene::LightScene(vector<Particle*>* people, vector<Particle*>* hands)
 	pHandPositions = hands;
 
 	//load all images 
-	m_hexImgBorder.loadImage("LightScene/hex-02.png");
-	m_hexImgInner.loadImage("LightScene/hex-03.png");
+	m_hexImgBorder.loadImage("LightScene/Hexagon.png");
+	m_hexImgInner.loadImage("LightScene/hexagonFill.png");
 	m_lightImg.loadImage("LightScene/light.png");
 	m_fogImg.loadImage("LightScene/fog.png");
 
@@ -96,6 +96,8 @@ void LightScene::Render()
 			m_hexImgBorder.draw(0,0);
 		ofPopMatrix();
 		
+		ofSetRectMode(OF_RECTMODE_CORNER);
+
 		ofNoFill();
 		ofSetLineWidth(5);
 		float distSqrd = std::numeric_limits<float>::max();
@@ -103,15 +105,21 @@ void LightScene::Render()
 		for(vector<Particle*>::iterator hands = pHandPositions->begin(); hands != pHandPositions->end(); ++hands){
 			distSqrd = ofDistSquared( (*hands)->pos.x, (*hands)->pos.y, (*p)->pos.x, (*p)->pos.y);
 			
-			float hextoHandsX = hp->pos.x - (*p)->pos.x;
+			hp->hexToHands = (*hands)->pos - hp->pos;
 
-			float hextoHandsY = hp->pos.y - (*p)->pos.y;
-			
-			hp->hexToHands.set(hextoHandsX, hextoHandsY);
-			
-			if (distSqrd < 90000){				
-				closestHand.push_back((*hands));		
-				(*p)->pos += hp->hexToHands;
+			float offsetMap = ofMap(distSqrd, 22500, 90000, 0, 1);
+			ofClamp(offsetMap, 0,1);
+			ofVec2f offsetAccel = hp->hexToHands*offsetMap;	
+
+			if (distSqrd < 250000){				
+				closestHand.push_back((*hands));	
+
+				if(distSqrd > 90000){
+					hp->accel += offsetAccel;
+				}
+				else if(distSqrd < 90000){
+					hp->accel -= offsetAccel*0.002;
+				}
 			}
 		}
 
@@ -126,8 +134,8 @@ void LightScene::Render()
 				}
 				
 				hp->hexSize += hp->hexGrowthRate;
-				if (hp->hexSize  > 4){  
-					hp->hexSize = 4; 
+				if (hp->hexSize  > 1){  
+					hp->hexSize = 1; 
 				}
 			}
 			closestHand.clear();
@@ -141,8 +149,8 @@ void LightScene::Render()
 			}	
 
 			hp->hexSize -= hp->hexGrowthRate;
-				if (hp->hexSize  < 1){  
-					hp->hexSize = 1; 
+				if (hp->hexSize  < 0.3){  
+					hp->hexSize = 0.3; 
 				}
 		}
 		hp->hexColor.a = hp->hexAlpha;	
