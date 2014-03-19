@@ -23,11 +23,18 @@ LightScene::LightScene(vector<Particle*>* people, vector<Particle*>* hands)
 	//load all images 
 	m_hexImgBorder.loadImage("LightScene/Hexagon.png");
 	m_hexImgInner.loadImage("LightScene/hexagonFill.png");
-	m_lightImg.loadImage("LightScene/light.png");
+	m_lightImg.loadImage("LightScene/light.png"); 
+
+	//for fog
+	m_fogShader.load("LightScene/fogShader");
 	m_fogImg.loadImage("LightScene/fog.png");
+	m_lightAlpha.loadImage("LightScene/lightAlpha.png");
+	m_fogAlphaMask.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
+
+	m_fogVbo.setVertexData(fogVerts, 4, GL_STATIC_DRAW);
+	m_fogVbo.setTexCoordData(s_fogTexCoords, 4, GL_STATIC_DRAW);
 
 	m_lights = vector<Light>();
-
 
 	for(int i = 0; i < ofGetWidth(); i += m_lightImg.width){
 		Light l = Light();
@@ -35,38 +42,27 @@ LightScene::LightScene(vector<Particle*>* people, vector<Particle*>* hands)
 		l.x = i;
 		m_lights.push_back(l);	
 	}
-
-	//create an image that holds is the length of the amount of lights. set pixel to white if light is on
-	m_lightsOnTexture.allocate(m_lights.size(), 1, GL_LUMINANCE);
-	m_lightsOnTexture.clear();
-	m_lightsOnTexture.readToPixels(m_lightsOnPixels);
-
-	//setting up shader for fog
-	m_fogShader = ofShader();
-	m_fogShader.load("LightScene/fog");
-	m_fogVbo = ofVbo();
-	m_fogVbo.setVertexData( &fogVerts[0], 4, GL_STATIC_DRAW);
-	m_fogVbo.setTexCoordData(&s_fogTexCoords[0], 4, GL_STATIC_DRAW);
-	m_fogInt = 0;
-
 }
 
 void LightScene::Render()
 {
+	ofClear(0);
+
 	//FOG 
-	m_fogShader.begin();
-	m_fogImg.getTextureReference().bind();
-	m_fogVbo.bind();
-
-	//draw fog shader
-	m_fogShader.setUniformTexture("lightsOnPix", m_lightsOnTexture, 1);
-	m_fogShader.setUniform1f("numLights", m_lights.size());
-	glDrawArrays(GL_QUADS, 0, 4);
-
-	m_fogImg.getTextureReference().unbind();
-	m_fogShader.end();
-	m_fogVbo.unbind();
-
+	ofSetColor(255);
+	ofSetRectMode(OF_RECTMODE_CORNER);
+	ofEnableAlphaBlending();
+		m_fogAlphaMask.begin();
+			ofClear(0, 255);
+			int dif = m_lightAlpha.width * 0.5 - m_lightImg.width * 0.5;
+			for (vector<Light>::iterator l = m_lights.begin(); l != m_lights.end(); ++l){
+				if (l->isOn == true){
+					m_lightAlpha.draw(l->x - dif, 0, 0);
+				}
+			}
+		m_fogAlphaMask.end();
+	
+	ofDisableAlphaBlending();
 
 	//draw lights
 	ofSetColor(255);
@@ -90,10 +86,10 @@ void LightScene::Render()
 			ofScale(hp->hexSize, hp->hexSize);
 
 			ofSetColor(hp->hexColor);
-			m_hexImgInner.draw(0,0);
+			//m_hexImgInner.draw(0,0);
 
 			ofSetColor(255);
-			m_hexImgBorder.draw(0,0);
+			//m_hexImgBorder.draw(0,0);
 		ofPopMatrix();
 		
 		ofSetRectMode(OF_RECTMODE_CORNER);
@@ -156,33 +152,39 @@ void LightScene::Render()
 		hp->hexColor.a = hp->hexAlpha;	
 	}
 
+	//draw fog with shader
+	m_fogShader.begin();
+
+		m_fogImg.bind();
+		m_fogVbo.bind();
+
+		glDrawArrays(GL_QUADS, 0, 4);
+
+		m_fogImg.unbind();
+		m_fogVbo.unbind();
+
+	m_fogShader.end();
+
 }
 
 void LightScene::Update(int deltaTime)
 {
-	float distance;
-	m_fogInt = 0;
-	int count = 0; 
-
 
 	for(vector<Light>::iterator l = m_lights.begin(); l != m_lights.end(); ++l){
 		l->isOn = false;
-		m_lightsOnPixels.setColor(count+1, 1, ofColor(0));
-		count++;
 	}
 
-	count=0;
+	int count = 0;
 	for(vector<Particle*>::iterator p = pPeople->begin(); p != pPeople->end(); ++p){
 		for(vector<Light>::iterator l = m_lights.begin(); l != m_lights.end(); ++l){
 
 			if((*p)->pos.x < l->x+m_lightImg.width && (*p)->pos.x+m_hexImgBorder.width > l->x){
 				l->isOn = true;
-				m_lightsOnPixels.setColor(count+1, 1, ofColor(255));
 			}
 			count++;
 		}
 	}
-	m_lightsOnTexture.loadData(m_lightsOnPixels, GL_LUMINANCE);
+
 }
 
 void LightScene::convertPeopleVector()
