@@ -51,18 +51,19 @@ void LightScene::Render()
 	//FOG 
 	ofSetColor(255);
 	ofSetRectMode(OF_RECTMODE_CORNER);
-	ofEnableAlphaBlending();
-		m_fogAlphaMask.begin();
-			ofClear(0, 255);
+
+	m_fogAlphaMask.begin();
+		ofEnableAlphaBlending();
+			ofClear(0, 0);
 			int dif = m_lightAlpha.width * 0.5 - m_lightImg.width * 0.5;
 			for (vector<Light>::iterator l = m_lights.begin(); l != m_lights.end(); ++l){
 				if (l->isOn == true){
 					m_lightAlpha.draw(l->x - dif, 0, 0);
 				}
 			}
-		m_fogAlphaMask.end();
+	m_fogAlphaMask.end();
 	
-	ofDisableAlphaBlending();
+	//m_fogAlphaMask.draw(0, 0);
 
 	//draw lights
 	ofSetColor(255);
@@ -155,16 +156,18 @@ void LightScene::Render()
 	//draw fog with shader
 	m_fogShader.begin();
 
-		m_fogImg.bind();
+		m_fogImg.getTextureReference().bind();
+		m_fogShader.setUniformTexture("imageMask", m_fogAlphaMask.getTextureReference(), 1);
 		m_fogVbo.bind();
 
 		glDrawArrays(GL_QUADS, 0, 4);
 
-		m_fogImg.unbind();
+		m_fogImg.getTextureReference().unbind();
 		m_fogVbo.unbind();
 
 	m_fogShader.end();
 
+	
 }
 
 void LightScene::Update(int deltaTime)
