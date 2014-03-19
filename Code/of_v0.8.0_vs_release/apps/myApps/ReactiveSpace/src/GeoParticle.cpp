@@ -11,10 +11,18 @@ GeoParticle::GeoParticle(ofVec3f _pos)
 : Particle(_pos)
 {
 	startTime = 0;
+	alphaTime = 0;
 	m_explodeTime = 0;
 	m_isExploding = false;
+	alphaExplode = 250;
 
-	explosionSprite.loadImage("GeoScene/Particles.png");
+	
+
+	//geoExplodeSound.loadSound("GeoScene/Scene3_Explosion.mp3");
+	 
+	
+
+
 	//get a random radius
 	GeoSize = ofRandom(ofGetWidth() * 0.05, ofGetWidth() * 0.1);
 
@@ -103,10 +111,49 @@ void GeoParticle::update(float timeScale)
 		}
 	}
 	m_vbo.setVertexData(&m_currentVerts[0], m_numTriangles*3, GL_DYNAMIC_DRAW);
+
+
+	if(m_isExploding == true){
+	alphaTime = alphaTime + timeScale*16.f;
+		if (alphaTime > 200){
+			alphaExplode = 200;
+		}
+		if (alphaTime > 400){
+			alphaExplode = 150;
+		}
+		if (alphaTime > 600){
+			alphaExplode = 50;
+		}
+		if (alphaTime > 800){
+			alphaExplode = 0;
+		}
+	}
+
 }
 
-void GeoParticle::draw()
+void GeoParticle::draw(ofImage mGrad, ofImage explosionSprite)
 {
+	if(m_isExploding == true){
+		
+		for(int j = 0 ; j < 50; j ++){
+			
+			ofPushMatrix();
+
+				if(m_gradNum == 0 ){ofSetColor(251,236,119,alphaExplode);}
+				if(m_gradNum == 1 ){ofSetColor(238,158,100,alphaExplode);}
+				if(m_gradNum == 2 ){ofSetColor(211,75,63,alphaExplode);}
+				if(m_gradNum == 3 ){ofSetColor(87,193,235,alphaExplode);}
+				if(m_gradNum == 4 ){ofSetColor(72,165,76,alphaExplode);}
+				if(m_gradNum == 5 ){ofSetColor(169,233,180,alphaExplode);}
+
+				explosionSprite.draw(pos.x+ofRandom(-alphaExplode,alphaExplode),pos.y+ofRandom(-alphaExplode,alphaExplode), 30,30);
+			ofPopMatrix();
+			
+		}
+	}
+	ofSetColor(255);
+	mGrad.bind();
+
 	ofPushMatrix();
 		ofTranslate(pos.x, pos.y);
 		ofScale(GeoSize, GeoSize);
@@ -114,6 +161,10 @@ void GeoParticle::draw()
 		glDrawArrays(GL_TRIANGLES, 0, m_numTriangles*3);
 		m_vbo.unbind();
 	ofPopMatrix();
+
+	mGrad.unbind();
+
+	
 }
 
 void GeoParticle::setTriangles()
@@ -158,12 +209,11 @@ void GeoParticle::countDown(float dTime)
 {
 	//if (vel.x == 0){
 			startTime = startTime + dTime*16.f;
+			//geoExplodeSound.play();			
 						
-						
-			if (startTime > 1000){
+			if (startTime > 2000){
 				explode();
 				startTime = 0;
-
 			}
 	//}
 }
@@ -172,6 +222,7 @@ void GeoParticle::explode()
 {
 	m_isExploding = true;
 	m_explodeTime = 0;
+	vel.x = 0;
 }
 
 

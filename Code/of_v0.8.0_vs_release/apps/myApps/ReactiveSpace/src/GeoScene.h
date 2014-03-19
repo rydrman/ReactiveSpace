@@ -10,14 +10,15 @@ class GeoScene : public IScene
 	//ofImage geo3;
 	ofImage geoBack;
 	ofImage geoHands;
-
+	
 	ofImage m_gradients;
+	ofSoundPlayer geoBackSound;
 
 	int screenW;
 	int screenH;
 public:
 	GeoScene(vector<Particle*>* people, vector<Particle*>* hands);
-
+	ofImage explosionSprite;
 	virtual void Render();
 	virtual void Update(int timeScale);
 	void convertPeopleVector();

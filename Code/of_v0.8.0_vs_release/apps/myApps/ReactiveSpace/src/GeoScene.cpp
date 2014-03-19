@@ -10,6 +10,7 @@ static ofColor col = ofColor(255, 255, 255);
 GeoScene::GeoScene(vector<Particle*>* people, vector<Particle*>* hands)
 : IScene(people, hands)
 {
+
 	screenW = ofGetWidth();
 	screenH = ofGetHeight();	
 
@@ -17,6 +18,14 @@ GeoScene::GeoScene(vector<Particle*>* people, vector<Particle*>* hands)
 	geoHands.loadImage("GeoScene/Hand_White.png");
 
 	m_gradients.loadImage("GeoScene/gradients.png");
+
+
+	explosionSprite.loadImage("GeoScene/Particles2.png");
+
+	geoBackSound.loadSound("GeoScene/Scene3Back.mp3");
+	geoBackSound.setLoop(true); 
+	geoBackSound.play();
+	
 
 }
 
@@ -31,10 +40,12 @@ void GeoScene::Render()
 	GeoHands* gh;
 	for (vector<Particle*>::iterator h = pHandPositions->begin(); h != pHandPositions->end(); ++h)
 	{
+		gh = (GeoHands*)(*h);
 		ofPushMatrix();
 			//ofSetColor(0,200,200,70);
 			//ofScale(radius,radius);
-			geoHands.draw((*h)->pos.x-185,(*h)->pos.y-185,0);
+			gh->drawHands(geoHands);
+			
 		ofPopMatrix();
 	}
 
@@ -51,12 +62,15 @@ void GeoScene::Render()
 			
 		    //ofTranslate((*p)->pos);
 			//ofSetColor(col);
-			gp->draw();
+			gp->draw(m_gradients, explosionSprite);
 		//ofPopMatrix();
 
 	}
 
 	m_gradients.unbind();
+
+
+
 }
 
 void GeoScene::Update(int timeScale)
@@ -71,7 +85,7 @@ void GeoScene::Update(int timeScale)
 		for (vector<Particle*>::iterator p = pPeople->begin(); p != pPeople->end(); ++p)
 		{
 			gp = (GeoParticle*)(*p);
-			
+			if(gp->m_isExploding) continue;
 
 			if ((*h)->pos.x + radius > ((*p)->pos.x ) && (*h)->pos.x - radius<((*p)->pos.x ))
 			{
@@ -79,25 +93,21 @@ void GeoScene::Update(int timeScale)
 				{
 					
 
-					gp->vel.x = gp->vel.x /2 ;
+					//gp->vel.x = gp->vel.x /2 ;
 					gp->countDown(timeScale);
 					onTarget = true;
 					gh->handCountDown(timeScale, onTarget);	
-					
+					goto stopSearching;
 				}
 			}
-			else{
-				(*p)->vel.x = (*p)->vel.x * 2;
-				col = ofColor(255, 255, 255);
-				radius = 100;
-				onTarget = false;
-			//	gh->handCountDown(deltaTime,onTarget);
-			}
+			
 
 
 		}
 
 	}
+
+	stopSearching:
 
 	//update geo particles
 	for (vector<Particle*>::iterator p = pPeople->begin(); p != pPeople->end(); ++p)
@@ -105,7 +115,7 @@ void GeoScene::Update(int timeScale)
 		gp = (GeoParticle*)(*p);
 		gp->update(timeScale);
 		
-	}
+	}	
 
 }
 
