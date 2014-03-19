@@ -8,6 +8,8 @@ class LightScene : public IScene
 	ofImage m_hexImgBorder;
 	ofImage m_hexImgInner;
 	ofImage m_lightImg;
+	ofImage m_lightTube;
+	ofImage m_backgroundImg;
 	
 
 	//for fog

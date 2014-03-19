@@ -24,6 +24,8 @@ LightScene::LightScene(vector<Particle*>* people, vector<Particle*>* hands)
 	m_hexImgBorder.loadImage("LightScene/Hexagon.png");
 	m_hexImgInner.loadImage("LightScene/hexagonFill.png");
 	m_lightImg.loadImage("LightScene/light.png"); 
+	m_lightTube.loadImage("LightScene/lightTube.png");
+	m_backgroundImg.loadImage("LightScene/lightsBackground.png");
 
 	//for fog
 	m_fogShader.load("LightScene/fogShader");
@@ -36,7 +38,7 @@ LightScene::LightScene(vector<Particle*>* people, vector<Particle*>* hands)
 
 	m_lights = vector<Light>();
 
-	for(int i = 0; i < ofGetWidth(); i += m_lightImg.width){
+	for(int i = 0; i < ofGetWidth(); i += m_lightImg.width * 0.7){
 		Light l = Light();
 		l.isOn = false;
 		l.x = i;
@@ -48,29 +50,27 @@ void LightScene::Render()
 {
 	ofClear(0);
 
-	//FOG 
+	//draw lights for background
 	ofSetColor(255);
 	ofSetRectMode(OF_RECTMODE_CORNER);
-
-	m_fogAlphaMask.begin();
-		ofEnableAlphaBlending();
-			ofClear(0, 0);
-			int dif = m_lightAlpha.width * 0.5 - m_lightImg.width * 0.5;
-			for (vector<Light>::iterator l = m_lights.begin(); l != m_lights.end(); ++l){
-				if (l->isOn == true){
-					m_lightAlpha.draw(l->x - dif, 0, 0);
-				}
-			}
-	m_fogAlphaMask.end();
-	
-	//m_fogAlphaMask.draw(0, 0);
-
-	//draw lights
-	ofSetColor(255);
-	ofSetRectMode(OF_RECTMODE_CORNER);
+	ofEnableBlendMode(OF_BLENDMODE_ADD);
 	for(vector<Light>::iterator l = m_lights.begin(); l != m_lights.end(); ++l){
 		if(l->isOn == true){
-			m_lightImg.draw(l->x, 0, 0);
+			m_lightImg.draw(l->x - m_lightImg.width * 0.5, 0, 0);
+		}
+	}
+	ofDisableBlendMode();
+
+	ofEnableBlendMode(OF_BLENDMODE_MULTIPLY);
+	m_backgroundImg.draw(0, 0);
+	ofDisableBlendMode();
+
+	ofEnableAlphaBlending();
+
+	//draw light tubes
+	for (vector<Light>::iterator l = m_lights.begin(); l != m_lights.end(); ++l){
+		if (l->isOn == true){
+			m_lightTube.draw(l->x - m_lightImg.width * 0.5, 0, 0);
 		}
 	}
 
@@ -95,8 +95,6 @@ void LightScene::Render()
 		
 		ofSetRectMode(OF_RECTMODE_CORNER);
 
-		ofNoFill();
-		ofSetLineWidth(5);
 		float distSqrd = std::numeric_limits<float>::max();
 
 		for(vector<Particle*>::iterator hands = pHandPositions->begin(); hands != pHandPositions->end(); ++hands){
@@ -120,6 +118,9 @@ void LightScene::Render()
 			}
 		}
 
+		ofNoFill();
+		ofSetColor(255, 255);
+		ofSetLineWidth(6);
 		if(closestHand.size() != 0){
 			for(vector<Particle*>::iterator connectedhands = closestHand.begin(); connectedhands != closestHand.end(); ++connectedhands){
 
@@ -152,6 +153,21 @@ void LightScene::Render()
 		}
 		hp->hexColor.a = hp->hexAlpha;	
 	}
+
+	//FOG 
+	ofSetColor(255);
+	ofSetRectMode(OF_RECTMODE_CORNER);
+
+	m_fogAlphaMask.begin();
+	ofEnableAlphaBlending();
+	ofClear(0, 0);
+	int dif = m_lightAlpha.width * 0.5;
+	for (vector<Light>::iterator l = m_lights.begin(); l != m_lights.end(); ++l){
+		if (l->isOn == true){
+			m_lightAlpha.draw(l->x - dif, 0, 0);
+		}
+	}
+	m_fogAlphaMask.end();
 
 	//draw fog with shader
 	m_fogShader.begin();
