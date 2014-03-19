@@ -87,10 +87,10 @@ void LightScene::Render()
 			ofScale(hp->hexSize, hp->hexSize);
 
 			ofSetColor(hp->hexColor);
-			//m_hexImgInner.draw(0,0);
+			m_hexImgInner.draw(0,0);
 
 			ofSetColor(255);
-			//m_hexImgBorder.draw(0,0);
+			m_hexImgBorder.draw(0,0);
 		ofPopMatrix();
 		
 		ofSetRectMode(OF_RECTMODE_CORNER);
