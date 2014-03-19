@@ -2,6 +2,10 @@
 #include "ofMain.h"
 #include "Particle.h"
 
+//static separation 
+static const float s_desiredSepSqrd = 100;
+static const float s_neighDistSqrd = 20000;
+
 class HexagonParticle 
 	: public Particle {
 		
@@ -18,4 +22,7 @@ public :
 	HexagonParticle(Particle _old);
 	HexagonParticle(ofVec3f _pos);
 	~HexagonParticle();
+
+	void separation(vector<HexagonParticle*>* connectedParticles);
+
 };

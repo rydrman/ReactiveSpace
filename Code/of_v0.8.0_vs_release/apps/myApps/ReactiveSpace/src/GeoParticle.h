@@ -14,14 +14,15 @@ class GeoParticle :
 	public Particle
 {
 public:
-	
+	ofSoundPlayer geoExplodeSound;
 	ofImage m_shapes;
-	ofImage explosionSprite;
 	
+	int alphaExplode;
 	ofImage GeoShape;
 	int GeoSize;
 	int GeoTimer;
 	int startTime;
+	int alphaTime;
 
 	//for geometry
 	float m_gradNum;
@@ -44,7 +45,7 @@ public:
 	GeoParticle(ofVec3f _pos);
 
 	void update(float timeScale);
-	void draw();
+	void draw(ofImage mGrad, ofImage explosionSprite);
 	void explode();
 	void setTriangles();
 	void getRandomTexCoord(ofVec2f* coords);

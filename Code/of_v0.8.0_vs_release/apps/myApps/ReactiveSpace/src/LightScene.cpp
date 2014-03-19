@@ -24,6 +24,8 @@ LightScene::LightScene(vector<Particle*>* people, vector<Particle*>* hands)
 	m_hexImgBorder.loadImage("LightScene/Hexagon.png");
 	m_hexImgInner.loadImage("LightScene/hexagonFill.png");
 	m_lightImg.loadImage("LightScene/light.png"); 
+	
+	m_handsImage.loadImage("LightScene/handsImage.png");
 
 	//for fog
 	m_fogShader.load("LightScene/fogShader");
@@ -51,18 +53,18 @@ void LightScene::Render()
 	//FOG 
 	ofSetColor(255);
 	ofSetRectMode(OF_RECTMODE_CORNER);
-	ofEnableAlphaBlending();
-		m_fogAlphaMask.begin();
-			ofClear(0, 255);
+
+	m_fogAlphaMask.begin();
+		ofEnableAlphaBlending();
+			ofClear(0, 0);
 			int dif = m_lightAlpha.width * 0.5 - m_lightImg.width * 0.5;
 			for (vector<Light>::iterator l = m_lights.begin(); l != m_lights.end(); ++l){
 				if (l->isOn == true){
-					m_lightAlpha.draw(l->x - dif, 0, 0);
+		//			m_lightAlpha.draw(l->x - dif, 0, 0);
 				}
 			}
-		m_fogAlphaMask.end();
-	
-	ofDisableAlphaBlending();
+	m_fogAlphaMask.end();
+	//m_fogAlphaMask.draw(0, 0);
 
 	//draw lights
 	ofSetColor(255);
@@ -86,19 +88,18 @@ void LightScene::Render()
 			ofScale(hp->hexSize, hp->hexSize);
 
 			ofSetColor(hp->hexColor);
-			//m_hexImgInner.draw(0,0);
+			m_hexImgInner.draw(0,0);
 
 			ofSetColor(255);
-			//m_hexImgBorder.draw(0,0);
+			m_hexImgBorder.draw(0,0);
 		ofPopMatrix();
 		
 		ofSetRectMode(OF_RECTMODE_CORNER);
 
-		ofNoFill();
-		ofSetLineWidth(5);
 		float distSqrd = std::numeric_limits<float>::max();
 
 		for(vector<Particle*>::iterator hands = pHandPositions->begin(); hands != pHandPositions->end(); ++hands){
+			
 			distSqrd = ofDistSquared( (*hands)->pos.x, (*hands)->pos.y, (*p)->pos.x, (*p)->pos.y);
 			
 			hp->hexToHands = (*hands)->pos - hp->pos;
@@ -119,6 +120,9 @@ void LightScene::Render()
 			}
 		}
 
+		ofNoFill();
+		ofSetLineWidth(7);
+		ofSetColor(255,255);
 		if(closestHand.size() != 0){
 			for(vector<Particle*>::iterator connectedhands = closestHand.begin(); connectedhands != closestHand.end(); ++connectedhands){
 
@@ -155,16 +159,24 @@ void LightScene::Render()
 	//draw fog with shader
 	m_fogShader.begin();
 
-		m_fogImg.bind();
+		m_fogImg.getTextureReference().bind();
+		m_fogShader.setUniformTexture("imageMask", m_fogAlphaMask.getTextureReference(), 1);
 		m_fogVbo.bind();
 
 		glDrawArrays(GL_QUADS, 0, 4);
 
-		m_fogImg.unbind();
+		m_fogImg.getTextureReference().unbind();
 		m_fogVbo.unbind();
 
 	m_fogShader.end();
-
+	ofSetRectMode(OF_RECTMODE_CENTER);
+	for (vector<Particle*>::iterator hands = pHandPositions->begin(); hands != pHandPositions->end(); ++hands){
+		ofPushMatrix();
+		ofTranslate((*hands)->pos);
+		m_handsImage.draw(0,0);
+		ofPopMatrix();
+	}
+	ofSetRectMode(OF_RECTMODE_CORNER);
 }
 
 void LightScene::Update(int deltaTime)
