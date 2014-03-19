@@ -7,3 +7,4 @@
 #include "HexagonParticle.h"
 #include "GeoParticle.h"
 #include "GeoHands.h"
+#include "RainCloudParticle.h"

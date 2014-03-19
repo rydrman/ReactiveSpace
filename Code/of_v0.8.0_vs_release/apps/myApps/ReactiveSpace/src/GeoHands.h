@@ -13,9 +13,10 @@ public:
 	ofImage handImgOrange;
 	ofImage handImgRed;
 	
+	
 	int CountTimer;
 	int Interval;
-	void drawHands();
+	void drawHands(ofImage geoHands);
 	void handCountDown(float deltTime, bool lock);
 	GeoHands(void);
 	~GeoHands(void);

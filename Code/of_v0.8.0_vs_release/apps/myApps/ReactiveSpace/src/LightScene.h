@@ -19,6 +19,8 @@ class LightScene : public IScene
 	ofFbo m_fogAlphaMask;
 	ofImage m_lightAlpha;
 
+	ofImage m_handsImage;
+
 	vector<Light> m_lights;
 
 	vector<Particle*> closestHand; 

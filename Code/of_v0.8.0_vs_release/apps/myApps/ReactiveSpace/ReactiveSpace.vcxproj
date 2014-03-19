@@ -113,6 +113,7 @@
     <ClCompile Include="..\..\..\addons\ofxOpenCv\src\ofxCvShortImage.cpp" />
     <ClCompile Include="src\OpenCVManager.cpp" />
     <ClCompile Include="src\Particle.cpp" />
+    <ClCompile Include="src\RainCloudParticle.cpp" />
     <ClCompile Include="src\RainScene.cpp" />
     <ClCompile Include="src\ReactiveSpaceApp.cpp" />
   </ItemGroup>
@@ -224,6 +225,7 @@
     <ClInclude Include="src\OpenCVManager.h" />
     <ClInclude Include="src\Particle.h" />
     <ClInclude Include="src\ParticleMain.h" />
+    <ClInclude Include="src\RainCloudParticle.h" />
     <ClInclude Include="src\RainScene.h" />
     <ClInclude Include="src\ReactiveSpaceApp.h" />
   </ItemGroup>

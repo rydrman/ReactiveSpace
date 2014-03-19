@@ -26,6 +26,7 @@ LightScene::LightScene(vector<Particle*>* people, vector<Particle*>* hands)
 	m_lightImg.loadImage("LightScene/light.png"); 
 	m_lightTube.loadImage("LightScene/lightTube.png");
 	m_backgroundImg.loadImage("LightScene/lightsBackground.png");
+	m_handsImage.loadImage("LightScene/handsImage.png");
 
 	//for fog
 	m_fogShader.load("LightScene/fogShader");
@@ -98,6 +99,7 @@ void LightScene::Render()
 		float distSqrd = std::numeric_limits<float>::max();
 
 		for(vector<Particle*>::iterator hands = pHandPositions->begin(); hands != pHandPositions->end(); ++hands){
+			
 			distSqrd = ofDistSquared( (*hands)->pos.x, (*hands)->pos.y, (*p)->pos.x, (*p)->pos.y);
 			
 			hp->hexToHands = (*hands)->pos - hp->pos;
@@ -182,8 +184,15 @@ void LightScene::Render()
 		m_fogVbo.unbind();
 
 	m_fogShader.end();
-
 	
+	ofSetRectMode(OF_RECTMODE_CENTER);
+	for (vector<Particle*>::iterator hands = pHandPositions->begin(); hands != pHandPositions->end(); ++hands){
+		ofPushMatrix();
+		ofTranslate((*hands)->pos);
+		m_handsImage.draw(0,0);
+		ofPopMatrix();
+	}
+	ofSetRectMode(OF_RECTMODE_CORNER);
 }
 
 void LightScene::Update(int deltaTime)
