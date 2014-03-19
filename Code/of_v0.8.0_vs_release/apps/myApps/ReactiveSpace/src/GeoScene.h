@@ -17,8 +17,9 @@ class GeoScene : public IScene
 	int screenW;
 	int screenH;
 public:
-	GeoScene(vector<Particle*>* people, vector<Particle*>* hands);
 	ofImage explosionSprite;
+	GeoScene(vector<Particle*>* people, vector<Particle*>* hands);
+	
 	virtual void Render();
 	virtual void Update(int timeScale);
 	void convertPeopleVector();

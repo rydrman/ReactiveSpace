@@ -97,6 +97,11 @@ void GeoScene::Update(int timeScale)
 					gp->countDown(timeScale);
 					onTarget = true;
 					gh->handCountDown(timeScale, onTarget);	
+
+					if( gp->m_isDead){
+						pPeople->erase(p, p);
+					}
+
 					goto stopSearching;
 				}
 			}

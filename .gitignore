@@ -220,3 +220,8 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+/Code/of_v0.8.0_vs_release/libs/openFrameworksCompiled/lib/vs/openframeworksLib.lib
+/Code/of_v0.8.0_vs_release/libs/openFrameworksCompiled/lib/vs/openframeworksLib_debug.bsc
+/Code/of_v0.8.0_vs_release/libs/openFrameworksCompiled/lib/vs/openframeworksLib_debug.lib
+/Code/of_v0.8.0_vs_release/libs/openFrameworksCompiled/lib/vs/openframeworksLib_debug.bsc
+/Code/of_v0.8.0_vs_release/libs/openFrameworksCompiled/lib/vs/openframeworksLib_debug.lib
