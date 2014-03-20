@@ -118,16 +118,18 @@ void GridScene::Render()
 
 	//now draw angry particles on top
 	alpha = 1.f;
+	BirdParticle* angry;
 	for (vector<BirdParticle*>::iterator p = m_angryParticles.begin(); p != m_angryParticles.end(); ++p)
 	{
+		angry = (*p);
 		m_particleShader.setUniform4f("uColor",
-			1.f -(*p)->mood,
-			((*p)->mood > 0.5) ? ofMap((*p)->mood, 0.5f, 1.f, 0.5f, 0.7f) :(*p)->mood,
-			(*p)->mood,
+			1.f -angry->mood,
+			(angry->mood > 0.5) ? ofMap(angry->mood, 0.5f, 1.f, 0.5f, 0.7f) :angry->mood,
+			angry->mood,
 			alpha);
 
 		ofPushMatrix();
-			ofTranslate((*p)->pos);
+			ofTranslate(angry->pos);
 			ofScale(m_particleSize, m_particleSize);
 			glDrawArrays(GL_QUADS, 0, 4);
 		ofPopMatrix();

@@ -20,24 +20,26 @@ void BirdParticle::update(vector<BirdParticle*>* angryParticles)
 	ofVec2f sumAlign = ofVec2f(0.f, 0.f);
 
 	int count = 0;
+	BirdParticle* angry;
 	for (vector<BirdParticle*>::iterator p = angryParticles->begin(); p != angryParticles->end(); ++p)
 	{
+		angry = (*p);
 		//look for close particles
-		float distSqrd = ofDistSquared((*p)->pos.x,(*p)->pos.y, pos.x, pos.y);
+		float distSqrd = ofDistSquared(angry->pos.x, angry->pos.y, pos.x, pos.y);
 		if (distSqrd < s_neighbourDistSqrd)
 		{
 			//do flocking calculations
 			//seperation
 			if (distSqrd < s_desiredSeperationSqrd && distSqrd > 0)
 			{
-				steerVecSep += ( (pos -(*p)->pos).normalize() / sqrt(distSqrd) );
+				steerVecSep += ((pos - angry->pos).normalize() / sqrt(distSqrd));
 			}
 
 			//cohesion
-			sumCoh +=(*p)->pos;
+			sumCoh += angry->pos;
 
 			//alignment
-			sumAlign +=(*p)->vel;
+			sumAlign += angry->vel;
 
 			++count;
 		}
