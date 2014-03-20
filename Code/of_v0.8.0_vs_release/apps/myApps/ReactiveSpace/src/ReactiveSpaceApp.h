@@ -18,6 +18,7 @@ using std::vector;
 
 class ReactiveSpaceApp : public ofBaseApp{
 
+	int m_nextSceneNum;
 	int m_currentSceneNum;
 	vector<IScene*> m_scenes;
 	IScene* pCurrentScene;
