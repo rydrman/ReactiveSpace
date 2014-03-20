@@ -104,19 +104,20 @@ void LightScene::Render()
 			
 			hp->hexToHands = (*hands)->pos - hp->pos;
 
-			float offsetMap = ofMap(distSqrd, 22500, 90000, 0, 1);
-			ofClamp(offsetMap, 0,1);
-			ofVec2f offsetAccel = hp->hexToHands*offsetMap;	
+			//float offsetMap = ofMap(distSqrd, 22500, 90000, 0, 1);
+			//ofClamp(offsetMap, 0,1);
+			//ofVec2f offsetAccel = hp->hexToHands*offsetMap;	
 
 			if (distSqrd < 250000){				
 				closestHand.push_back((*hands));	
-
-				if(distSqrd > 90000){
-					hp->accel += offsetAccel;
-				}
-				else if(distSqrd < 90000){
-					hp->accel -= offsetAccel*0.002;
-				}
+				hp->seek((*hands)->pos, 1.f, true);
+				//if(distSqrd < 90000){
+					//hp->seek((*p)->pos, 1.0, true);
+					//hp->accel += offsetAccel;
+				//}
+				//else if(distSqrd < 90000){
+				//	hp->accel -= offsetAccel*0.002;
+				//}
 			}
 		}
 

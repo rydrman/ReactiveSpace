@@ -59,13 +59,15 @@ void Particle::seek(ofVec3f target, float strength, bool slowToTarget, float* ho
 		{
 			homeRatio = distSqrd / 10000;
 			desired *= homeRatio;
-			if (desired.lengthSquared() < 1.f)
-				desired.normalize();
+			//if (desired.lengthSquared() < 1.f)
+				//desired.normalize();
 		}
 
-		steerVec = desired - vel;
+		steerVec = desired;// -vel;
 		steerVec.limit(maxForce);
 	}
+	cout << vel << endl;
+	cout << steerVec << endl << endl;
 
 	accel += steerVec * strength;
 	*homeDistRatio = homeRatio;
