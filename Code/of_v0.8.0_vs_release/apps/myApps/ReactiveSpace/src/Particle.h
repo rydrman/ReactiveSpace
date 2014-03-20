@@ -29,7 +29,7 @@ public:
 	void seek(ofVec3f target, float strength = 1.f, bool slowToTarget = false, float* homeDistRatio = new float);
 
 	//update velocity
-	void update();
+	void update(float timeScale = 1.f);
 
 	~Particle();
 };

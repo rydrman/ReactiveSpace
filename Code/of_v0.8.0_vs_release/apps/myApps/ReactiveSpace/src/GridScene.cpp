@@ -255,7 +255,7 @@ void GridScene::Update(int timeScale)
 
 		//update it 
 		if (!p->isHome)			
-			p->update(&m_angryParticles);
+			p->update(&m_angryParticles, timeScale);
 
 		//reverse speed if at edge of screen
 		int screenW = ofGetWidth();

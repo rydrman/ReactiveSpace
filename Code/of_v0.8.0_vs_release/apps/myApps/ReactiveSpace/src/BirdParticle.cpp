@@ -11,9 +11,10 @@ BirdParticle::BirdParticle(ofVec2f _pos, float _maxSpeed, float _maxForce)
 	maxSpeed = _maxSpeed;
 	maxForce = _maxForce;
 	isHome = false;
+	homeDistRatio = 1.f;
 }
 
-void BirdParticle::update(vector<BirdParticle*>* angryParticles)
+void BirdParticle::update(vector<BirdParticle*>* angryParticles, float timeScale)
 {
 	ofVec2f steerVecSep = ofVec2f(0.f, 0.f);
 	ofVec2f sumCoh = ofVec2f(0.f, 0.f);
@@ -63,16 +64,16 @@ void BirdParticle::update(vector<BirdParticle*>* angryParticles)
 
 		//add them all
 		accel += steerVecSep + sumAlign;
-		accel.limit(maxSpeed);
+		accel.limit(maxSpeed * (0.1f + 0.9f * homeDistRatio));
 	}
 
-	Particle::update();
+	Particle::update(timeScale);
 }
 
 bool BirdParticle::seek()
 {
-	float homeDistRatio = 1.f;
-	Particle::seek(originalPos, 1.0f, true, &homeDistRatio);
+	homeDistRatio = 1.f;
+	Particle::seek(originalPos, 5.f, true, &homeDistRatio);
 
 	//check to see if it's home
 	if (!isHome 
