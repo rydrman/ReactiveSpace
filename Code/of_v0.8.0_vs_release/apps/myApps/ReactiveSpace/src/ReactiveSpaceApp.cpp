@@ -54,10 +54,12 @@ void ReactiveSpaceApp::update()
 	//switch scene if necessary
 	if (m_currentSceneNum != m_nextSceneNum)
 	{
+		pCurrentScene->onUnload();
 		m_currentSceneNum = m_nextSceneNum;
 		pCurrentScene = m_scenes[m_currentSceneNum];
 		pCurrentScene->convertPeopleVector();
 		pCurrentScene->convertHandVector();
+		pCurrentScene->onLoad();
 	}
 
 #ifdef DEBUG_DRAW

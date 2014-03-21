@@ -287,6 +287,21 @@ void GridScene::Update(int timeScale)
 	particleUpdateOffset = !particleUpdateOffset;
 }
 
+void GridScene::onUnload()
+{
+	BirdParticle* p;
+	for (int i = (particleUpdateOffset) ? 0 : 1; i < m_numParticles; i+=2)
+	{
+		p = &m_particleList[i];
+
+		p->mood = 0.5f;
+		p->vel *= 0.f;
+		p->isHome = true;
+	}
+
+	m_angryParticles.clear();
+}
+
 GridScene::~GridScene()
 {
 }

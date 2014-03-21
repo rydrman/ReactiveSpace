@@ -6,6 +6,14 @@ IScene::IScene(vector<Particle*>* people, vector<Particle*>* hands)
 	pHandPositions = hands;
 }
 
+void IScene::onUnload()
+{
+}
+
+void IScene::onLoad()
+{
+}
+
 void IScene::convertPeopleVector()
 {
 	vector<Particle*> newPeople = vector<Particle*>();

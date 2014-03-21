@@ -162,7 +162,7 @@ void LightScene::Render()
 	ofSetRectMode(OF_RECTMODE_CORNER);
 
 	m_fogAlphaMask.begin();
-	ofEnableAlphaBlending();
+	//ofEnableAlphaBlending();
 	ofClear(0, 0);
 	int dif = m_lightAlpha.width * 0.5;
 	for (vector<Light>::iterator l = m_lights.begin(); l != m_lights.end(); ++l){
