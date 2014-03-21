@@ -157,7 +157,7 @@ void GridScene::Render()
 	{
 		ofPushMatrix();
 		ofTranslate((*h)->pos);
-		m_particleImage.draw(-20.f, -20.f, 40.f, 40.f); // ofCircle(0.f, 0.f, 0.f, 20.f);
+		m_particleImage.draw(-10.f, -10.f, 20.f, 20.f); // ofCircle(0.f, 0.f, 0.f, 20.f);
 
 #ifdef DEBUG_DRAW
 		ofSetColor(0, 0, 0, 255);
