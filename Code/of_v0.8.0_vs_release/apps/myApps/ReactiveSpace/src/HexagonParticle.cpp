@@ -8,9 +8,9 @@ HexagonParticle::HexagonParticle(Particle _old)
 HexagonParticle::HexagonParticle(ofVec3f _pos)
 :Particle(_pos)
 {
-
-	hexAlpha = 0; 
+//	connectedToHands = false;
 	hexColor = ofColor(ofRandom(0,255), ofRandom(0,255), ofRandom(0,255), hexAlpha);
+	hexAlpha = 0; 
 	hexRotation = (int)ofRandom(0,360);
 	hexSize = 0.3;
 	
@@ -19,6 +19,17 @@ HexagonParticle::HexagonParticle(ofVec3f _pos)
 	hexToHands.set(0, 0);
 
 }
+/*
+void HexagonParticle::update(){
+
+	if(connectedToHands == true){
+		hexColor = ofColor(ofRandom(0,255), ofRandom(0,255), ofRandom(0,255), hexAlpha);
+	}
+	else{
+		hexColor = ofColor(0,0,0,100);
+	}
+
+}*/
 
 void HexagonParticle::separation(vector<HexagonParticle*>* connectedParticles)
 {

@@ -22,8 +22,11 @@ class LightScene : public IScene
 	ofImage m_handsImage;
 
 	vector<Light> m_lights;
-
 	vector<Particle*> closestHand; 
+
+	Boolean m_connectedToHands;
+
+	vector<HexagonParticle*> m_connectedParticles;
 	
 public:
 	LightScene(vector<Particle*>* people, vector<Particle*>* hands);

@@ -20,6 +20,8 @@ LightScene::LightScene(vector<Particle*>* people, vector<Particle*>* hands)
 	pPeople = people;
 	pHandPositions = hands;
 
+	m_connectedToHands = false;
+
 	//load all images 
 	m_hexImgBorder.loadImage("LightScene/Hexagon.png");
 	m_hexImgInner.loadImage("LightScene/hexagonFill.png");
@@ -45,6 +47,8 @@ LightScene::LightScene(vector<Particle*>* people, vector<Particle*>* hands)
 		l.x = i;
 		m_lights.push_back(l);	
 	}
+
+	m_connectedParticles = vector<HexagonParticle*>();
 }
 
 void LightScene::Render()
@@ -86,7 +90,6 @@ void LightScene::Render()
 			ofSetRectMode(OF_RECTMODE_CENTER);
 			ofRotate(hp->hexRotation);
 			ofScale(hp->hexSize, hp->hexSize);
-
 			ofSetColor(hp->hexColor);
 			m_hexImgInner.draw(0,0);
 
@@ -104,31 +107,42 @@ void LightScene::Render()
 			
 			hp->hexToHands = (*hands)->pos - hp->pos;
 
-			//float offsetMap = ofMap(distSqrd, 22500, 90000, 0, 1);
-			//ofClamp(offsetMap, 0,1);
-			//ofVec2f offsetAccel = hp->hexToHands*offsetMap;	
+			float offsetMap = ofMap(distSqrd, 22500, 90000, 0, 1);
+			ofClamp(offsetMap, 0,1);
+			ofVec2f offsetAccel = hp->hexToHands*offsetMap;	
 
 			if (distSqrd < 250000){				
+			
 				closestHand.push_back((*hands));	
-				hp->seek((*hands)->pos, 1.f, true);
-				//if(distSqrd < 90000){
+
+				//hp->seek((*hands)->pos, 1.f, true);
+				
+				m_connectedParticles.push_back(hp);	
+				hp->separation(&m_connectedParticles);
+
+				if(distSqrd > 90000){
 					//hp->seek((*p)->pos, 1.0, true);
-					//hp->accel += offsetAccel;
-				//}
-				//else if(distSqrd < 90000){
-				//	hp->accel -= offsetAccel*0.002;
-				//}
+					hp->accel += offsetAccel;
+				}
+				else if(distSqrd < 90000){
+					hp->accel -= offsetAccel*0.0025;
+				}
+				m_connectedParticles.clear();
+
 			}
 		}
 
 		ofNoFill();
 		ofSetColor(255, 255);
 		ofSetLineWidth(6);
+
 		if(closestHand.size() != 0){
 			for(vector<Particle*>::iterator connectedhands = closestHand.begin(); connectedhands != closestHand.end(); ++connectedhands){
 
-				ofLine( (*connectedhands)->pos.x, (*connectedhands)->pos.y, (*p)->pos.x, (*p)->pos.y);
+				//draws line from hands to connected particle
+				ofLine( (*connectedhands)->pos.x, (*connectedhands)->pos.y, hp->pos.x, hp->pos.y);
 				
+				//increments the alpha and the size
 				hp->hexAlpha += 5;
 				if(hp->hexAlpha > 200){
 					hp->hexAlpha = 200;
@@ -143,7 +157,7 @@ void LightScene::Render()
 		}
 		else
 		{
-
+			//decrements the alpha and the size
 			hp->hexAlpha -= 5;
 			if(hp->hexAlpha < 0){
 				hp->hexAlpha = 0;
@@ -153,8 +167,10 @@ void LightScene::Render()
 				if (hp->hexSize  < 0.3){  
 					hp->hexSize = 0.3; 
 				}
+			m_connectedToHands = false;
 		}
 		hp->hexColor.a = hp->hexAlpha;	
+
 	}
 
 	//FOG 
@@ -204,10 +220,14 @@ void LightScene::Update(int deltaTime)
 	}
 
 	int count = 0;
-	for(vector<Particle*>::iterator p = pPeople->begin(); p != pPeople->end(); ++p){
+	HexagonParticle* hp;
+	//draw a hexagon for each person in people
+	for(vector<Particle*>::iterator p = pPeople->begin(); p != pPeople->end(); ++p)
+	{
+		hp = (HexagonParticle*) (*p);
 		for(vector<Light>::iterator l = m_lights.begin(); l != m_lights.end(); ++l){
 
-			if((*p)->pos.x < l->x+m_lightImg.width && (*p)->pos.x+m_hexImgBorder.width > l->x){
+			if(hp->pos.x < l->x+m_lightImg.width*0.5 && hp->pos.x+(m_hexImgBorder.width*hp->hexSize)*0.5 > l->x){
 				l->isOn = true;
 			}
 			count++;

@@ -23,6 +23,7 @@ public :
 	HexagonParticle(ofVec3f _pos);
 	~HexagonParticle();
 
+	void update();
 	void separation(vector<HexagonParticle*>* connectedParticles);
 
 };
