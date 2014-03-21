@@ -178,8 +178,8 @@ void GridScene::Update(int timeScale)
 		p = &m_particleList[i];
 
 		//update noise
-		p->noiseX += timeScale / 2.f;
-		p->noiseY += timeScale / 3.f;
+		p->noiseX += timeScale * 0.08f;
+		p->noiseY += timeScale * 0.08f;
 
 		//check distance to hands
 		bool edit = false;
@@ -240,22 +240,24 @@ void GridScene::Update(int timeScale)
 		}
 
 		//approach original position
-		if (!p->isHome && p->mood >= 0.45f)
+		if (!p->isHome)
 		{
-			bool gotHome = p->seek();
-			if (gotHome)
+			if( p->mood >= 0.45f)
 			{
-				vector<BirdParticle*>::iterator it = std::find(m_angryParticles.begin(), m_angryParticles.end(), (BirdParticle*)&*p);
-				if (it != m_angryParticles.end())
-					m_angryParticles.erase(it);
+				bool gotHome = p->seek();
+				if (gotHome)
+				{
+					vector<BirdParticle*>::iterator it = std::find(m_angryParticles.begin(), m_angryParticles.end(), (BirdParticle*)&*p);
+					if (it != m_angryParticles.end())
+						m_angryParticles.erase(it);
+				}
+				p->update(timeScale);
 			}
+			else
+				p->update(&m_angryParticles, timeScale);
 		}
 
 		p->mood = ofClamp(p->mood, 0.f, 1.f);
-
-		//update it 
-		if (!p->isHome)			
-			p->update(&m_angryParticles, timeScale);
 
 		//reverse speed if at edge of screen
 		int screenW = ofGetWidth();

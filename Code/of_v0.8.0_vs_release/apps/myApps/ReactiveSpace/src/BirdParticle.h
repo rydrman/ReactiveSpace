@@ -25,6 +25,7 @@ public:
 	BirdParticle();
 	BirdParticle(ofVec2f _pos, float _maxSpeed, float _maxForce);
 
+	void update(float timescale);
 	void update(vector<BirdParticle*>* angryParticles, float timeScale);
 
 	//for bird particle only: 

@@ -58,7 +58,7 @@ void Particle::seek(ofVec3f target, float strength, bool slowToTarget, float* ho
 		if (slowToTarget && distSqrd < 10000)
 		{
 			homeRatio = distSqrd / 10000.f;
-			//vel *= homeRatio;
+			vel *= homeRatio;
 			//desired *= homeRatio;
 			//if (desired.lengthSquared() < 1.f)
 				//desired.normalize();
