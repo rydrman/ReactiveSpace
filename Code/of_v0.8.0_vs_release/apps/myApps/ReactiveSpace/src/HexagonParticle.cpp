@@ -1,10 +1,5 @@
 #include "HexagonParticle.h"
 
-HexagonParticle::HexagonParticle(Particle _old)
-{
-	HexagonParticle::HexagonParticle(_old.pos);
-}
-
 HexagonParticle::HexagonParticle(ofVec3f _pos)
 :Particle(_pos)
 {
@@ -14,7 +9,7 @@ HexagonParticle::HexagonParticle(ofVec3f _pos)
 	hexRotation = (int)ofRandom(0,360);
 	hexSize = 0.3;
 	
-	hexGrowthRate = ofRandom(0.005, 0.5);
+	hexGrowthRate = ofRandom(0.001, 0.005);
 	hexMaxSize = ofRandom(2,5);
 	hexToHands.set(0, 0);
 

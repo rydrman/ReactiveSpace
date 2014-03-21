@@ -86,7 +86,7 @@ void OpenCVManager::update(int timeScale)
 	}
 
 	//update from video
-	if (false)//(m_vidGrabber.isInitialized())
+	if (m_vidGrabber.isInitialized())
 	{
 		bool isNewFrame = false;
 		int id = 0;
@@ -228,14 +228,14 @@ void OpenCVManager::update(int timeScale)
 				}
 			}
 			targetVel *= 0.04f;
-			(*p)->accel = (targetVel - (*p)->vel) * timeScale * 0.1f;
+			(*p)->accel += (targetVel - (*p)->vel) * timeScale * 0.1f;
 		}
 		else
 		{
 			targetVel = (*p)->vel;
 		}
 
-		(*p)->update();// stepTimeDelta;
+		(*p)->update(timeScale);// stepTimeDelta;
 
 		if ((*p)->pos.x > ofGetWindowWidth() + s_generationBuffer*1.5f
 			|| (*p)->pos.x < -s_generationBuffer * 1.5f

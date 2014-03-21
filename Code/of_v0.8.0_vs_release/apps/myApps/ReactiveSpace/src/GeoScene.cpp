@@ -19,7 +19,6 @@ GeoScene::GeoScene(vector<Particle*>* people, vector<Particle*>* hands)
 
 	m_gradients.loadImage("GeoScene/gradients.png");
 
-
 	explosionSprite.loadImage("GeoScene/Particles2.png");
 
 	geoBackSound.loadSound("GeoScene/Scene3Back.mp3");
@@ -131,7 +130,7 @@ void GeoScene::convertPeopleVector()
 
 	for (vector<Particle*>::iterator pOld = pPeople->begin(); pOld != pPeople->end(); ++pOld)
 	{
-		GeoParticle* p = new GeoParticle(**pOld._Ptr);
+		GeoParticle* p = new GeoParticle((*pOld)->pos);
 		newPeople.push_back(p);
 	}
 	*pPeople = newPeople;
@@ -149,14 +148,14 @@ void GeoScene::convertHandVector()
 
 	for (vector<Particle*>::iterator hOld = pHandPositions->begin(); hOld != pHandPositions->end(); ++hOld)
 	{
-		Particle* h = new GeoHands(**hOld._Ptr);
+		GeoHands* h = new GeoHands((*hOld)->pos);
 		newHands.push_back(h);
 	}
-	*pPeople = newHands;
+	*pHandPositions = newHands;
 }
 Particle* GeoScene::addHandOfProperType(ofVec3f _pos)
 {
-	Particle* h = new GeoHands(_pos);
+	GeoHands* h = new GeoHands(_pos);
 	pHandPositions->push_back(h);
 	return h;
 }

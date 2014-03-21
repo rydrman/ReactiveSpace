@@ -3,8 +3,8 @@
 #include "Particle.h"
 
 //static separation 
-static const float s_desiredSepSqrd = 100;
-static const float s_neighDistSqrd = 20000;
+static const float s_desiredSepSqrd = 45000;
+static const float s_neighDistSqrd = 90000;
 
 class HexagonParticle 
 	: public Particle {
@@ -19,7 +19,6 @@ public :
 	float hexGrowthRate;
 	ofVec2f hexToHands;
 
-	HexagonParticle(Particle _old);
 	HexagonParticle(ofVec3f _pos);
 	~HexagonParticle();
 

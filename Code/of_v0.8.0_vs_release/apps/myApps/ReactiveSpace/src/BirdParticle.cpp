@@ -14,6 +14,11 @@ BirdParticle::BirdParticle(ofVec2f _pos, float _maxSpeed, float _maxForce)
 	homeDistRatio = 1.f;
 }
 
+void BirdParticle::update(float timeScale)
+{
+	Particle::update(timeScale);
+}
+
 void BirdParticle::update(vector<BirdParticle*>* angryParticles, float timeScale)
 {
 	ofVec2f steerVecSep = ofVec2f(0.f, 0.f);
@@ -72,12 +77,13 @@ void BirdParticle::update(vector<BirdParticle*>* angryParticles, float timeScale
 
 bool BirdParticle::seek()
 {
-	homeDistRatio = 1.f;
-	Particle::seek(originalPos, 5.f, true, &homeDistRatio);
+	//homeDistRatio = 1.f;
+
+	Particle::seek(originalPos, 1.f, true, &homeDistRatio);
 
 	//check to see if it's home
 	if (!isHome 
-		&& homeDistRatio < 0.0001)
+		&& homeDistRatio < 0.001)
 	{
 		//register as home
 		isHome = true;

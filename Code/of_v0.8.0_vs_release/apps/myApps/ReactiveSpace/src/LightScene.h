@@ -34,6 +34,8 @@ public:
 	void Render();
 	void Update(int deltaTime);
 
+	void onLoad();
+
 	void convertPeopleVector();
 	Particle* addParticleOfProperType(ofVec3f _pos);
 

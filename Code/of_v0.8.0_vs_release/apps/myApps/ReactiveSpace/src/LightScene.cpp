@@ -36,6 +36,7 @@ LightScene::LightScene(vector<Particle*>* people, vector<Particle*>* hands)
 	m_lightAlpha.loadImage("LightScene/lightAlpha.png");
 	m_fogAlphaMask.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
 
+	m_fogVbo.disableVAOs();
 	m_fogVbo.setVertexData(fogVerts, 4, GL_STATIC_DRAW);
 	m_fogVbo.setTexCoordData(s_fogTexCoords, 4, GL_STATIC_DRAW);
 
@@ -118,7 +119,7 @@ void LightScene::Render()
 				//hp->seek((*hands)->pos, 1.f, true);
 				
 				m_connectedParticles.push_back(hp);	
-				hp->separation(&m_connectedParticles);
+				//hp->separation(&m_connectedParticles);
 
 				if(distSqrd > 90000){
 					//hp->seek((*p)->pos, 1.0, true);
@@ -178,7 +179,7 @@ void LightScene::Render()
 	ofSetRectMode(OF_RECTMODE_CORNER);
 
 	m_fogAlphaMask.begin();
-	ofEnableAlphaBlending();
+	//ofEnableAlphaBlending();
 	ofClear(0, 0);
 	int dif = m_lightAlpha.width * 0.5;
 	for (vector<Light>::iterator l = m_lights.begin(); l != m_lights.end(); ++l){
@@ -242,7 +243,7 @@ void LightScene::convertPeopleVector()
 
 	for (vector<Particle*>::iterator pOld = pPeople->begin(); pOld != pPeople->end(); ++pOld)
 	{
-		HexagonParticle* p = new HexagonParticle(**pOld._Ptr);
+		HexagonParticle* p = new HexagonParticle((*pOld)->pos);
 		newPeople.push_back(p);
 	}
 	*pPeople = newPeople;
@@ -252,6 +253,21 @@ Particle* LightScene::addParticleOfProperType(ofVec3f _pos)
 	HexagonParticle* p = new HexagonParticle(_pos);
 	pPeople->push_back(p);
 	return p;
+}
+
+void LightScene::onLoad()
+{
+	/*m_fogVbo.
+
+	const ofVec2f fogVerts[] = {
+		ofVec2f(0.f, 0.f),
+		ofVec2f(ofGetWidth(), 0.f),
+		ofVec2f(ofGetWidth(), ofGetHeight()),
+		ofVec2f(0.0f, ofGetHeight())
+	};
+
+	m_fogVbo.setVertexData(fogVerts, 4, GL_STATIC_DRAW);
+	m_fogVbo.setTexCoordData(s_fogTexCoords, 4, GL_STATIC_DRAW);*/
 }
 
 LightScene::~LightScene()
