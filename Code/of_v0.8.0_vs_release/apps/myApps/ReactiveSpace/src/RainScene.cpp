@@ -178,6 +178,24 @@ void RainScene::Update(int timeScale)
 	
 }
 
+void RainScene::convertPeopleVector()
+{
+	vector<Particle*> newPeople = vector<Particle*>();
+
+	for (vector<Particle*>::iterator pOld = pPeople->begin(); pOld != pPeople->end(); ++pOld)
+	{
+		RainCloudParticle* p = new RainCloudParticle((*pOld)->pos);
+		newPeople.push_back(p);
+	}
+	*pPeople = newPeople;
+}
+Particle* RainScene::addParticleOfProperType(ofVec3f _pos)
+{
+	RainCloudParticle* p = new RainCloudParticle(_pos);
+	pPeople->push_back(p);
+	return p;
+}
+
 RainScene::~RainScene()
 {
 }

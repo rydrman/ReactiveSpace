@@ -30,12 +30,12 @@ void Particle::applyForce(float x, float y)
 	applyForce( ofVec3f(x, y) );
 }
 
-void Particle::update()
+void Particle::update(float timeScale)
 {
 	vel += accel;
 	vel.limit(maxSpeed);
 	prevPos = pos;
-	pos += vel;
+	pos += vel * timeScale;
 
 	//reset accel
 	accel *= 0;
@@ -57,17 +57,20 @@ void Particle::seek(ofVec3f target, float strength, bool slowToTarget, float* ho
 
 		if (slowToTarget && distSqrd < 10000)
 		{
-			homeRatio = distSqrd / 10000;
-			desired *= homeRatio;
-			if (desired.lengthSquared() < 1.f)
-				desired.normalize();
+			homeRatio = distSqrd / 10000.f;
+			vel *= homeRatio;
+			//desired *= homeRatio;
+			//if (desired.lengthSquared() < 1.f)
+				//desired.normalize();
 		}
 
-		steerVec = desired - vel;
+		steerVec = desired * strength * homeRatio;// -vel;
 		steerVec.limit(maxForce);
 	}
+	//cout << vel << endl;
+	//cout << steerVec << endl << endl;
 
-	accel += steerVec * strength;
+	accel += steerVec;
 	*homeDistRatio = homeRatio;
 }
 

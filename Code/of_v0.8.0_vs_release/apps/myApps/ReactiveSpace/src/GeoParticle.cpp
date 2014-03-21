@@ -3,11 +3,6 @@
 static float s_gradWidth = 1.f / 6.f;
 static int s_explosionTimeout = 500;
 
-GeoParticle::GeoParticle(Particle _old)
-{
-	GeoParticle(_old.pos);
-}
-
 GeoParticle::GeoParticle(ofVec3f _pos)
 : Particle(_pos)
 {
@@ -17,7 +12,8 @@ GeoParticle::GeoParticle(ofVec3f _pos)
 	m_isExploding = false;
 	m_isDead = false;
 	alphaExplode = 250;
-	
+	m_vbo.disableVAOs();
+
 	//get a random radius
 	GeoSize = ofRandom(ofGetWidth() * 0.05, ofGetWidth() * 0.1);
 

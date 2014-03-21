@@ -18,13 +18,15 @@ public:
 	float noiseX;
 	float noiseY;
 	float mood;  //0 -> 1, angry -> happy
-	float isHome;
+	float homeDistRatio;
+	bool isHome;
 
 	
 	BirdParticle();
 	BirdParticle(ofVec2f _pos, float _maxSpeed, float _maxForce);
 
-	void update(vector<BirdParticle*>* angryParticles);
+	void update(float timescale);
+	void update(vector<BirdParticle*>* angryParticles, float timeScale);
 
 	//for bird particle only: 
 	//goes back to original grid position

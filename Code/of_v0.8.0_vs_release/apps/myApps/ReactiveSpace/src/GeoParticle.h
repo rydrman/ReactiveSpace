@@ -41,7 +41,6 @@ public:
 	bool m_isDead;
 	float m_explodeTime;
 
-	GeoParticle(Particle _old);
 	GeoParticle(ofVec3f _pos);
 
 	void update(float timeScale);

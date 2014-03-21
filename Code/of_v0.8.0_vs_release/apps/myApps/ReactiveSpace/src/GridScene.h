@@ -31,6 +31,8 @@ public:
 	virtual void Render();
 	virtual void Update(int deltaTime);
 
+	virtual void onUnload();
+
 	~GridScene();
 };
 

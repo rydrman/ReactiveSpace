@@ -11,33 +11,41 @@ BirdParticle::BirdParticle(ofVec2f _pos, float _maxSpeed, float _maxForce)
 	maxSpeed = _maxSpeed;
 	maxForce = _maxForce;
 	isHome = false;
+	homeDistRatio = 1.f;
 }
 
-void BirdParticle::update(vector<BirdParticle*>* angryParticles)
+void BirdParticle::update(float timeScale)
+{
+	Particle::update(timeScale);
+}
+
+void BirdParticle::update(vector<BirdParticle*>* angryParticles, float timeScale)
 {
 	ofVec2f steerVecSep = ofVec2f(0.f, 0.f);
 	ofVec2f sumCoh = ofVec2f(0.f, 0.f);
 	ofVec2f sumAlign = ofVec2f(0.f, 0.f);
 
 	int count = 0;
+	BirdParticle* angry;
 	for (vector<BirdParticle*>::iterator p = angryParticles->begin(); p != angryParticles->end(); ++p)
 	{
+		angry = (*p);
 		//look for close particles
-		float distSqrd = ofDistSquared((*p)->pos.x,(*p)->pos.y, pos.x, pos.y);
+		float distSqrd = ofDistSquared(angry->pos.x, angry->pos.y, pos.x, pos.y);
 		if (distSqrd < s_neighbourDistSqrd)
 		{
 			//do flocking calculations
 			//seperation
 			if (distSqrd < s_desiredSeperationSqrd && distSqrd > 0)
 			{
-				steerVecSep += ( (pos -(*p)->pos).normalize() / sqrt(distSqrd) );
+				steerVecSep += ((pos - angry->pos).normalize() / sqrt(distSqrd));
 			}
 
 			//cohesion
-			sumCoh +=(*p)->pos;
+			sumCoh += angry->pos;
 
 			//alignment
-			sumAlign +=(*p)->vel;
+			sumAlign += angry->vel;
 
 			++count;
 		}
@@ -61,20 +69,21 @@ void BirdParticle::update(vector<BirdParticle*>* angryParticles)
 
 		//add them all
 		accel += steerVecSep + sumAlign;
-		accel.limit(maxSpeed);
+		accel.limit(maxSpeed * (0.1f + 0.9f * homeDistRatio));
 	}
 
-	Particle::update();
+	Particle::update(timeScale);
 }
 
 bool BirdParticle::seek()
 {
-	float homeDistRatio = 1.f;
-	Particle::seek(originalPos, 1.0f, true, &homeDistRatio);
+	//homeDistRatio = 1.f;
+
+	Particle::seek(originalPos, 1.f, true, &homeDistRatio);
 
 	//check to see if it's home
 	if (!isHome 
-		&& homeDistRatio < 0.0001)
+		&& homeDistRatio < 0.001)
 	{
 		//register as home
 		isHome = true;

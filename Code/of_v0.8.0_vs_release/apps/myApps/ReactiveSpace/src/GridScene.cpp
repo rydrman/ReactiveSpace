@@ -118,16 +118,18 @@ void GridScene::Render()
 
 	//now draw angry particles on top
 	alpha = 1.f;
+	BirdParticle* angry;
 	for (vector<BirdParticle*>::iterator p = m_angryParticles.begin(); p != m_angryParticles.end(); ++p)
 	{
+		angry = (*p);
 		m_particleShader.setUniform4f("uColor",
-			1.f -(*p)->mood,
-			((*p)->mood > 0.5) ? ofMap((*p)->mood, 0.5f, 1.f, 0.5f, 0.7f) :(*p)->mood,
-			(*p)->mood,
+			1.f -angry->mood,
+			(angry->mood > 0.5) ? ofMap(angry->mood, 0.5f, 1.f, 0.5f, 0.7f) :angry->mood,
+			angry->mood,
 			alpha);
 
 		ofPushMatrix();
-			ofTranslate((*p)->pos);
+			ofTranslate(angry->pos);
 			ofScale(m_particleSize, m_particleSize);
 			glDrawArrays(GL_QUADS, 0, 4);
 		ofPopMatrix();
@@ -155,7 +157,7 @@ void GridScene::Render()
 	{
 		ofPushMatrix();
 		ofTranslate((*h)->pos);
-		ofCircle(0.f, 0.f, 0.f, 20.f);
+		m_particleImage.draw(-20.f, -20.f, 40.f, 40.f); // ofCircle(0.f, 0.f, 0.f, 20.f);
 
 #ifdef DEBUG_DRAW
 		ofSetColor(0, 0, 0, 255);
@@ -176,8 +178,8 @@ void GridScene::Update(int timeScale)
 		p = &m_particleList[i];
 
 		//update noise
-		p->noiseX += timeScale / 2.f;
-		p->noiseY += timeScale / 3.f;
+		p->noiseX += timeScale * 0.08f;
+		p->noiseY += timeScale * 0.08f;
 
 		//check distance to hands
 		bool edit = false;
@@ -238,22 +240,24 @@ void GridScene::Update(int timeScale)
 		}
 
 		//approach original position
-		if (!p->isHome && p->mood >= 0.45f)
+		if (!p->isHome)
 		{
-			bool gotHome = p->seek();
-			if (gotHome)
+			if( p->mood >= 0.45f)
 			{
-				vector<BirdParticle*>::iterator it = std::find(m_angryParticles.begin(), m_angryParticles.end(), (BirdParticle*)&*p);
-				if (it != m_angryParticles.end())
-					m_angryParticles.erase(it);
+				bool gotHome = p->seek();
+				if (gotHome)
+				{
+					vector<BirdParticle*>::iterator it = std::find(m_angryParticles.begin(), m_angryParticles.end(), (BirdParticle*)&*p);
+					if (it != m_angryParticles.end())
+						m_angryParticles.erase(it);
+				}
+				p->update(timeScale);
 			}
+			else
+				p->update(&m_angryParticles, timeScale);
 		}
 
 		p->mood = ofClamp(p->mood, 0.f, 1.f);
-
-		//update it 
-		if (!p->isHome)			
-			p->update(&m_angryParticles);
 
 		//reverse speed if at edge of screen
 		int screenW = ofGetWidth();
@@ -281,6 +285,21 @@ void GridScene::Update(int timeScale)
 	}
 
 	particleUpdateOffset = !particleUpdateOffset;
+}
+
+void GridScene::onUnload()
+{
+	BirdParticle* p;
+	for (int i = (particleUpdateOffset) ? 0 : 1; i < m_numParticles; i+=2)
+	{
+		p = &m_particleList[i];
+
+		p->mood = 0.5f;
+		p->vel *= 0.f;
+		p->isHome = true;
+	}
+
+	m_angryParticles.clear();
 }
 
 GridScene::~GridScene()

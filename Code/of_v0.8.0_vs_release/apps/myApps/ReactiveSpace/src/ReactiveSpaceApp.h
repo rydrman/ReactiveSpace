@@ -1,6 +1,6 @@
 #pragma once
 
-#define DEBUG_DRAW 1
+//#define DEBUG_DRAW 1
 
 #include "ofMain.h"
 #include <stdio.h>
@@ -18,6 +18,7 @@ using std::vector;
 
 class ReactiveSpaceApp : public ofBaseApp{
 
+	int m_nextSceneNum;
 	int m_currentSceneNum;
 	vector<IScene*> m_scenes;
 	IScene* pCurrentScene;

@@ -8,6 +8,8 @@ class LightScene : public IScene
 	ofImage m_hexImgBorder;
 	ofImage m_hexImgInner;
 	ofImage m_lightImg;
+	ofImage m_lightTube;
+	ofImage m_backgroundImg;
 	
 
 	//for fog
@@ -17,15 +19,22 @@ class LightScene : public IScene
 	ofFbo m_fogAlphaMask;
 	ofImage m_lightAlpha;
 
-	vector<Light> m_lights;
+	ofImage m_handsImage;
 
+	vector<Light> m_lights;
 	vector<Particle*> closestHand; 
+
+	Boolean m_connectedToHands;
+
+	vector<HexagonParticle*> m_connectedParticles;
 	
 public:
 	LightScene(vector<Particle*>* people, vector<Particle*>* hands);
 
 	void Render();
 	void Update(int deltaTime);
+
+	void onLoad();
 
 	void convertPeopleVector();
 	Particle* addParticleOfProperType(ofVec3f _pos);

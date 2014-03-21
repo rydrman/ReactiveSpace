@@ -22,6 +22,9 @@ public:
 	virtual void convertHandVector();
 	virtual Particle* addHandOfProperType(ofVec3f _pos);
 
+	virtual void onUnload();
+	virtual void onLoad();
+
 	void OnEnterPassiveUser();
 	void OnUserInteraction();
 

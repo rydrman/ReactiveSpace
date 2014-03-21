@@ -5,7 +5,7 @@
 
  int radius = 100;
  bool onTarget = false;
-static ofColor col = ofColor(255, 255, 255);
+ static ofColor col = ofColor(255, 255, 255);
  int startTime = 0;
 GeoScene::GeoScene(vector<Particle*>* people, vector<Particle*>* hands)
 : IScene(people, hands)
@@ -18,7 +18,6 @@ GeoScene::GeoScene(vector<Particle*>* people, vector<Particle*>* hands)
 	geoHands.loadImage("GeoScene/Hand_White.png");
 
 	m_gradients.loadImage("GeoScene/gradients.png");
-
 
 	explosionSprite.loadImage("GeoScene/Particles2.png");
 
@@ -134,7 +133,7 @@ void GeoScene::convertPeopleVector()
 
 	for (vector<Particle*>::iterator pOld = pPeople->begin(); pOld != pPeople->end(); ++pOld)
 	{
-		GeoParticle* p = new GeoParticle(**pOld._Ptr);
+		GeoParticle* p = new GeoParticle((*pOld)->pos);
 		newPeople.push_back(p);
 	}
 	*pPeople = newPeople;
@@ -152,14 +151,14 @@ void GeoScene::convertHandVector()
 
 	for (vector<Particle*>::iterator hOld = pHandPositions->begin(); hOld != pHandPositions->end(); ++hOld)
 	{
-		Particle* h = new GeoHands(**hOld._Ptr);
+		GeoHands* h = new GeoHands((*hOld)->pos);
 		newHands.push_back(h);
 	}
-	*pPeople = newHands;
+	*pHandPositions = newHands;
 }
 Particle* GeoScene::addHandOfProperType(ofVec3f _pos)
 {
-	Particle* h = new GeoHands(_pos);
+	GeoHands* h = new GeoHands(_pos);
 	pHandPositions->push_back(h);
 	return h;
 }

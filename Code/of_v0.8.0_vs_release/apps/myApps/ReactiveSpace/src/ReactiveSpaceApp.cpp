@@ -3,7 +3,8 @@
 void ReactiveSpaceApp::setup()
 {
 	//setup vars
-	m_currentSceneNum = 3;
+	m_currentSceneNum = 0;
+	m_nextSceneNum = 0;
 
 	//graphics
 	ofSetFrameRate(60);
@@ -126,38 +127,34 @@ void ReactiveSpaceApp::draw()
 
 	openCVManager->debugDraw();
 #endif
+
+	//switch scene if necessary
+	if (m_currentSceneNum != m_nextSceneNum)
+	{
+		pCurrentScene->onUnload();
+		m_currentSceneNum = m_nextSceneNum;
+		pCurrentScene = m_scenes[m_currentSceneNum];
+		pCurrentScene->convertPeopleVector();
+		pCurrentScene->convertHandVector();
+		pCurrentScene->onLoad();
+	}
 }
 
 //--------------------------------------------------------------
 void ReactiveSpaceApp::keyPressed(int key)
 {
 	switch (key){
-	case 'b':
-		openCVManager->learnBackground();
-		break;
 	case '0':
-		m_currentSceneNum = 0;
-		pCurrentScene = m_scenes[m_currentSceneNum];
-		pCurrentScene->convertPeopleVector();
-		pCurrentScene->convertHandVector();
+		m_nextSceneNum = 0;
 		break;
 	case '1':
-		m_currentSceneNum = 1;
-		pCurrentScene = m_scenes[m_currentSceneNum];
-		pCurrentScene->convertPeopleVector();
-		pCurrentScene->convertHandVector();
+		m_nextSceneNum = 1;
 		break;
 	case '2':
-		m_currentSceneNum = 2;
-		pCurrentScene = m_scenes[m_currentSceneNum];
-		pCurrentScene->convertPeopleVector();
-		pCurrentScene->convertHandVector();
+		m_nextSceneNum = 2;
 		break;
 	case '3':
-		m_currentSceneNum = 3;
-		pCurrentScene = m_scenes[m_currentSceneNum];
-		pCurrentScene->convertPeopleVector();
-		pCurrentScene->convertHandVector();
+		m_nextSceneNum = 3;
 		break;
 	}
 }

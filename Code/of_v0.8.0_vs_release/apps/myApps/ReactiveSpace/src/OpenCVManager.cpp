@@ -1,6 +1,6 @@
 #include "OpenCVManager.h"
 
-//#define DO_CAMERA
+#define DO_CAMERA
 
 static CvSize s_frameSize = cvSize(160, 120);
 static ofVec2f s_frameSizeInv = ofVec2f(1.f/s_frameSize.width, 1.f/s_frameSize.height);
@@ -86,7 +86,7 @@ void OpenCVManager::update(int timeScale)
 	}
 
 	//update from video
-	if (false)//(m_vidGrabber.isInitialized())
+	if (m_vidGrabber.isInitialized())
 	{
 		bool isNewFrame = false;
 		int id = 0;
@@ -190,8 +190,8 @@ void OpenCVManager::update(int timeScale)
 			x = ofGetWidth() + s_generationBuffer;
 
 		//debug
-		x = ofRandom(ofGetWidth() / 2.f);
-		y = ofRandom(ofGetHeight() / 2.f);
+		x = ofRandom(ofGetWidth());
+		y = ofRandom(ofGetHeight());
 
 		Particle* p = ppCurrentScene[0]->addParticleOfProperType(
 			ofVec2f(x, y)
@@ -228,14 +228,14 @@ void OpenCVManager::update(int timeScale)
 				}
 			}
 			targetVel *= 0.04f;
-			(*p)->accel = (targetVel - (*p)->vel) * timeScale * 0.1f;
+			(*p)->accel += (targetVel - (*p)->vel) * timeScale * 0.1f;
 		}
 		else
 		{
 			targetVel = (*p)->vel;
 		}
 
-		(*p)->update();// stepTimeDelta;
+		(*p)->update(timeScale);// stepTimeDelta;
 
 		if ((*p)->pos.x > ofGetWindowWidth() + s_generationBuffer*1.5f
 			|| (*p)->pos.x < -s_generationBuffer * 1.5f
