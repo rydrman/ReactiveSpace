@@ -13,11 +13,7 @@ GeoHands::GeoHands(ofVec3f _pos)
 	
 	CountTimer = 0;
 	Interval = 0;
-	//handImgBase.loadImage("GeoScene/Hand_White.png");
-	//handImgGreen.loadImage("GeoScene/Hand_Green.png");
-	//handImgYellow.loadImage("GeoScene/Hand_Yellow.png");
-	//handImgOrange.loadImage("GeoScene/Hand_Orange.png");
-	//handImgRed.loadImage("GeoScene/Hand_Red.png");
+	
 }
 
 

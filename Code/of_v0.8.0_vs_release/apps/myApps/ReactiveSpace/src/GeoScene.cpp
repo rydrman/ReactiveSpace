@@ -81,14 +81,17 @@ void GeoScene::Update(int timeScale)
 	for (vector<Particle*>::iterator h = pHandPositions->begin(); h != pHandPositions->end(); ++h)
 	{
 		gh= (GeoHands*)(*h);
+		onTarget = false;
 
 		for (vector<Particle*>::iterator p = pPeople->begin(); p != pPeople->end(); ++p)
 		{
 			gp = (GeoParticle*)(*p);
 			if(gp->m_isExploding) continue;
+			
 
 			if ((*h)->pos.x + radius > ((*p)->pos.x ) && (*h)->pos.x - radius<((*p)->pos.x ))
 			{
+				
 				if ((*h)->pos.y -50 + radius >((*p)->pos.y  ) && (*h)->pos.y - radius < ((*p)->pos.y))
 				{
 					
