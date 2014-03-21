@@ -184,7 +184,7 @@ void RainScene::convertPeopleVector()
 
 	for (vector<Particle*>::iterator pOld = pPeople->begin(); pOld != pPeople->end(); ++pOld)
 	{
-		RainCloudParticle* p = new RainCloudParticle(**pOld._Ptr);
+		RainCloudParticle* p = new RainCloudParticle((*pOld)->pos);
 		newPeople.push_back(p);
 	}
 	*pPeople = newPeople;

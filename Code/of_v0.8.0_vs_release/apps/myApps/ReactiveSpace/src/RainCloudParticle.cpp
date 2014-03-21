@@ -1,11 +1,5 @@
 #include "RainCloudParticle.h"
 
-RainCloudParticle::RainCloudParticle(Particle _old)
-:Particle(_old)
-{
-	RainCloudParticle(_old.pos);
-}
-
 RainCloudParticle::RainCloudParticle(ofVec3f _pos)
 : Particle(_pos)
 {

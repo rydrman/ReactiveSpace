@@ -20,7 +20,7 @@ void IScene::convertPeopleVector()
 
 	for (vector<Particle*>::iterator pOld = pPeople->begin(); pOld != pPeople->end(); ++pOld)
 	{
-		Particle* p = new Particle(**pOld._Ptr);
+		Particle* p = new Particle((*pOld)->pos);
 		newPeople.push_back(p);
 	}
 	*pPeople = newPeople;
@@ -39,10 +39,10 @@ void IScene::convertHandVector()
 
 	for (vector<Particle*>::iterator hOld = pHandPositions->begin(); hOld != pHandPositions->end(); ++hOld)
 	{
-		Particle* h = new Particle(**hOld._Ptr);
+		Particle* h = new Particle((*hOld)->pos);
 		newHands.push_back(h);
 	}
-	*pPeople = newHands;
+	*pHandPositions = newHands;
 }
 
 Particle* IScene::addHandOfProperType(ofVec3f _pos)

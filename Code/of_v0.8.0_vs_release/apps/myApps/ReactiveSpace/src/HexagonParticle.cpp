@@ -1,10 +1,5 @@
 #include "HexagonParticle.h"
 
-HexagonParticle::HexagonParticle(Particle _old)
-{
-	HexagonParticle::HexagonParticle(_old.pos);
-}
-
 HexagonParticle::HexagonParticle(ofVec3f _pos)
 :Particle(_pos)
 {

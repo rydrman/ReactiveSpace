@@ -1,6 +1,6 @@
 #include "OpenCVManager.h"
 
-//#define DO_CAMERA
+#define DO_CAMERA
 
 static CvSize s_frameSize = cvSize(160, 120);
 static ofVec2f s_frameSizeInv = ofVec2f(1.f/s_frameSize.width, 1.f/s_frameSize.height);
@@ -86,7 +86,7 @@ void OpenCVManager::update(int timeScale)
 	}
 
 	//update from video
-	if (false)//(m_vidGrabber.isInitialized())
+	if (m_vidGrabber.isInitialized())
 	{
 		bool isNewFrame = false;
 		int id = 0;

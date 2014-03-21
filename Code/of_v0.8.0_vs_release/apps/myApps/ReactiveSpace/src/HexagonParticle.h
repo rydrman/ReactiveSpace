@@ -19,7 +19,6 @@ public :
 	float hexGrowthRate;
 	ofVec2f hexToHands;
 
-	HexagonParticle(Particle _old);
 	HexagonParticle(ofVec3f _pos);
 	~HexagonParticle();
 

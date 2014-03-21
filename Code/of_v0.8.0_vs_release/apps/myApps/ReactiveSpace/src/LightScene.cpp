@@ -34,6 +34,7 @@ LightScene::LightScene(vector<Particle*>* people, vector<Particle*>* hands)
 	m_lightAlpha.loadImage("LightScene/lightAlpha.png");
 	m_fogAlphaMask.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
 
+	m_fogVbo.disableVAOs();
 	m_fogVbo.setVertexData(fogVerts, 4, GL_STATIC_DRAW);
 	m_fogVbo.setTexCoordData(s_fogTexCoords, 4, GL_STATIC_DRAW);
 
@@ -108,9 +109,14 @@ void LightScene::Render()
 			//ofClamp(offsetMap, 0,1);
 			//ofVec2f offsetAccel = hp->hexToHands*offsetMap;	
 
-			if (distSqrd < 250000){				
-				closestHand.push_back((*hands));	
-				hp->seek((*hands)->pos, 1.f, true);
+			if (distSqrd < 250000){	
+				try{
+					closestHand.push_back((*hands));
+					hp->seek((*hands)->pos, 1.f, true);
+				}
+				catch(std::exception e){
+					cout << e.what() << endl;
+				}
 				//if(distSqrd < 90000){
 					//hp->seek((*p)->pos, 1.0, true);
 					//hp->accel += offsetAccel;
@@ -222,7 +228,7 @@ void LightScene::convertPeopleVector()
 
 	for (vector<Particle*>::iterator pOld = pPeople->begin(); pOld != pPeople->end(); ++pOld)
 	{
-		HexagonParticle* p = new HexagonParticle(**pOld._Ptr);
+		HexagonParticle* p = new HexagonParticle((*pOld)->pos);
 		newPeople.push_back(p);
 	}
 	*pPeople = newPeople;
@@ -232,6 +238,21 @@ Particle* LightScene::addParticleOfProperType(ofVec3f _pos)
 	HexagonParticle* p = new HexagonParticle(_pos);
 	pPeople->push_back(p);
 	return p;
+}
+
+void LightScene::onLoad()
+{
+	/*m_fogVbo.
+
+	const ofVec2f fogVerts[] = {
+		ofVec2f(0.f, 0.f),
+		ofVec2f(ofGetWidth(), 0.f),
+		ofVec2f(ofGetWidth(), ofGetHeight()),
+		ofVec2f(0.0f, ofGetHeight())
+	};
+
+	m_fogVbo.setVertexData(fogVerts, 4, GL_STATIC_DRAW);
+	m_fogVbo.setTexCoordData(s_fogTexCoords, 4, GL_STATIC_DRAW);*/
 }
 
 LightScene::~LightScene()
