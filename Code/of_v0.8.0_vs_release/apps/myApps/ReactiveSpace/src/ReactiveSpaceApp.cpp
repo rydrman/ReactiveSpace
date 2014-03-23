@@ -3,8 +3,8 @@
 void ReactiveSpaceApp::setup()
 {
 	//setup vars
-	m_currentSceneNum = 0;
-	m_nextSceneNum = 0;
+	m_currentSceneNum = 2;
+	m_nextSceneNum = 2;
 
 	//graphics
 	ofSetFrameRate(60);
@@ -144,16 +144,16 @@ void ReactiveSpaceApp::draw()
 void ReactiveSpaceApp::keyPressed(int key)
 {
 	switch (key){
-	case '0':
+	case '1':
 		m_nextSceneNum = 0;
 		break;
-	case '1':
+	case '2':
 		m_nextSceneNum = 1;
 		break;
-	case '2':
+	case '3':
 		m_nextSceneNum = 2;
 		break;
-	case '3':
+	case '4':
 		m_nextSceneNum = 3;
 		break;
 	}

@@ -1,6 +1,6 @@
 #include "OpenCVManager.h"
 
-#define DO_CAMERA
+//#define DO_CAMERA
 
 static CvSize s_frameSize = cvSize(160, 120);
 static ofVec2f s_frameSizeInv = ofVec2f(1.f/s_frameSize.width, 1.f/s_frameSize.height);
@@ -52,7 +52,7 @@ OpenCVManager::OpenCVManager(vector<Particle*>* people, IScene** currentScene)
 			int pos = (i*m_fieldHeight) + j;
 			m_vectorField[pos] = Particle(ofVec3f(i * s_vectorFieldDensity, j * s_vectorFieldDensity));
 			m_vectorField[pos].vel = ofVec3f(m_vectorFieldNorm, 0.f);
-			m_vectorField[pos].maxSpeed = s_vectorFieldDensity;
+			m_vectorField[pos].maxSpeed = s_vectorFieldDensity * 0.3f;
 		}
 	}
 
@@ -224,10 +224,10 @@ void OpenCVManager::update(int timeScale)
 				for (int j = -2; j < 3; ++j)
 				{
 					int pos = ((fieldX + i) * m_fieldHeight) + (fieldY + j);
-					targetVel += m_vectorField[pos].vel;
+					targetVel += (3.f - std::max(abs(i), abs(j))) * m_vectorField[pos].vel;
 				}
 			}
-			targetVel *= 0.04f;
+			targetVel *= 0.029f;
 			(*p)->accel += (targetVel - (*p)->vel) * timeScale * 0.1f;
 		}
 		else

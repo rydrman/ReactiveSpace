@@ -14,14 +14,21 @@ class RainScene : public IScene
 	Particle* m_rainVectorField;
 	float m_rainVectorFieldNorm;
 
+	bool m_createNextInCloud;
+	int m_createNextInCloudNum;
+
 	ofImage m_rainImage;
 	ofImage m_rainBackground;
+	ofImage m_cloudImage;
 
 public:
 	RainScene(vector<Particle*>* people, vector<Particle*>* hands);
 
 	virtual void Render();
 	virtual void Update(int timeScale);
+
+	void addNewRainDrop(Particle* p);
+
 	void convertPeopleVector();
 	Particle* addParticleOfProperType(ofVec3f _pos);
 	//void convertHandVector();
