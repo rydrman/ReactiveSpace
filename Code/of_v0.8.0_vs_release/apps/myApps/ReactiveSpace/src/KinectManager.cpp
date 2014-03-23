@@ -84,12 +84,12 @@ HRESULT KinectManager::startKinect()
 	return hr;
 }
 
-HRESULT KinectManager::update(int dt)
+HRESULT KinectManager::update(float timeScale)
 {
 	//first add time to particles and remove them if they're dead
 	for (vector<Particle*>::iterator hp = pHandPositions->begin(); hp != pHandPositions->end();)
 	{
-		(*hp)->timer += dt;
+		(*hp)->timer += 16.f / timeScale;
 
 		if ((*hp)->timer > handParticleTimeout)
 			hp = pHandPositions->erase(hp);
@@ -107,7 +107,7 @@ HRESULT KinectManager::update(int dt)
 
 		if (hr == S_NUI_INITIALIZING)
 		{
-			cout << "kinect is stil initializing...\n";
+			cout << "kinect is still initializing...\n";
 			return hr;
 		}
 		else if (FAILED(hr))
@@ -124,7 +124,7 @@ HRESULT KinectManager::update(int dt)
 	// kinect if okay, do updating //
 
 	//get next frame
-	hr = pKinect->NuiSkeletonGetNextFrame(10, pSkeletonFrame);
+	hr = pKinect->NuiSkeletonGetNextFrame(5, pSkeletonFrame);
 
 	if (SUCCEEDED(hr))
 	{
@@ -148,14 +148,14 @@ HRESULT KinectManager::update(int dt)
 			}
 		}
 	}
-
-	NUI_IMAGE_FRAME nextFrame;
-	hr = pKinect->NuiImageStreamGetNextFrame(colorStream, 20, &nextFrame);
-
-	if (SUCCEEDED(hr))
+	else if (hr == E_NUI_FRAME_NO_DATA || hr == S_FALSE)
 	{
-		//get image stream
+		//new frame was not yet available
+		return MAKE_HRESULT(0, 0, 1);
 	}
+
+	//NUI_IMAGE_FRAME nextFrame;
+	//hr = pKinect->NuiImageStreamGetNextFrame(colorStream, 20, &nextFrame);
 
 	return hr;
 }
@@ -175,7 +175,7 @@ void KinectManager::addUpdate(ofVec3f pos, int trackingID, int jointIndex)
 	Particle* p;
 	if (pI != pHandPositions->end())
 	{
-		p = *pI._Ptr;
+		p = (*pI);
 		p->vel = (pos - p->pos) * 0.5f;
 		p->timer = 0;
 		p->update();

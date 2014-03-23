@@ -32,7 +32,7 @@ public:
 	HRESULT initialize();
 	HRESULT startKinect();
 
-	HRESULT update(int dt);
+	HRESULT update(float timeScale);
 
 	void addUpdate(ofVec3f pos, int trackingID, int jointIndex);
 
