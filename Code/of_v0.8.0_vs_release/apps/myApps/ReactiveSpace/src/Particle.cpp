@@ -8,6 +8,7 @@ Particle::Particle(ofVec3f _pos)
 	accel = ofVec3f(0.f, 0.f);
 	maxSpeed = std::numeric_limits<float>::max();
 	maxForce = std::numeric_limits<float>::max();
+	restitution = 1.f;
 }
 
 Particle::Particle()
@@ -18,6 +19,7 @@ Particle::Particle()
 	accel = ofVec3f(0.f, 0.f);
 	maxSpeed = std::numeric_limits<float>::max();
 	maxForce = std::numeric_limits<float>::max();
+	restitution = 1.f;
 }
 
 void Particle::applyForce(ofVec3f f)
@@ -33,6 +35,7 @@ void Particle::applyForce(float x, float y)
 void Particle::update(float timeScale)
 {
 	vel += accel;
+	vel *= restitution;
 	vel.limit(maxSpeed);
 	prevPos = pos;
 	pos += vel * timeScale;

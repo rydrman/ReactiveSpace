@@ -132,28 +132,22 @@ void GeoParticle::update(float timeScale)
 
 }
 
-void GeoParticle::draw(ofImage mGrad, ofImage explosionSprite)
+void GeoParticle::draw(ofImage* mGrad, ofImage* explosionSprite)
 {
-	if(m_isExploding == true){
-		
-		for(int j = 0 ; j < 50; j ++){
+	if(m_isExploding == true && alphaExplode > 0){
+
+		float randRange = 0.3921f * alphaExplode;  // 1/255 * 100
+		for(int j = 0 ; j < 10; j ++){
 			
 			ofPushMatrix();
-
-				if(m_gradNum == 0 ){ofSetColor(251,236,119,alphaExplode);}
-				if(m_gradNum == 1 ){ofSetColor(238,158,100,alphaExplode);}
-				if(m_gradNum == 2 ){ofSetColor(211,75,63,alphaExplode);}
-				if(m_gradNum == 3 ){ofSetColor(87,193,235,alphaExplode);}
-				if(m_gradNum == 4 ){ofSetColor(72,165,76,alphaExplode);}
-				if(m_gradNum == 5 ){ofSetColor(169,233,180,alphaExplode);}
-
-				explosionSprite.draw(pos.x+ofRandom(-alphaExplode,alphaExplode),pos.y+ofRandom(-alphaExplode,alphaExplode), 30,30);
+				ofSetColor(getColor(/*alphaExplode*/));
+				explosionSprite->draw(pos.x + ofRandom(-randRange, randRange), pos.y + ofRandom(-randRange, randRange), 30, 30);
 			ofPopMatrix();
 			
 		}
 	}
 	ofSetColor(255);
-	mGrad.bind();
+	mGrad->bind();
 
 	ofPushMatrix();
 		ofTranslate(pos.x, pos.y);
@@ -165,9 +159,27 @@ void GeoParticle::draw(ofImage mGrad, ofImage explosionSprite)
 		m_vbo.unbind();
 	ofPopMatrix();
 
-	mGrad.unbind();
+	mGrad->unbind();
+}
 
-	
+ofColor GeoParticle::getColor(int alpha)
+{
+	switch (m_gradNum)
+	{
+	case 0:
+		return ofColor(251, 236, 119, alpha);
+	case 1:
+		return ofColor(238, 158, 100, alpha);
+	case 2:
+		return ofColor(211, 75, 63, alpha);
+	case 3:
+		return ofColor(87, 193, 235, alpha);
+	case 4:
+		return ofColor(72, 165, 76, alpha);
+	case 5:
+		return ofColor(169, 233, 180, alpha);
+	}
+
 }
 
 void GeoParticle::setTriangles()

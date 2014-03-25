@@ -25,7 +25,7 @@ public:
 	int alphaTime;
 
 	//for geometry
-	float m_gradNum;
+	int m_gradNum;
 	int m_numVerts;
 	ofVec2f* m_originalVerts;
 	float* m_noiseOffsets;
@@ -44,12 +44,16 @@ public:
 	GeoParticle(ofVec3f _pos);
 
 	void update(float timeScale);
-	void draw(ofImage mGrad, ofImage explosionSprite);
+	void draw(ofImage* mGrad, ofImage* explosionSprite);
 	void explode();
+	void countDown(float dTime);
+	ofColor getColor(int alpha = 255);
+
+private:
 	void setTriangles();
 	void getRandomTexCoord(ofVec2f* coords);
 	ofVec2f rotatePoint(ofVec2f point, ofVec2f center, float angle);
-	void countDown(float dTime);
+	
 	~GeoParticle(void);
 };
 

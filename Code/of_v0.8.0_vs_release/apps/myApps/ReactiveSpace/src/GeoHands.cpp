@@ -44,9 +44,9 @@ void GeoHands::drawHands(ofImage geoHands)
 	
 		
 }
-void GeoHands::handCountDown(float deltTime , bool lock)
+void GeoHands::handCountDown(float timeScale , bool lock)
 {
-	CountTimer = CountTimer + deltTime*16.f;
+	CountTimer = CountTimer + timeScale*16.f;
 			
 		if(lock  == true){
 			if (CountTimer > 0){
@@ -69,10 +69,6 @@ void GeoHands::handCountDown(float deltTime , bool lock)
 				Interval = 0;
 				CountTimer = 0;
 		}
-			/*if(CountTimer > 3000){
-			Interval = 0;
-			CountTimer = 0;
-			}*/
 }
 
 

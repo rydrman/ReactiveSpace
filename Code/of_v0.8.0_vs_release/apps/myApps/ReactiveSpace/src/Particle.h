@@ -11,6 +11,7 @@ public:
 	ofVec3f vel;
 	ofVec3f accel;
 	ofVec2f originalPos;
+	float restitution;
 	float maxSpeed;
 	float maxForce;
 	float isHome;

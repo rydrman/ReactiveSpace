@@ -2,6 +2,15 @@
 #include "IScene.h"
 #include "ParticleMain.h"
 
+struct Confetti
+{
+	Particle p;
+	float timeout;
+	int spriteX;
+	int spriteY;
+	ofColor color;
+};
+
 class GeoScene : public IScene
 {
 	Particle* m_Geometry;
@@ -10,9 +19,12 @@ class GeoScene : public IScene
 	//ofImage geo3;
 	ofImage geoBack;
 	ofImage geoHands;
+	ofImage m_confettiImg;
 	
 	ofImage m_gradients;
 	ofSoundPlayer geoBackSound;
+
+	Confetti* m_confetti;
 
 	int screenW;
 	int screenH;
@@ -28,4 +40,6 @@ public:
 	Particle* addHandOfProperType(ofVec3f _pos);
 	~GeoScene();
 };
+
+
 

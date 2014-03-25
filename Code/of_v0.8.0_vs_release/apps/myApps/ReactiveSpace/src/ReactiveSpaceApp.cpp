@@ -3,8 +3,8 @@
 void ReactiveSpaceApp::setup()
 {
 	//setup vars
-	m_currentSceneNum = 2;
-	m_nextSceneNum = 2;
+	m_currentSceneNum = 3;
+	m_nextSceneNum = 3;
 
 	//graphics
 	ofSetFrameRate(60);
