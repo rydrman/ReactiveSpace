@@ -15,6 +15,7 @@ public :
 	float hexAlpha;
 	float hexRotation;
 
+	bool isConnected;
 	float hexMaxSize;
 	float hexGrowthRate;
 	ofVec2f hexToHands;

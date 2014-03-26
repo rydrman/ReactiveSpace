@@ -80,7 +80,7 @@ void LightScene::Render()
 		}
 	}
 
-
+	m_connectedParticles.clear();
 	HexagonParticle* hp;
 	//draw a hexagon for each person in people
 	for(vector<Particle*>::iterator p = pPeople->begin(); p != pPeople->end(); ++p)
@@ -118,8 +118,9 @@ void LightScene::Render()
 
 				//hp->seek((*hands)->pos, 1.f, true);
 				
+				hp->isConnected = true;
 				m_connectedParticles.push_back(hp);	
-				//hp->separation(&m_connectedParticles);
+				
 
 				if(distSqrd > 90000){
 					//hp->seek((*p)->pos, 1.0, true);
@@ -128,8 +129,12 @@ void LightScene::Render()
 				else if(distSqrd < 90000){
 					hp->accel -= offsetAccel*0.0025;
 				}
-				m_connectedParticles.clear();
+				
 
+			}
+			else
+			{
+				hp->isConnected = false;
 			}
 		}
 
@@ -226,6 +231,12 @@ void LightScene::Update(int deltaTime)
 	for(vector<Particle*>::iterator p = pPeople->begin(); p != pPeople->end(); ++p)
 	{
 		hp = (HexagonParticle*) (*p);
+
+		if (hp->isConnected)
+		{
+			hp->separation(&m_connectedParticles);
+		}
+
 		for(vector<Light>::iterator l = m_lights.begin(); l != m_lights.end(); ++l){
 
 			if(hp->pos.x < l->x+m_lightImg.width*0.5 && hp->pos.x+(m_hexImgBorder.width*hp->hexSize)*0.5 > l->x){
@@ -234,6 +245,7 @@ void LightScene::Update(int deltaTime)
 			count++;
 		}
 	}
+
 
 }
 

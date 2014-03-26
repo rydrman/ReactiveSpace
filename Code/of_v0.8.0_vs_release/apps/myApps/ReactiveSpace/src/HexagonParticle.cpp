@@ -13,6 +13,7 @@ HexagonParticle::HexagonParticle(ofVec3f _pos)
 	hexMaxSize = ofRandom(2,5);
 	hexToHands.set(0, 0);
 
+	isConnected = false;
 }
 /*
 void HexagonParticle::update(){
@@ -36,8 +37,8 @@ void HexagonParticle::separation(vector<HexagonParticle*>* connectedParticles)
 
 		if (distSqrd < s_neighDistSqrd){
 		
-			if (distSqrd < s_desiredSepSqrd && distSqrd >0){
-				steerSep += (pos - (*c)->pos).normalize() / sqrt(distSqrd);
+			if (distSqrd < s_desiredSepSqrd && distSqrd > 0){
+				steerSep += (pos - (*c)->pos);
 			}
 		
 			++count;
@@ -46,11 +47,11 @@ void HexagonParticle::separation(vector<HexagonParticle*>* connectedParticles)
 		if (count > 0){
 		
 			steerSep /= (float)count;
-			steerSep = steerSep.normalize() *maxSpeed;
-			steerSep -= vel;
+			//steerSep = steerSep.normalize() * maxSpeed;
+			//steerSep -= vel;
 			steerSep.limit(maxForce*0.2);
 			accel += steerSep;
-			accel.limit(maxSpeed);
+			//accel.limit(maxSpeed);
 		}
 	}
 
