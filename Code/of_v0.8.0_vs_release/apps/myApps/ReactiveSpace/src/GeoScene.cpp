@@ -17,6 +17,9 @@ GeoScene::GeoScene(vector<Particle*>* people, vector<Particle*>* hands)
 	geoBackSound.loadSound("GeoScene/Scene3Back.mp3");
 	geoBackSound.setLoop(true); 
 	geoBackSound.play();
+
+	geoExplosionSound.loadSound("GeoScene/Scene3_ExplodeOnly.mp3");
+	geoExplosionSound2.loadSound("GeoScene/Scene3_ExplodeOnly2.mp3");
 	
 	m_confetti = new Confetti[s_numConfetti];
 	for (int i = 0; i < s_numConfetti; ++i)
@@ -88,7 +91,7 @@ void GeoScene::Update(float timeScale)
 			if ((*h)->pos.x + s_radius > ((*p)->pos.x) && (*h)->pos.x - s_radius<((*p)->pos.x)
 				&& (*h)->pos.y - 50 + s_radius >((*p)->pos.y) && (*h)->pos.y - s_radius < ((*p)->pos.y))
 			{
-				gp->countDown(timeScale);
+				gp->countDown(timeScale, geoExplosionSound,geoExplosionSound2);
 				gh->handCountDown(timeScale, true);	
 
 				if (gp->m_isExploding)

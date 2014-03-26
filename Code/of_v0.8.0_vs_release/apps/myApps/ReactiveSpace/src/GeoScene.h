@@ -23,7 +23,8 @@ class GeoScene : public IScene
 	
 	ofImage m_gradients;
 	ofSoundPlayer geoBackSound;
-
+	ofSoundPlayer geoExplosionSound;
+	ofSoundPlayer geoExplosionSound2;
 	Confetti* m_confetti;
 
 	int screenW;

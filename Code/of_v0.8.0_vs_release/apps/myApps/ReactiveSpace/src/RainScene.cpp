@@ -23,7 +23,7 @@ RainScene::RainScene(vector<Particle*>* people, vector<Particle*>* hands)
 	{
 		m_rainParticles[i] = Particle(ofVec2f(ofRandom(0, screenW), ofRandom(0, screenH)));
 		m_rainParticles[i].vel = ofVec2f(0.f, ofRandom(screenH * 0.005f, screenH * 0.01f));
-		m_rainParticles[i].maxSpeed = ofRandom(screenH * 0.08f, screenH * 0.12f);
+		m_rainParticles[i].maxSpeed = ofRandom(screenH * 0.003f, screenH * 0.009f);
 	}
 
 	float scale = screenH * screenW;
@@ -168,9 +168,23 @@ void RainScene::Update(float timeScale)
 				targetVel += (3.f - std::max(abs(i), abs(j))) * m_rainVectorField[pos].vel;
 			}
 		}
-		targetVel *= 0.029f;
 
-		p->accel +=  s_gravity * timeScale + (targetVel - p->vel) * timeScale ;
+		
+		targetVel *= 0.029f ;
+
+		p->applyForce(s_gravity.x * timeScale, s_gravity.y * timeScale);
+		
+		
+
+		p->applyForce(targetVel.x * timeScale, targetVel.y * timeScale);
+	
+	
+			
+				
+			
+		
+	
+
 		p->update();
 
 		if (p->pos.y > screenH)
@@ -195,15 +209,19 @@ void RainScene::addNewRainDrop(Particle* p)
 	if (m_createNextInCloud)
 	{
 		if (m_createNextInCloudNum > pPeople->size()-1)
+			
 			m_createNextInCloudNum = 0;
 		RainCloudParticle* rc = (RainCloudParticle*)(pPeople->at(m_createNextInCloudNum));
 		rc->addRainDrop(p);
 		++m_createNextInCloudNum;
+
 	}
 	else
 	{
+		
 		p->pos = ofVec2f(ofRandom(0.f, ofGetWidth()), 0.f);
 		p->vel = ofVec2f(0.f, ofRandom(ofGetHeight() * 0.005f, ofGetHeight() * 0.01f));
+		
 	}
 	m_createNextInCloud = !m_createNextInCloud;
 }

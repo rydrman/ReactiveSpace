@@ -20,6 +20,9 @@ Particle::Particle()
 	maxSpeed = std::numeric_limits<float>::max();
 	maxForce = std::numeric_limits<float>::max();
 	restitution = 1.f;
+
+
+
 }
 
 void Particle::applyForce(ofVec3f f)
