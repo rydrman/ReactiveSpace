@@ -123,7 +123,7 @@ void RainScene::Render()
 #endif
 }
 
-void RainScene::Update(int timeScale)
+void RainScene::Update(float timeScale)
 {
 	int screenH = ofGetHeight();
 

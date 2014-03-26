@@ -70,7 +70,7 @@ void GeoScene::Render()
 	}
 }
 
-void GeoScene::Update(int timeScale)
+void GeoScene::Update(float timeScale)
 {
 	//update hands
 	GeoParticle* gp;
