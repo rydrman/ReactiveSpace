@@ -20,9 +20,10 @@ class LightScene : public IScene
 	ofImage m_lightAlpha;
 
 	ofImage m_handsImage;
+	ofImage m_hexLineImg;
 
 	vector<Light> m_lights;
-	vector<Particle*> closestHand; 
+	vector<Particle*> m_closestHand; 
 
 	Boolean m_connectedToHands;
 
