@@ -231,13 +231,17 @@ void GeoParticle::getRandomTexCoord(ofVec2f* coords)
 	}
 }
 
-void GeoParticle::countDown(float dTime)
+void GeoParticle::countDown(float dTime, ofSoundPlayer* geoExplosionSound, ofSoundPlayer* geoExplosionSound2)
 {
 	//if (vel.x == 0){
 			startTime = startTime + dTime*16.f;
-			//geoExplodeSound.play();			
+						
 						
 			if (startTime > 2000){
+				int coin = ofRandom(2);
+				if(coin ==0){geoExplosionSound->play();}
+				if(coin==1){geoExplosionSound2->play();}
+				
 				explode();
 				startTime = 0;
 			}
@@ -250,6 +254,8 @@ void GeoParticle::explode()
 	{
 		m_isExploding = true;
 		m_explodeTime = 0;
+
+
 	}
 }
 

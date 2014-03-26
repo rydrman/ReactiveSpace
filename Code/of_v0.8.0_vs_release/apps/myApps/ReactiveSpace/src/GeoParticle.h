@@ -14,7 +14,7 @@ class GeoParticle :
 	public Particle
 {
 public:
-	ofSoundPlayer geoExplodeSound;
+	ofSoundPlayer* geoExplodeSound;
 	ofImage m_shapes;
 	
 	int alphaExplode;
@@ -46,7 +46,7 @@ public:
 	void update(float timeScale);
 	void draw(ofImage* mGrad, ofImage* explosionSprite);
 	void explode();
-	void countDown(float dTime);
+	void countDown(float dTime, ofSoundPlayer* geoExplosionSound, ofSoundPlayer* geoExplosionSound2);
 	ofColor getColor(int alpha = 255);
 
 private:

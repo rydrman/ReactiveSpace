@@ -22,18 +22,19 @@ class GeoScene : public IScene
 	ofImage m_confettiImg;
 	
 	ofImage m_gradients;
-	ofSoundPlayer geoBackSound;
-
+	ofSoundPlayer* geoBackSound;
+	ofSoundPlayer* geoExplosionSound;
+	ofSoundPlayer* geoExplosionSound2;
 	Confetti* m_confetti;
 
 	int screenW;
 	int screenH;
 public:
 	ofImage explosionSprite;
-	GeoScene(vector<Particle*>* people, vector<Particle*>* hands);
+	GeoScene(vector<Particle*>* people, vector<Particle*>* hands, AudioManager* audioManager);
 	
 	virtual void Render();
-	virtual void Update(int timeScale);
+	virtual void Update(float timeScale);
 	void convertPeopleVector();
 	Particle* addParticleOfProperType(ofVec3f _pos);
 	void convertHandVector();

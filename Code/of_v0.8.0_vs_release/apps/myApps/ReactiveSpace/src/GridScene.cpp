@@ -22,8 +22,8 @@ const ofVec2f s_quadTexCoords[] = {
 	ofVec2f(0.0f, 1.0f)
 };
 
-GridScene::GridScene(vector<Particle*>* people, vector<Particle*>* hands)
-: IScene(people, hands)
+GridScene::GridScene(vector<Particle*>* people, vector<Particle*>* hands, AudioManager* audioManager)
+: IScene(people, hands, audioManager)
 {
 
 	int screenHeight = ofGetHeight();
@@ -169,7 +169,7 @@ void GridScene::Render()
 	}
 }
 
-void GridScene::Update(int timeScale)
+void GridScene::Update(float timeScale)
 {
 	int i = 0;
 	BirdParticle* p;

@@ -13,6 +13,7 @@
 #include "ParticleMain.h"
 #include "KinectManager.h"
 #include "OpenCVManager.h"
+#include "AudioManager.h"
 
 using std::vector;
 
@@ -22,6 +23,8 @@ class ReactiveSpaceApp : public ofBaseApp{
 	int m_currentSceneNum;
 	vector<IScene*> m_scenes;
 	IScene* pCurrentScene;
+
+	AudioManager m_audioManager;
 
 	float stepTimeDelta;
 	float stepTimeLast;

@@ -2,8 +2,8 @@
 
 static int s_radius = 100;
 static int s_numConfetti = 1000;
-GeoScene::GeoScene(vector<Particle*>* people, vector<Particle*>* hands)
-: IScene(people, hands)
+GeoScene::GeoScene(vector<Particle*>* people, vector<Particle*>* hands, AudioManager* audioManager)
+: IScene(people, hands, audioManager)
 {
 	screenW = ofGetWidth();
 	screenH = ofGetHeight();	
@@ -14,9 +14,12 @@ GeoScene::GeoScene(vector<Particle*>* people, vector<Particle*>* hands)
 	explosionSprite.loadImage("GeoScene/Particles2.png");
 	m_confettiImg.loadImage("GeoScene/Particles.png");
 
-	geoBackSound.loadSound("GeoScene/Scene3Back.mp3");
-	geoBackSound.setLoop(true); 
-	geoBackSound.play();
+	geoBackSound = pAudioManager->load("GeoScene/Scene3Back.mp3");
+	geoBackSound->setLoop(true); 
+	geoBackSound->play();
+
+	geoExplosionSound = pAudioManager->load("GeoScene/Scene3_ExplodeOnly.mp3");
+	geoExplosionSound2 = pAudioManager->load("GeoScene/Scene3_ExplodeOnly2.mp3");
 	
 	m_confetti = new Confetti[s_numConfetti];
 	for (int i = 0; i < s_numConfetti; ++i)
@@ -67,7 +70,7 @@ void GeoScene::Render()
 	}
 }
 
-void GeoScene::Update(int timeScale)
+void GeoScene::Update(float timeScale)
 {
 	//update hands
 	GeoParticle* gp;
@@ -88,7 +91,7 @@ void GeoScene::Update(int timeScale)
 			if ((*h)->pos.x + s_radius > ((*p)->pos.x) && (*h)->pos.x - s_radius<((*p)->pos.x)
 				&& (*h)->pos.y - 50 + s_radius >((*p)->pos.y) && (*h)->pos.y - s_radius < ((*p)->pos.y))
 			{
-				gp->countDown(timeScale);
+				gp->countDown(timeScale, geoExplosionSound, geoExplosionSound2);
 				gh->handCountDown(timeScale, true);	
 
 				if (gp->m_isExploding)

@@ -30,10 +30,10 @@ class LightScene : public IScene
 	vector<HexagonParticle*> m_connectedParticles;
 	
 public:
-	LightScene(vector<Particle*>* people, vector<Particle*>* hands);
+	LightScene(vector<Particle*>* people, vector<Particle*>* hands, AudioManager* audioManager);
 
 	void Render();
-	void Update(int deltaTime);
+	void Update(float timeScale);
 
 	void onLoad();
 
