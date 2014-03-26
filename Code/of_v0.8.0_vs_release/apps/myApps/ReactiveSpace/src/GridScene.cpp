@@ -169,7 +169,7 @@ void GridScene::Render()
 	}
 }
 
-void GridScene::Update(int timeScale)
+void GridScene::Update(float timeScale)
 {
 	int i = 0;
 	BirdParticle* p;

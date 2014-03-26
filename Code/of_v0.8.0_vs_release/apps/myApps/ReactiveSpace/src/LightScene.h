@@ -32,7 +32,7 @@ public:
 	LightScene(vector<Particle*>* people, vector<Particle*>* hands);
 
 	void Render();
-	void Update(int deltaTime);
+	void Update(float timeScale);
 
 	void onLoad();
 

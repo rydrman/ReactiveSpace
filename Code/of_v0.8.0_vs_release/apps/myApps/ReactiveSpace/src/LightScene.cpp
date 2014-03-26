@@ -44,7 +44,6 @@ LightScene::LightScene(vector<Particle*>* people, vector<Particle*>* hands)
 
 	for(int i = 0; i < ofGetWidth(); i += m_lightImg.width * 0.7){
 		Light l = Light();
-		l.isOn = false;
 		l.x = i;
 		m_lights.push_back(l);	
 	}
@@ -61,7 +60,7 @@ void LightScene::Render()
 	ofSetRectMode(OF_RECTMODE_CORNER);
 	ofEnableBlendMode(OF_BLENDMODE_ADD);
 	for(vector<Light>::iterator l = m_lights.begin(); l != m_lights.end(); ++l){
-		if(l->isOn == true){
+		if(l->isOn() == true){
 			m_lightImg.draw(l->x - m_lightImg.width * 0.5, 0, 0);
 		}
 	}
@@ -75,7 +74,7 @@ void LightScene::Render()
 
 	//draw light tubes
 	for (vector<Light>::iterator l = m_lights.begin(); l != m_lights.end(); ++l){
-		if (l->isOn == true){
+		if (l->isOn() == true){
 			m_lightTube.draw(l->x - m_lightImg.width * 0.5, 0, 0);
 		}
 	}
@@ -183,7 +182,7 @@ void LightScene::Render()
 	ofClear(0, 0);
 	int dif = m_lightAlpha.width * 0.5;
 	for (vector<Light>::iterator l = m_lights.begin(); l != m_lights.end(); ++l){
-		if (l->isOn == true){
+		if (l->isOn() == true){
 			m_lightAlpha.draw(l->x - dif, 0, 0);
 		}
 	}
@@ -213,26 +212,28 @@ void LightScene::Render()
 	ofSetRectMode(OF_RECTMODE_CORNER);
 }
 
-void LightScene::Update(int deltaTime)
+void LightScene::Update(float timeScale)
 {
 
-	for(vector<Light>::iterator l = m_lights.begin(); l != m_lights.end(); ++l){
-		l->isOn = false;
-	}
-
-	int count = 0;
 	HexagonParticle* hp;
-	//draw a hexagon for each person in people
-	for(vector<Particle*>::iterator p = pPeople->begin(); p != pPeople->end(); ++p)
+	for(vector<Light>::iterator l = m_lights.begin(); l != m_lights.end(); ++l)
 	{
-		hp = (HexagonParticle*) (*p);
-		for(vector<Light>::iterator l = m_lights.begin(); l != m_lights.end(); ++l){
-
-			if(hp->pos.x < l->x+m_lightImg.width*0.5 && hp->pos.x+(m_hexImgBorder.width*hp->hexSize)*0.5 > l->x){
-				l->isOn = true;
+		bool turnedOn = false;
+		for (vector<Particle*>::iterator p = pPeople->begin(); p != pPeople->end(); ++p)
+		{
+			hp = (HexagonParticle*)(*p);
+			if (hp->pos.x < l->x + m_lightImg.width*0.5 && hp->pos.x + (m_hexImgBorder.width*hp->hexSize)*0.5 > l->x)
+			{
+				l->turnOn();
+				turnedOn = true;
+				break;
 			}
-			count++;
 		}
+		if (!turnedOn)
+		{
+			l->turnOff();
+		}
+		l->update(timeScale);
 	}
 
 }
