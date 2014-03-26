@@ -16,6 +16,7 @@ public:
 	float maxForce;
 	float isHome;
 	
+	
 	//for kinect / tracking
 	int ID;
 	int jointIndex;
