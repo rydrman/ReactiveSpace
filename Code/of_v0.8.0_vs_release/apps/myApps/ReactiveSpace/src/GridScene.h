@@ -26,7 +26,7 @@ class GridScene : public IScene
 	ofShader m_particleShader;
 
 public:
-	GridScene(vector<Particle*>* people, vector<Particle*>* hands);
+	GridScene(vector<Particle*>* people, vector<Particle*>* hands, AudioManager* audioManager);
 	
 	virtual void Render();
 	virtual void Update(float timeScalee);

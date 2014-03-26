@@ -1,9 +1,10 @@
 #include "IScene.h"
 
-IScene::IScene(vector<Particle*>* people, vector<Particle*>* hands)
+IScene::IScene(vector<Particle*>* people, vector<Particle*>* hands, AudioManager* audioManager)
 {
 	pPeople = people;
 	pHandPositions = hands;
+	pAudioManager = audioManager;
 }
 
 void IScene::onUnload()

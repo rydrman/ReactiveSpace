@@ -7,8 +7,8 @@ const ofVec2f s_fogTexCoords[] = {
 	ofVec2f(0.0f, 1.0f)
 };
 
-LightScene::LightScene(vector<Particle*>* people, vector<Particle*>* hands)
-: IScene(people, hands)
+LightScene::LightScene(vector<Particle*>* people, vector<Particle*>* hands, AudioManager* audioManager)
+: IScene(people, hands, audioManager)
 {
 	const ofVec2f fogVerts[] = {
 		ofVec2f(0.f, 0.f),

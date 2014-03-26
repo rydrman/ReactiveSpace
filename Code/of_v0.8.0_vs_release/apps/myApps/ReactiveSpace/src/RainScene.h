@@ -22,7 +22,7 @@ class RainScene : public IScene
 	ofImage m_cloudImage;
 
 public:
-	RainScene(vector<Particle*>* people, vector<Particle*>* hands);
+	RainScene(vector<Particle*>* people, vector<Particle*>* hands, AudioManager* audioManager);
 
 	virtual void Render();
 	virtual void Update(float timeScale);

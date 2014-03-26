@@ -2,6 +2,7 @@
 
 #include <vector>
 #include "ParticleMain.h"
+#include "AudioManager.h"
 
 using std::vector;
 
@@ -10,8 +11,9 @@ class IScene
 public:
 	vector<Particle*>* pPeople;
 	vector<Particle*>* pHandPositions;
+	AudioManager* pAudioManager;
 
-	IScene(vector<Particle*>* people, vector<Particle*>* hands);
+	IScene(vector<Particle*>* people, vector<Particle*>* hands, AudioManager* audioManager);
 	
 	virtual void Render() = 0;
 	virtual void Update(float timeScale) = 0;

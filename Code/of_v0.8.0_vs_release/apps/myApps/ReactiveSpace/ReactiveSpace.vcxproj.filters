@@ -25,6 +25,7 @@
     <ClCompile Include="src\RainScene.cpp" />
     <ClCompile Include="src\ReactiveSpaceApp.cpp" />
     <ClCompile Include="src\RainCloudParticle.cpp" />
+    <ClCompile Include="src\AudioManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\addons\ofxOpenCv\src\ofxCvBlob.h" />
@@ -137,6 +138,7 @@
     <ClInclude Include="src\RainScene.h" />
     <ClInclude Include="src\ReactiveSpaceApp.h" />
     <ClInclude Include="src\RainCloudParticle.h" />
+    <ClInclude Include="src\AudioManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />
