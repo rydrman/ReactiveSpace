@@ -15,7 +15,9 @@ class RainScene : public IScene
 	float m_rainVectorFieldNorm;
 
 	bool m_createNextInCloud;
+	int whichStart;
 	int m_createNextInCloudNum;
+	int ratio;
 
 	ofImage m_rainImage;
 	ofImage m_rainBackground;

@@ -13,7 +13,7 @@ RainScene::RainScene(vector<Particle*>* people, vector<Particle*>* hands, AudioM
 
 	int screenW = ofGetWidth();
 	int screenH = ofGetHeight();
-
+	whichStart = 0;
 	m_createNextInCloud = false;
 	m_createNextInCloudNum = 0;
 
@@ -48,9 +48,9 @@ RainScene::RainScene(vector<Particle*>* people, vector<Particle*>* hands, AudioM
 		}
 	}
 
-	m_rainImage.loadImage("RainScene/Rain2.png");
+	m_rainImage.loadImage("RainScene/RainDrops.png");
 	m_rainBackground.loadImage("RainScene/RainBackground.png");
-	m_cloudImage.loadImage("RainScene/cloud.png");
+	m_cloudImage.loadImage("RainScene/Clouds_spreadsheet.png");
 }
 
 void RainScene::Render()
@@ -178,12 +178,6 @@ void RainScene::Update(float timeScale)
 
 		p->applyForce(targetVel.x * timeScale, targetVel.y * timeScale);
 	
-	
-			
-				
-			
-		
-	
 
 		p->update();
 
@@ -206,8 +200,12 @@ void RainScene::Update(float timeScale)
 
 void RainScene::addNewRainDrop(Particle* p)
 {
-	if (m_createNextInCloud)
+	int numClouds = pPeople->end() - pPeople->begin();
+	ratio = numClouds + 1;
+	
+	if (whichStart < ratio)
 	{
+		
 		if (m_createNextInCloudNum > pPeople->size()-1)
 			
 			m_createNextInCloudNum = 0;
@@ -221,9 +219,10 @@ void RainScene::addNewRainDrop(Particle* p)
 		
 		p->pos = ofVec2f(ofRandom(0.f, ofGetWidth()), 0.f);
 		p->vel = ofVec2f(0.f, ofRandom(ofGetHeight() * 0.005f, ofGetHeight() * 0.01f));
-		
+	whichStart = 0;
 	}
-	m_createNextInCloud = !m_createNextInCloud;
+	whichStart++;
+	//m_createNextInCloud = !m_createNextInCloud;
 }
 
 void RainScene::convertPeopleVector()

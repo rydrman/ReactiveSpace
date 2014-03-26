@@ -11,7 +11,7 @@ public:
 	RainCloudParticle(ofVec3f _pos);
 
 	void draw();
-
+	int rando;
 	void addRainDrop(Particle* p);
 
 	~RainCloudParticle(void);
