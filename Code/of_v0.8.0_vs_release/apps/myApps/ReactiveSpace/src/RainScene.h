@@ -22,6 +22,7 @@ class RainScene : public IScene
 	ofImage m_rainImage;
 	ofImage m_rainBackground;
 	ofImage m_cloudImage;
+	ofSoundPlayer* rainBackSound;
 
 public:
 	RainScene(vector<Particle*>* people, vector<Particle*>* hands, AudioManager* audioManager);
@@ -35,6 +36,9 @@ public:
 	Particle* addParticleOfProperType(ofVec3f _pos);
 	//void convertHandVector();
 	//Particle* addHandOfProperType(ofVec3f _pos);
+	//switching between scenes
+	void onLoad();
+	void onUnload();
 
 	~RainScene();
 };

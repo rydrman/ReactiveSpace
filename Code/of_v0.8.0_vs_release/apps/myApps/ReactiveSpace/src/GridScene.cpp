@@ -80,6 +80,9 @@ GridScene::GridScene(vector<Particle*>* people, vector<Particle*>* hands, AudioM
 	m_particleImage.loadImage("GridScene/GridParticle.png");
 	m_particleShader = ofShader();
 	m_particleShader.load("GridScene/gridParticle");
+	
+	gridBackSound = pAudioManager->load("GridScene/Scene1_Background.mp3");
+	gridBackSound->setLoop(true); 
 }
 
 void GridScene::Render()
@@ -300,8 +303,16 @@ void GridScene::onUnload()
 	}
 
 	m_angryParticles.clear();
+	gridBackSound->stop();
 }
 
 GridScene::~GridScene()
 {
 }
+void GridScene::onLoad()
+{
+	gridBackSound->play();
+}
+
+
+	
