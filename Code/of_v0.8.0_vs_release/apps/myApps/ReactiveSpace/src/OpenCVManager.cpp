@@ -173,6 +173,21 @@ void OpenCVManager::update(int timeScale)
 			}
 		}
 	}
+	else
+	{
+		//no video camera, use noise
+		Particle* vect;
+		for (int i = 0; i < m_fieldWidth; ++i)
+		{
+			for (int j = 0; j < m_fieldHeight; ++j)
+			{
+				vect = &m_vectorField[(i*m_fieldHeight) + j];
+
+				float noiseNum = ((i*m_fieldHeight) + j) + ofGetFrameNum() * 0.001f;
+				vect->vel = ofVec2f(-1.f + ofNoise(noiseNum)*2.f, -1.f + 2.f * ofNoise(noiseNum + 1000)) * vect->maxSpeed;
+			}
+		}
+	}
 
 	//////////////////////
 	//  simulate crowd  //
@@ -208,33 +223,27 @@ void OpenCVManager::update(int timeScale)
 		ofVec3f targetVel = ofVec3f(0.f, 0.f);
 
 		//calculate vector field that's close
-		//only if theres a webcam
-		if (m_vidGrabber.isInitialized())
+
+		int fieldX = (*p)->pos.x / s_vectorFieldDensity;
+		int fieldY = (*p)->pos.y / s_vectorFieldDensity;
+
+		if (fieldX < 2) fieldX = 2;
+		else if (fieldX > m_fieldWidth - 3) fieldX = m_fieldWidth - 3;
+		if (fieldY < 2) fieldY = 2;
+		else if (fieldY > m_fieldHeight - 3) fieldY = m_fieldHeight - 3;
+
+		for (int i = -2; i < 3; ++i)
 		{
-			int fieldX = (*p)->pos.x / s_vectorFieldDensity;
-			int fieldY = (*p)->pos.y / s_vectorFieldDensity;
-
-			if (fieldX < 2) fieldX = 2;
-			else if (fieldX > m_fieldWidth - 3) fieldX = m_fieldWidth - 3;
-			if (fieldY < 2) fieldY = 2;
-			else if (fieldY > m_fieldHeight - 3) fieldY = m_fieldHeight - 3;
-
-			for (int i = -2; i < 3; ++i)
+			for (int j = -2; j < 3; ++j)
 			{
-				for (int j = -2; j < 3; ++j)
-				{
-					int pos = ((fieldX + i) * m_fieldHeight) + (fieldY + j);
-					targetVel += (3.f - std::max(abs(i), abs(j))) * m_vectorField[pos].vel;
-				}
+				int pos = ((fieldX + i) * m_fieldHeight) + (fieldY + j);
+				targetVel += (3.f - std::max(abs(i), abs(j))) * m_vectorField[pos].vel;
 			}
-			targetVel *= 0.029f;
-			(*p)->accel += (targetVel - (*p)->vel) * timeScale * 0.1f;
 		}
-		else
-		{
-			targetVel = (*p)->vel;
-		}
+		targetVel *= 0.029f;
+		(*p)->accel += (targetVel - (*p)->vel) * timeScale * 0.1f;
 
+		//update person
 		(*p)->update(timeScale);// stepTimeDelta;
 
 		if ((*p)->pos.x > ofGetWindowWidth() + s_generationBuffer*1.5f
