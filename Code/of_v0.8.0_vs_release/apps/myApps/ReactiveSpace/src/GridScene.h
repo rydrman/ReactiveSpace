@@ -24,6 +24,7 @@ class GridScene : public IScene
 	ofImage m_particleImage;
 	ofVbo m_particleVbo;
 	ofShader m_particleShader;
+	ofSoundPlayer* gridBackSound;
 
 public:
 	GridScene(vector<Particle*>* people, vector<Particle*>* hands, AudioManager* audioManager);
@@ -32,6 +33,10 @@ public:
 	virtual void Update(float timeScalee);
 
 	virtual void onUnload();
+
+	//switching between scenes
+	void onLoad();
+
 
 	~GridScene();
 };

@@ -48,9 +48,16 @@ RainScene::RainScene(vector<Particle*>* people, vector<Particle*>* hands, AudioM
 		}
 	}
 
-	m_rainImage.loadImage("RainScene/RainDrops.png");
+	m_rainImage.loadImage("RainScene/Rain2.png");
 	m_rainBackground.loadImage("RainScene/RainBackground.png");
 	m_cloudImage.loadImage("RainScene/Clouds_spreadsheet.png");
+	
+	rainBackSound = pAudioManager->load("RainScene/Scene4_Background.mp3");
+	rainBackSound->setLoop(true); 
+
+
+
+
 }
 
 void RainScene::Render()
@@ -233,7 +240,7 @@ void RainScene::convertPeopleVector()
 	{
 		RainCloudParticle* p = new RainCloudParticle((*pOld)->pos);
 		p->m_cloudImage = &m_cloudImage;
-		p->m_size = ofVec2f(m_cloudImage.getWidth(), m_cloudImage.getHeight());
+		p->m_size = ofVec2f(m_cloudImage.getWidth()/4, m_cloudImage.getHeight());
 		newPeople.push_back(p);
 	}
 	*pPeople = newPeople;
@@ -249,4 +256,13 @@ Particle* RainScene::addParticleOfProperType(ofVec3f _pos)
 
 RainScene::~RainScene()
 {
+}
+void RainScene::onLoad()
+{
+	rainBackSound->play();
+}
+
+void RainScene::onUnload()
+{
+	rainBackSound->stop();
 }
