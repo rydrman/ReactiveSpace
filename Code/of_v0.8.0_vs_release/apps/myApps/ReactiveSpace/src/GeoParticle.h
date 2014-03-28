@@ -49,6 +49,10 @@ public:
 	void countDown(float dTime, ofSoundPlayer* geoExplosionSound, ofSoundPlayer* geoExplosionSound2);
 	ofColor getColor(int alpha = 255);
 
+	//for switching between scenes 
+	void onLoad();
+	void onUnload();
+
 private:
 	void setTriangles();
 	void getRandomTexCoord(ofVec2f* coords);

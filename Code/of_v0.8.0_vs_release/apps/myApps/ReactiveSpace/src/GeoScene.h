@@ -40,6 +40,10 @@ public:
 	void convertHandVector();
 	Particle* addHandOfProperType(ofVec3f _pos);
 	~GeoScene();
+
+	//switching between scenes
+	void onLoad();
+	void onUnload();
 };
 
 

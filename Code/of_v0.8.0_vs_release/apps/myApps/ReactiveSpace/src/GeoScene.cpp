@@ -16,8 +16,7 @@ GeoScene::GeoScene(vector<Particle*>* people, vector<Particle*>* hands, AudioMan
 
 	geoBackSound = pAudioManager->load("GeoScene/Scene3Back.mp3");
 	geoBackSound->setLoop(true); 
-	geoBackSound->play();
-
+	
 	geoExplosionSound = pAudioManager->load("GeoScene/Scene3_ExplodeOnly.mp3");
 	geoExplosionSound2 = pAudioManager->load("GeoScene/Scene3_ExplodeOnly2.mp3");
 	
@@ -194,3 +193,12 @@ GeoScene::~GeoScene()
 {
 }
 
+void GeoScene::onLoad()
+{
+	geoBackSound->play();
+}
+
+void GeoScene::onUnload()
+{
+	geoBackSound->stop();
+}
