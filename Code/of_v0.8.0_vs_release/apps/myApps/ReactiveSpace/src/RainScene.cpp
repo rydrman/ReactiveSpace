@@ -48,9 +48,16 @@ RainScene::RainScene(vector<Particle*>* people, vector<Particle*>* hands, AudioM
 		}
 	}
 
-	m_rainImage.loadImage("RainScene/RainDrops.png");
+	m_rainImage.loadImage("RainScene/rainDropsWhite.png");
 	m_rainBackground.loadImage("RainScene/RainBackground.png");
 	m_cloudImage.loadImage("RainScene/Clouds_spreadsheet.png");
+	
+	rainBackSound = pAudioManager->load("RainScene/Scene4_Background.mp3");
+	rainBackSound->setLoop(true); 
+
+
+
+
 }
 
 void RainScene::Render()
@@ -65,7 +72,15 @@ void RainScene::Render()
 	{
 		ofPushMatrix();
 			ofTranslate(m_rainParticles[i].pos);
-			m_rainImage.draw(0.f, 0.f, 0.f, 15.f, 30.f);
+			float angle = atan2f(m_rainParticles[i].vel.y, m_rainParticles[i].vel.x);
+			ofRotate(ofRadToDeg(angle));
+			//grey 230 230 230
+			//blue 176, 231, 255
+			ofSetColor(ofMap(angle, -PI, PI, 230, 176), 
+					ofMap(angle, -PI, PI, 230, 231), 
+					ofMap(angle, -PI, PI, 230, 255));
+			m_rainImage.draw(-15.f, 7.5f, 0.f, 30.f, 15.f);
+			ofSetColor(255);
 		ofPopMatrix();
 	}
 
@@ -206,12 +221,16 @@ void RainScene::addNewRainDrop(Particle* p)
 	if (whichStart < ratio)
 	{
 		
-		if (m_createNextInCloudNum > pPeople->size()-1)
-			
+		if (m_createNextInCloudNum > pPeople->size() - 1)
+		{
 			m_createNextInCloudNum = 0;
-		RainCloudParticle* rc = (RainCloudParticle*)(pPeople->at(m_createNextInCloudNum));
-		rc->addRainDrop(p);
-		++m_createNextInCloudNum;
+		}
+		if (pPeople->size() > 0)
+		{
+			RainCloudParticle* rc = (RainCloudParticle*)(pPeople->at(m_createNextInCloudNum));
+			rc->addRainDrop(p);
+			++m_createNextInCloudNum;
+		}
 
 	}
 	else
@@ -233,7 +252,7 @@ void RainScene::convertPeopleVector()
 	{
 		RainCloudParticle* p = new RainCloudParticle((*pOld)->pos);
 		p->m_cloudImage = &m_cloudImage;
-		p->m_size = ofVec2f(m_cloudImage.getWidth(), m_cloudImage.getHeight());
+		p->m_size = ofVec2f(m_cloudImage.getWidth()/4, m_cloudImage.getHeight());
 		newPeople.push_back(p);
 	}
 	*pPeople = newPeople;
@@ -249,4 +268,13 @@ Particle* RainScene::addParticleOfProperType(ofVec3f _pos)
 
 RainScene::~RainScene()
 {
+}
+void RainScene::onLoad()
+{
+	rainBackSound->play();
+}
+
+void RainScene::onUnload()
+{
+	rainBackSound->stop();
 }

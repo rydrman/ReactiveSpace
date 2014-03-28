@@ -2,17 +2,21 @@
 
 static float s_gradWidth = 1.f / 6.f;
 static int s_explosionTimeout = 500;
+static float s_countDownTime = 1000;
 
-GeoParticle::GeoParticle(ofVec3f _pos)
+GeoParticle::GeoParticle(ofVec3f _pos, ofSoundPlayer* explosionSound)
 : Particle(_pos)
 {
 	startTime = 0;
 	alphaTime = 0;
+	connected = false;
 	m_explodeTime = 0;
 	m_isExploding = false;
 	m_isDead = false;
 	alphaExplode = 250;
 	m_vbo.disableVAOs();
+
+	pExplosionSound = explosionSound;
 
 	//get a random radius
 	GeoSize = ofRandom(ofGetWidth() * 0.05, ofGetWidth() * 0.1);
@@ -95,6 +99,20 @@ void GeoParticle::update(float timeScale)
 		if (m_explodeTime >= s_explosionTimeout)
 			m_explodeTime = s_explosionTimeout;
 	}
+	else if (connected)
+	{
+		startTime += 16.f / timeScale;
+
+		if (startTime > s_countDownTime)
+		{
+			explode();
+			startTime = 0;
+		}
+	}
+	else
+	{
+		startTime = 0;
+	}
 
 	// update noise counters
 	for (int i = 0; i < m_numVerts; ++i)
@@ -113,7 +131,7 @@ void GeoParticle::update(float timeScale)
 	}
 	m_vbo.setVertexData(&m_currentVerts[0], m_numTriangles*3, GL_DYNAMIC_DRAW);
 
-
+	//set alpha for explosion pieces
 	if(m_isExploding == true){
 	alphaTime = alphaTime + timeScale*16.f;
 		if (alphaTime > s_explosionTimeout * 0.2){
@@ -231,31 +249,13 @@ void GeoParticle::getRandomTexCoord(ofVec2f* coords)
 	}
 }
 
-void GeoParticle::countDown(float dTime, ofSoundPlayer* geoExplosionSound, ofSoundPlayer* geoExplosionSound2)
-{
-	//if (vel.x == 0){
-			startTime = startTime + dTime*16.f;
-						
-						
-			if (startTime > 2000){
-				int coin = ofRandom(2);
-				if(coin ==0){geoExplosionSound->play();}
-				if(coin==1){geoExplosionSound2->play();}
-				
-				explode();
-				startTime = 0;
-			}
-	//}
-}
-
 void GeoParticle::explode()
 {
 	if (!m_isExploding)
 	{
+		pExplosionSound->play();
 		m_isExploding = true;
 		m_explodeTime = 0;
-
-
 	}
 }
 

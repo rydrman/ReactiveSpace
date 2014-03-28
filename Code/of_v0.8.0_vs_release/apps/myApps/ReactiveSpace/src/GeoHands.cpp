@@ -1,19 +1,22 @@
 #include "GeoHands.h"
 
+static float s_countDownTime = 1000;
 
 GeoHands::GeoHands(Particle _old)
 :Particle(_old)
 {
+	CountTimer = 0;
+	Interval = 0;
+	connected = false;
 }
 
 
 GeoHands::GeoHands(ofVec3f _pos)
 :Particle(_pos)
 {
-	
 	CountTimer = 0;
 	Interval = 0;
-	
+	connected = false;
 }
 
 
@@ -40,30 +43,24 @@ void GeoHands::drawHands(ofImage geoHands)
 		ofSetColor(255,0,0,100);
 		geoHands.draw(pos.x-185+ofRandom(-20,20),pos.y-185+ofRandom(-20,20));
 	}
-
-	
-		
 }
-void GeoHands::handCountDown(float timeScale , bool lock)
+
+void GeoHands::update(float timeScale)
 {
-	CountTimer = CountTimer + timeScale*16.f;
+	CountTimer += 16.f / timeScale;
 			
-		if(lock  == true){
-			if (CountTimer > 0){
+		if(connected){
+			if (CountTimer < s_countDownTime * 0.25f){
 				Interval = 1;
 			}		
-			if (CountTimer > 500){
+			else if (CountTimer < s_countDownTime * 0.5f){
 				Interval = 2;
 			}
-			if (CountTimer > 1000){
+			else if (CountTimer < s_countDownTime * 0.75f){
 				Interval = 3;
 			}
-			if (CountTimer > 1500){
+			else {
 				Interval = 4;
-			}
-			if (CountTimer >2000){
-				Interval = 0;
-				CountTimer = 0;
 			}
 		}else{
 				Interval = 0;

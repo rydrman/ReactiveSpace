@@ -53,13 +53,6 @@ void GeoScene::Render()
 		}
 	}
 
-	GeoHands* gh;
-	for (vector<Particle*>::iterator h = pHandPositions->begin(); h != pHandPositions->end(); ++h)
-	{
-		gh = (GeoHands*)(*h);
-		gh->drawHands(geoHands);
-	}
-
 	GeoParticle* gp;
 
 	for (vector<Particle*>::iterator p = pPeople->begin(); p != pPeople->end(); ++p)
@@ -67,6 +60,15 @@ void GeoScene::Render()
 		gp = (GeoParticle*)(*p);
 		gp->draw(&m_gradients, &explosionSprite);
 	}
+
+	GeoHands* gh;
+	for (vector<Particle*>::iterator h = pHandPositions->begin(); h != pHandPositions->end(); ++h)
+	{
+		gh = (GeoHands*)(*h);
+		gh->drawHands(geoHands);
+	}
+
+	
 }
 
 void GeoScene::Update(float timeScale)
@@ -74,71 +76,80 @@ void GeoScene::Update(float timeScale)
 	//update hands
 	GeoParticle* gp;
 	GeoHands* gh;
+	//reset vars first
+	for (vector<Particle*>::iterator h = pHandPositions->begin(); h != pHandPositions->end(); ++h)
+	{
+		((GeoHands*)(*h))->connected = false;
+	}
+	for (vector<Particle*>::iterator p = pPeople->begin(); p != pPeople->end(); ++p)
+	{
+		((GeoParticle*)(*p))->connected = false;
+	}
+
 	for (vector<Particle*>::iterator h = pHandPositions->begin(); h != pHandPositions->end(); ++h)
 	{
 		gh= (GeoHands*)(*h);
 
-		for (vector<Particle*>::iterator p = pPeople->begin(); p != pPeople->end();)
+		for (vector<Particle*>::iterator p = pPeople->begin(); p != pPeople->end(); ++p)
 		{
 			gp = (GeoParticle*)(*p);
 			if (gp->m_isExploding)
 			{
-				++p;
 				continue;
 			}
 
 			if ((*h)->pos.x + s_radius > ((*p)->pos.x) && (*h)->pos.x - s_radius<((*p)->pos.x)
 				&& (*h)->pos.y - 50 + s_radius >((*p)->pos.y) && (*h)->pos.y - s_radius < ((*p)->pos.y))
 			{
-				gp->countDown(timeScale, geoExplosionSound, geoExplosionSound2);
-				gh->handCountDown(timeScale, true);	
+				gp->connected = true;
+				gh->connected = true;	
 
-				if (gp->m_isExploding)
-				{
-					//add confetti
-					//find unused ones
-					int used = 0;
-					for (int i = 0; i < s_numConfetti; ++i)
-					{
-						if (m_confetti[i].timeout <= 0)
-						{
-							Confetti* c = &m_confetti[i];
-							c->p.pos = gp->pos;
-							c->p.vel = ofVec2f(ofRandom(-3, 3), ofRandom(-3, 3));
-							c->p.restitution = ofRandom(0.95, 0.99);
-							c->timeout = ofRandom(100.f, 200.f);
-							c->color = gp->getColor();
-							++used;
-						}
-
-						if (used == 100) break;
-					}
-				}
-				//remove it if necessary
-				else if( gp->m_isDead){
-					p = pPeople->erase(p);
-					continue;
-				}
-
-				goto stopSearching;
+				break;
 			}
-			else
-			{
-				gh->handCountDown(timeScale, false);
-			}
-			++p;
 		}
-
 	}
 
-	stopSearching:
-
-	//update geo particles
-	for (vector<Particle*>::iterator p = pPeople->begin(); p != pPeople->end(); ++p)
+	//update them
+	for (vector<Particle*>::iterator h = pHandPositions->begin(); h != pHandPositions->end(); ++h)
+	{
+		((GeoHands*)(*h))->update(timeScale);
+	}
+	for (vector<Particle*>::iterator p = pPeople->begin(); p != pPeople->end();)
 	{
 		gp = (GeoParticle*)(*p);
+
+		bool wasExploding = gp->m_isExploding;
+
 		gp->update(timeScale);
-	}	
+
+		if (gp->m_isExploding && !wasExploding)
+		{
+			//add confetti
+			//find unused ones
+			int used = 0;
+			for (int i = 0; i < s_numConfetti; ++i)
+			{
+				if (m_confetti[i].timeout <= 0)
+				{
+					Confetti* c = &m_confetti[i];
+					c->p.pos = gp->pos;
+					c->p.vel = ofVec2f(ofRandom(-3, 3), ofRandom(-3, 3));
+					c->p.restitution = ofRandom(0.95, 0.99);
+					c->timeout = ofRandom(100.f, 200.f);
+					c->color = gp->getColor();
+					++used;
+				}
+
+				if (used == 100) break;
+			}
+		}
+		//remove it if necessary
+		else if (gp->m_isDead){
+			p = pPeople->erase(p);
+			continue;
+		}
+		++p;
+	}
 
 	//update confetti
 	float unix = (float)ofGetUnixTime();
@@ -159,14 +170,34 @@ void GeoScene::convertPeopleVector()
 
 	for (vector<Particle*>::iterator pOld = pPeople->begin(); pOld != pPeople->end(); ++pOld)
 	{
-		GeoParticle* p = new GeoParticle((*pOld)->pos);
+		GeoParticle* p;
+		//toss a coin to pick sound
+		if (ofRandom(1.f) > 0.5f)
+		{
+			p = new GeoParticle((*pOld)->pos, geoExplosionSound);
+		}
+		else
+		{
+			p = new GeoParticle((*pOld)->pos, geoExplosionSound2);
+		}
+
+		
 		newPeople.push_back(p);
 	}
 	*pPeople = newPeople;
 }
 Particle* GeoScene::addParticleOfProperType(ofVec3f _pos)
 {
-	GeoParticle* p = new GeoParticle(_pos);
+	GeoParticle* p;
+	//toss a coin to pick sound
+	if (ofRandom(1.f) > 0.5f)
+	{
+		p = new GeoParticle(_pos, geoExplosionSound);
+	}
+	else
+	{
+		p = new GeoParticle(_pos, geoExplosionSound2);
+	}
 	pPeople->push_back(p);
 	return p;
 }
