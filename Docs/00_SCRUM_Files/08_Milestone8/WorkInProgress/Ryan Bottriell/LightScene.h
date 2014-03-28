@@ -20,19 +20,20 @@ class LightScene : public IScene
 	ofImage m_lightAlpha;
 
 	ofImage m_handsImage;
+	ofImage m_hexLineImg;
 
 	vector<Light> m_lights;
-	vector<Particle*> closestHand; 
+	vector<Particle*> m_closestHand; 
 
 	Boolean m_connectedToHands;
 
 	vector<HexagonParticle*> m_connectedParticles;
 	
 public:
-	LightScene(vector<Particle*>* people, vector<Particle*>* hands);
+	LightScene(vector<Particle*>* people, vector<Particle*>* hands, AudioManager* audioManager);
 
 	void Render();
-	void Update(int deltaTime);
+	void Update(float timeScale);
 
 	void onLoad();
 
