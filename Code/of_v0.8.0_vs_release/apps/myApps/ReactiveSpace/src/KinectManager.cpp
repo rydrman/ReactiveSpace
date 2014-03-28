@@ -151,6 +151,8 @@ HRESULT KinectManager::update(float timeScale)
 	else if (hr == E_NUI_FRAME_NO_DATA || hr == S_FALSE)
 	{
 		//new frame was not yet available
+		//if (hr == E_NUI_FRAME_NO_DATA)
+			//cout << "no Kinect Data" << ofGetFrameNum() << endl;
 		return MAKE_HRESULT(0, 0, 1);
 	}
 
