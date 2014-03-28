@@ -22,6 +22,7 @@ class RainScene : public IScene
 	ofImage m_rainImage;
 	ofImage m_rainBackground;
 	ofImage m_cloudImage;
+	ofImage m_cloudHand;
 	ofSoundPlayer* rainBackSound;
 
 public:
