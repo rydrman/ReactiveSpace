@@ -38,7 +38,7 @@ void HexagonParticle::separation(vector<HexagonParticle*>* connectedParticles)
 		if (distSqrd < s_neighDistSqrd){
 		
 			if (distSqrd < s_desiredSepSqrd && distSqrd > 0){
-				steerSep += (pos - (*c)->pos);
+				steerSep += (pos - (*c)->pos) * distSqrd-s_desiredSepSqrd;
 			}
 		
 			++count;
@@ -49,8 +49,7 @@ void HexagonParticle::separation(vector<HexagonParticle*>* connectedParticles)
 			steerSep /= (float)count;
 			//steerSep = steerSep.normalize() * maxSpeed;
 			//steerSep -= vel;
-			steerSep.limit(maxForce*0.2);
-			accel += steerSep;
+			applyForce( steerSep );
 			//accel.limit(maxSpeed);
 		}
 	}

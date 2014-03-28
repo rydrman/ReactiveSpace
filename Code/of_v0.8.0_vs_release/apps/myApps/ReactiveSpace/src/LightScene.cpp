@@ -187,6 +187,7 @@ void LightScene::Update(float timeScale)
 	for (vector<Particle*>::iterator p = pPeople->begin(); p != pPeople->end(); ++p)
 	{
 		hp = (HexagonParticle*)(*p);
+		hp->isConnected = false;
 
 		float distSqrd = std::numeric_limits<float>::max();
 		for (vector<Particle*>::iterator hands = pHandPositions->begin(); hands != pHandPositions->end(); ++hands){
@@ -195,8 +196,8 @@ void LightScene::Update(float timeScale)
 
 			hp->hexToHands = (*hands)->pos - hp->pos;
 
-			float offsetMap = ofMap(distSqrd, 22500, 90000, 0, 1);
-			ofClamp(offsetMap, 0, 1);
+			float offsetMap = ofMap(distSqrd, 22500.f, 90000.f, 0.f, 1.f);
+			ofClamp(offsetMap, 0.f, 1.f);
 
 			ofVec2f offsetAccel = hp->hexToHands*offsetMap;
 
@@ -210,10 +211,10 @@ void LightScene::Update(float timeScale)
 							
 				//apply tug and pull effect to particles when connected to hands
 				if (distSqrd > 90000){
-					hp->accel += offsetAccel;
+					hp->applyForce(offsetAccel * distSqrd-90000);
 				}
 				else if (distSqrd < 90000){
-					hp->accel -= offsetAccel*0.0025;
+					hp->applyForce(offsetAccel * distSqrd-90000);
 				}
 			}
 			else{
@@ -222,9 +223,7 @@ void LightScene::Update(float timeScale)
 			hp->separation(&m_connectedParticles);
 		}
 
-		if (hp->isConnected){
-			for (vector<Particle*>::iterator connectedhands = m_closestHand.begin(); connectedhands != m_closestHand.end(); ++connectedhands){
-				
+		if (hp->isConnected){					
 				hp->hexAlpha += 5;
 				if (hp->hexAlpha > 200){
 					hp->hexAlpha = 200;
@@ -234,8 +233,6 @@ void LightScene::Update(float timeScale)
 				if (hp->hexSize > 1){
 					hp->hexSize = 1;
 				}
-			}
-			//m_closestHand.clear();
 		}
 		else
 		{
@@ -261,6 +258,7 @@ void LightScene::convertPeopleVector()
 	for (vector<Particle*>::iterator pOld = pPeople->begin(); pOld != pPeople->end(); ++pOld)
 	{
 		HexagonParticle* p = new HexagonParticle((*pOld)->pos);
+		p->maxForce = 1.f;
 		newPeople.push_back(p);
 	}
 	*pPeople = newPeople;
@@ -268,6 +266,7 @@ void LightScene::convertPeopleVector()
 Particle* LightScene::addParticleOfProperType(ofVec3f _pos)
 {
 	HexagonParticle* p = new HexagonParticle(_pos);
+	p->maxForce = 1.f;
 	pPeople->push_back(p);
 	return p;
 }
