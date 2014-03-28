@@ -17,10 +17,12 @@ LightScene::LightScene(vector<Particle*>* people, vector<Particle*>* hands, Audi
 		ofVec2f(0.0f, ofGetHeight())
 	};
 
-	pPeople = people;
-	pHandPositions = hands;
+	pBackgroundSound = pAudioManager->load("LightScene/Scene2_Background.mp3");
+	pBackgroundSound->setLoop(true);
 
+	//for hands
 	m_connectedToHands = false;
+	m_connectedParticles = vector<HexagonParticle*>();
 
 	//load all images 
 	m_hexImgBorder.loadImage("LightScene/Hexagon.png");
@@ -40,16 +42,14 @@ LightScene::LightScene(vector<Particle*>* people, vector<Particle*>* hands, Audi
 	m_fogVbo.disableVAOs();
 	m_fogVbo.setVertexData(fogVerts, 4, GL_STATIC_DRAW);
 	m_fogVbo.setTexCoordData(s_fogTexCoords, 4, GL_STATIC_DRAW);
-
+	
+	//for lights
 	m_lights = vector<Light>();
-
 	for(int i = 0; i < ofGetWidth(); i += m_lightImg.width * 0.7){
 		Light l = Light();
 		l.x = i;
 		m_lights.push_back(l);	
 	}
-
-	m_connectedParticles = vector<HexagonParticle*>();
 }
 
 void LightScene::Render()
@@ -110,7 +110,7 @@ void LightScene::Render()
 		ofSetRectMode(OF_RECTMODE_CORNER);
 
 		float distSqrd = std::numeric_limits<float>::max();
-
+		vector<Particle*> closestHand; 
 		for(vector<Particle*>::iterator hands = pHandPositions->begin(); hands != pHandPositions->end(); ++hands){
 			
 			distSqrd = ofDistSquared( (*hands)->pos.x, (*hands)->pos.y, (*p)->pos.x, (*p)->pos.y);
@@ -119,8 +119,9 @@ void LightScene::Render()
 
 			float offsetMap = ofMap(distSqrd, 22500, 90000, 0, 1);
 			ofClamp(offsetMap, 0,1);
-			ofVec2f offsetAccel = hp->hexToHands*offsetMap;	
 
+			ofVec2f offsetAccel = hp->hexToHands*offsetMap;	
+			
 			if (distSqrd < 250000){				
 			
 				closestHand.push_back((*hands));	
@@ -268,6 +269,7 @@ Particle* LightScene::addParticleOfProperType(ofVec3f _pos)
 
 void LightScene::onLoad()
 {
+	pBackgroundSound->play();
 	/*m_fogVbo.
 
 	const ofVec2f fogVerts[] = {
@@ -279,6 +281,11 @@ void LightScene::onLoad()
 
 	m_fogVbo.setVertexData(fogVerts, 4, GL_STATIC_DRAW);
 	m_fogVbo.setTexCoordData(s_fogTexCoords, 4, GL_STATIC_DRAW);*/
+}
+
+void LightScene::onUnload()
+{
+	pBackgroundSound->stop();
 }
 
 LightScene::~LightScene()

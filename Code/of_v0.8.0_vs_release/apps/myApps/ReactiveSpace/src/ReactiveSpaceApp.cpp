@@ -36,6 +36,7 @@ void ReactiveSpaceApp::setup()
 	m_scenes.push_back(new GeoScene(&pPeople, &pHandPositions, &m_audioManager));
 	pCurrentScene = m_scenes[m_currentSceneNum];
 	pCurrentScene->convertPeopleVector();
+	pCurrentScene->onLoad();
 
 #ifdef DEBUG_DRAW
 	kinectUpdateMS = 0;
