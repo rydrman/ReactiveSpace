@@ -51,7 +51,7 @@ RainScene::RainScene(vector<Particle*>* people, vector<Particle*>* hands, AudioM
 	m_rainImage.loadImage("RainScene/rainDropsWhite.png");
 	m_rainBackground.loadImage("RainScene/RainBackground.png");
 	m_cloudImage.loadImage("RainScene/Clouds_spreadsheet.png");
-	
+	m_cloudHand.loadImage("RainScene/Hands_FINAL.png");
 	rainBackSound = pAudioManager->load("RainScene/Scene4_Background.mp3");
 	rainBackSound->setLoop(true); 
 
@@ -63,6 +63,54 @@ RainScene::RainScene(vector<Particle*>* people, vector<Particle*>* hands, AudioM
 void RainScene::Render()
 {
 	m_rainBackground.draw(0.f, 0.f, ofGetWidth(), ofGetHeight());
+
+	
+
+	//draw hands
+	ofSetColor(255, 255, 255, 255);
+	ofFill();
+	for (vector<Particle*>::iterator h = pHandPositions->begin(); h != pHandPositions->end(); ++h)
+	{
+		ofPushMatrix();
+		//ofTranslate((*h)->pos);
+		m_cloudHand.draw((*h)->pos.x -280/2,(*h)->pos.y-276/2,280,276); 
+		//ofCircle(0.f, 0.f, 0.f, 20.f);
+
+#ifdef DEBUG_DRAW
+		ofSetColor(0, 0, 0, 255);
+		ofFill();
+		ofDrawBitmapString(ofToString((*h)->ID, 0), 0.f, 0.f);
+		ofSetColor(0, 0, 0, 255);
+#endif
+		ofPopMatrix();
+	}
+
+#ifdef DEBUG_DRAW
+	//draw vector field
+	ofPushMatrix();
+	ofSetColor(180, 0, 0, 255);
+	ofTranslate(s_vectorFieldDensity *0.5f, s_vectorFieldDensity * 0.5f);
+
+	Particle* vect;
+	for (int i = 0; i < m_rainFieldWidth; ++i)
+	{
+		for (int j = 0; j < m_rainFieldHeight; ++j)
+		{
+			vect = &m_rainVectorField[(i*m_rainFieldHeight) + j];
+			float len = vect->vel.length();
+
+			ofPushMatrix();
+			ofTranslate(vect->pos);
+			ofFill();
+			ofRect(-2.f, -2.f, 2.f, 2.f);
+			ofNoFill();
+			ofRotate(ofRadToDeg(atan2f(vect->vel.y, vect->vel.x)));
+			ofLine(0.f, 0.f, len * 10.f, 0.f);
+			ofPopMatrix();
+		}
+	}
+	ofPopMatrix();
+#endif
 
 	//draw rain
 	ofFill();
@@ -91,51 +139,6 @@ void RainScene::Render()
 		rc = (RainCloudParticle*)(*p);
 		rc->draw();
 	}
-
-	//draw hands
-	ofSetColor(255, 255, 255, 255);
-	ofFill();
-	for (vector<Particle*>::iterator h = pHandPositions->begin(); h != pHandPositions->end(); ++h)
-	{
-		ofPushMatrix();
-		ofTranslate((*h)->pos);
-		ofCircle(0.f, 0.f, 0.f, 20.f);
-
-#ifdef DEBUG_DRAW
-		ofSetColor(0, 0, 0, 255);
-		ofFill();
-		ofDrawBitmapString(ofToString((*h)->ID, 0), 0.f, 0.f);
-		ofSetColor(0, 0, 0, 255);
-#endif
-		ofPopMatrix();
-	}
-
-#ifdef DEBUG_DRAW
-	//draw vector field
-	ofPushMatrix();
-	ofSetColor(180, 0, 0, 255);
-	ofTranslate(s_vectorFieldDensity *0.5f, s_vectorFieldDensity * 0.5f);
-
-	Particle* vector;
-	for (int i = 0; i < m_rainFieldWidth; ++i)
-	{
-		for (int j = 0; j < m_rainFieldHeight; ++j)
-		{
-			vector = &m_rainVectorField[(i*m_rainFieldHeight) + j];
-			float len = vector->vel.length();
-
-			ofPushMatrix();
-			ofTranslate(vector->pos);
-			ofFill();
-			ofRect(-2.f, -2.f, 2.f, 2.f);
-			ofNoFill();
-			ofRotate(ofRadToDeg(atan2f(vector->vel.y, vector->vel.x)));
-			ofLine(0.f, 0.f, len * 10.f, 0.f);
-			ofPopMatrix();
-		}
-	}
-	ofPopMatrix();
-#endif
 }
 
 void RainScene::Update(float timeScale)
