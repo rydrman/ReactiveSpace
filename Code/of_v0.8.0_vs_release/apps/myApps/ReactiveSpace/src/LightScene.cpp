@@ -16,9 +16,6 @@ LightScene::LightScene(vector<Particle*>* people, vector<Particle*>* hands, Audi
 		ofVec2f(ofGetWidth(), ofGetHeight()),
 		ofVec2f(0.0f, ofGetHeight())
 	};
-	
-	screenWidth = ofGetWidth();
-	screenHeight = ofGetHeight();
 
 	pBackgroundSound = pAudioManager->load("LightScene/Scene2_Background2.mp3");
 	pBackgroundSound->setLoop(true);
