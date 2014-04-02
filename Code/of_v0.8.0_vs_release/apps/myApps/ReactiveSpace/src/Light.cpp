@@ -9,6 +9,9 @@ ofVec2f s_flickerMap[] = {
 	//ofVec2f(400, 500),
 	//ofVec2f(600, 750)
 };
+ofVec2f s_flickerMap1[] = {
+	ofVec2f(0, 500)
+};
 
 Light::Light(void)
 {

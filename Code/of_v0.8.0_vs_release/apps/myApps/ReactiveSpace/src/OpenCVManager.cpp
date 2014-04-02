@@ -1,4 +1,5 @@
 #include "OpenCVManager.h"
+#include <exception>
 
 #define DO_CAMERA
 
@@ -145,31 +146,39 @@ void OpenCVManager::update(int timeScale)
 			ofVec2f deltaVec;
 			Particle* tmpVec;
 
-			for (int i = 0; i < m_numFeatures; ++i)
+			try
 			{
-				if (!m_pointFound[i]
-					|| m_newImgFeatures[i].x < 0
-					|| m_newImgFeatures[i].y < 0
-					|| m_newImgFeatures[i].x >= ofGetWidth()
-					|| m_newImgFeatures[i].y >= ofGetHeight())
-					continue;
 
-				deltaVec = ofVec2f(m_newImgFeatures[i].x - m_oldImgFeatures[i].x, m_newImgFeatures[i].y - m_oldImgFeatures[i].y);
-				
-				if (deltaVec.lengthSquared() < m_vectorFieldNorm * m_vectorFieldNorm)
-					continue;
+				for (int i = 0; i < m_numFeatures; ++i)
+				{
+					if (!m_pointFound[i]
+						|| m_newImgFeatures[i].x < 0
+						|| m_newImgFeatures[i].y < 0
+						|| m_newImgFeatures[i].x >= ofGetWidth()
+						|| m_newImgFeatures[i].y >= ofGetHeight())
+						continue;
 
-				//closest field value
-				int posX = (int) m_newImgFeatures[i].x * s_frameSizeInv.x * ofGetWidth() * s_vectorFieldDensityInv;
-				int posY = (int) (s_frameSize.height - m_newImgFeatures[i].y) * s_frameSizeInv.y * ofGetHeight() * s_vectorFieldDensityInv;
-				tmpVec = &m_vectorField[(posX * m_fieldHeight) + posY];
-				
-				//reverse for cv opposite y coord
-				deltaVec.y *= -1;
+					deltaVec = ofVec2f(m_newImgFeatures[i].x - m_oldImgFeatures[i].x, m_newImgFeatures[i].y - m_oldImgFeatures[i].y);
 
-				tmpVec->vel += deltaVec * timeScale * 0.5f;
+					if (deltaVec.lengthSquared() < m_vectorFieldNorm * m_vectorFieldNorm)
+						continue;
 
-				tmpVec->vel.limit(tmpVec->maxSpeed);
+					//closest field value
+					int posX = (int)m_newImgFeatures[i].x * s_frameSizeInv.x * ofGetWidth() * s_vectorFieldDensityInv;
+					int posY = (int)(s_frameSize.height - m_newImgFeatures[i].y) * s_frameSizeInv.y * ofGetHeight() * s_vectorFieldDensityInv;
+					tmpVec = &m_vectorField[(posX * m_fieldHeight) + posY];
+
+					//reverse for cv opposite y coord
+					deltaVec.y *= -1;
+
+					tmpVec->vel += deltaVec * timeScale * 0.5f;
+
+					tmpVec->vel.limit(tmpVec->maxSpeed);
+				}
+			}
+			catch (exception e)
+			{
+				cout << e.what() << endl;
 			}
 		}
 	}

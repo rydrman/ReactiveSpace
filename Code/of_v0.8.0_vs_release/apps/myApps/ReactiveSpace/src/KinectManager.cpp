@@ -87,6 +87,14 @@ HRESULT KinectManager::startKinect()
 HRESULT KinectManager::update(float timeScale)
 {
 	//first add time to particles and remove them if they're dead
+	try{
+		pHandPositions->size();
+	}
+	catch (exception e)
+	{
+		cout << e.what() << endl;
+		return MAKE_HRESULT(0, 0, -1);
+	}
 	for (vector<Particle*>::iterator hp = pHandPositions->begin(); hp != pHandPositions->end();)
 	{
 		(*hp)->timer += 16.f / timeScale;

@@ -159,7 +159,7 @@ void ReactiveSpaceApp::draw()
 //--------------------------------------------------------------
 void ReactiveSpaceApp::keyPressed(int key)
 {
-	/*switch (key){
+	switch (key){
 	case '1':
 		m_nextSceneNum = 0;
 		break;
@@ -172,7 +172,7 @@ void ReactiveSpaceApp::keyPressed(int key)
 	case '4':
 		m_nextSceneNum = 3;
 		break;
-	}*/
+	}
 }
 
 
@@ -191,8 +191,8 @@ void ReactiveSpaceApp::mouseMoved(int x, int y)
 //--------------------------------------------------------------
 void ReactiveSpaceApp::mouseDragged(int x, int y, int button)
 {
-	if (kinectManager->isFailed())
-	{
+	//if (kinectManager->isFailed())
+	//{
 		ofVec3f pos = ofVec3f(x, y);
 		Particle* p;
 		if (pHandPositions.size() == 0)
@@ -208,7 +208,7 @@ void ReactiveSpaceApp::mouseDragged(int x, int y, int button)
 			p->timer = 0;
 			p->update();
 		}
-	}
+	//}
 }
 
 //--------------------------------------------------------------
