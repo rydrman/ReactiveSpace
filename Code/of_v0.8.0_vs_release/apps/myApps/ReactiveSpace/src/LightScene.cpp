@@ -115,7 +115,7 @@ void LightScene::Render()
 					//draw lines from hands to connected particles
 					ofPushMatrix();
 					float angle = (atan2((*connectedhands)->pos.y - hp->pos.y, (*connectedhands)->pos.x - hp->pos.x) * 180 / PI)+90; //offset by 90 since image is pointing up
-					float dist = ofDist((*connectedhands)->pos.x/2, (*connectedhands)->pos.y/2, hp->pos.x/2, hp->pos.y/2);
+					float dist = ofDist((*connectedhands)->pos.x*0.5, (*connectedhands)->pos.y*0.5, hp->pos.x*0.5, hp->pos.y*0.5);
 					ofTranslate((*connectedhands)->pos.x, (*connectedhands)->pos.y);
 					ofRotate(angle);
 					ofScale(1, dist);
