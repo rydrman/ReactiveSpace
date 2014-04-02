@@ -53,7 +53,7 @@ RainScene::RainScene(vector<Particle*>* people, vector<Particle*>* hands, AudioM
 	m_rainBackground.loadImage("RainScene/City_FINAL.jpg");
 	m_cloudImage.loadImage("RainScene/Clouds_spreadsheet_FINAL.png");
 
-	m_cloudHand.loadImage("RainScene/Hands_FINAL.png");
+	m_cloudHand.loadImage("RainScene/Hands_Lighter.png");
 	rainBackSound = pAudioManager->load("RainScene/Scene4_Background.mp3");
 	rainBackSound->setLoop(true); 
 }
@@ -69,7 +69,7 @@ void RainScene::Render()
 	{
 		ofPushMatrix();
 		//ofTranslate((*h)->pos);
-		m_cloudHand.draw((*h)->pos.x -280/2,(*h)->pos.y-276/2,280,276); 
+		m_cloudHand.draw((*h)->pos.x -203/2,(*h)->pos.y-200/2,203,200); 
 		//ofCircle(0.f, 0.f, 0.f, 20.f);
 
 #ifdef DEBUG_DRAW

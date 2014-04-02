@@ -16,6 +16,9 @@ LightScene::LightScene(vector<Particle*>* people, vector<Particle*>* hands, Audi
 		ofVec2f(ofGetWidth(), ofGetHeight()),
 		ofVec2f(0.0f, ofGetHeight())
 	};
+	
+	screenWidth = ofGetWidth();
+	screenHeight = ofGetHeight();
 
 	pBackgroundSound = pAudioManager->load("LightScene/Scene2_Background2.mp3");
 	pBackgroundSound->setLoop(true);
@@ -24,14 +27,20 @@ LightScene::LightScene(vector<Particle*>* people, vector<Particle*>* hands, Audi
 	m_connectedToHands = false;
 	m_connectedParticles = vector<HexagonParticle*>();
 
-	//load all images 
+	//load background image
+	m_backgroundImg.loadImage("LightScene/lightsBackground.png");
+
+	//load hex images
 	m_hexImgBorder.loadImage("LightScene/Hexagon.png");
 	m_hexImgInner.loadImage("LightScene/hexagonFill.png");
-	m_lightImg.loadImage("LightScene/light.png"); 
-	m_lightTube.loadImage("LightScene/lightTube.png");
-	m_backgroundImg.loadImage("LightScene/lightsBackground.png");
-	m_handsImage.loadImage("LightScene/handsImage.png");
 	m_hexLineImg.loadImage("LightScene/hexLine_FINAL.png");
+
+	//load light images
+	m_lightImg.loadImage("LightScene/light.png"); 
+	m_lightTube.loadImage("LightScene/lightTube.png");	
+
+	//load hand image
+	m_handsImage.loadImage("LightScene/handsImage.png");
 
 	//for fog
 	m_fogShader.load("LightScene/fogShader");
@@ -55,6 +64,7 @@ LightScene::LightScene(vector<Particle*>* people, vector<Particle*>* hands, Audi
 void LightScene::Render()
 {
 	ofClear(0);
+
 	//draw lights for background
 	ofSetColor(255);
 	ofSetRectMode(OF_RECTMODE_CORNER);
@@ -66,6 +76,7 @@ void LightScene::Render()
 	}
 	ofDisableBlendMode();
 
+	//draw background image
 	ofEnableBlendMode(OF_BLENDMODE_MULTIPLY);
 	m_backgroundImg.draw(0, 0);
 	ofDisableBlendMode();
