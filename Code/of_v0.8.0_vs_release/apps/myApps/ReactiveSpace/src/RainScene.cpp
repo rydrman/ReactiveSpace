@@ -49,13 +49,10 @@ RainScene::RainScene(vector<Particle*>* people, vector<Particle*>* hands, AudioM
 	}
 
 	m_rainImage.loadImage("RainScene/rainDropsWhite.png");
-<<<<<<< HEAD
-	m_rainBackground.loadImage("RainScene/Background_FINAL.jpg");
-	m_cloudImage.loadImage("RainScene/Clouds_spreadsheet.png");
-=======
+
 	m_rainBackground.loadImage("RainScene/City_FINAL.jpg");
 	m_cloudImage.loadImage("RainScene/Clouds_spreadsheet_FINAL.png");
->>>>>>> 216870231acbc4144f694a723237c7e2e621ec54
+
 	m_cloudHand.loadImage("RainScene/Hands_FINAL.png");
 	rainBackSound = pAudioManager->load("RainScene/Scene4_Background.mp3");
 	rainBackSound->setLoop(true); 
