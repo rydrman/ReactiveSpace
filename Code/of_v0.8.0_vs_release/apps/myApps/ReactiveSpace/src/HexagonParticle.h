@@ -1,6 +1,6 @@
 #pragma once
 #include "ofMain.h"
-#include "Particle.h"
+#include "ParticleMain.h"
 
 //static separation 
 static const float s_desiredSepSqrd = 30000;
@@ -16,6 +16,7 @@ public :
 	float hexRotation;
 
 	bool isConnected;
+	vector<Particle*> connectedHands;
 	float hexMaxSize;
 	float hexGrowthRate;
 	ofVec2f hexToHands;
