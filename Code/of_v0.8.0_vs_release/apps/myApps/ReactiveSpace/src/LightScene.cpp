@@ -30,7 +30,7 @@ LightScene::LightScene(vector<Particle*>* people, vector<Particle*>* hands, Audi
 	//load hex images
 	m_hexImgBorder = pImageManager->load("LightScene/Hexagon.png");
 	m_hexImgInner = pImageManager->load("LightScene/hexagonFill.png");
-	m_hexLineImg = pImageManager->load("LightScene/hexLine_FINAL.png");
+	m_hexLineImg = pImageManager->load("LightScene/hexLine1_FINAL.png");
 
 	//load light images
 	m_lightImg = pImageManager->load("LightScene/light.png");
@@ -115,7 +115,7 @@ void LightScene::Render()
 					//draw lines from hands to connected particles
 					ofPushMatrix();
 					float angle = (atan2((*connectedhands)->pos.y - hp->pos.y, (*connectedhands)->pos.x - hp->pos.x) * 180 / PI)+90; //offset by 90 since image is pointing up
-					float dist = ofDist((*connectedhands)->pos.x, (*connectedhands)->pos.y, hp->pos.x, hp->pos.y);
+					float dist = ofDist((*connectedhands)->pos.x*0.5, (*connectedhands)->pos.y*0.5, hp->pos.x*0.5, hp->pos.y*0.5);
 					ofTranslate((*connectedhands)->pos.x, (*connectedhands)->pos.y);
 					ofRotate(angle);
 					ofScale(1, dist);
