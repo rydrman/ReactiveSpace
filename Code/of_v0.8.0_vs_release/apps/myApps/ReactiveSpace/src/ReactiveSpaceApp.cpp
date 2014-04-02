@@ -18,6 +18,7 @@ void ReactiveSpaceApp::setup()
 	//init time stuff
 	stepTimeDelta = 0;
 	stepTimeLast = ofGetElapsedTimeMillis();
+	sceneTimeCount = 0;
 
 	//open CV stuff
 	pCurrentScene = nullptr;
@@ -52,7 +53,7 @@ void ReactiveSpaceApp::update()
 	//get time since last step
 	float stepTime = ofGetElapsedTimeMillis();
 	stepTimeDelta = stepTime - stepTimeLast;
-
+	sceneTimeCount += stepTimeDelta;
 	float timeScale = stepTimeDelta / 16.f;
 
 #ifdef DEBUG_DRAW
@@ -133,6 +134,17 @@ void ReactiveSpaceApp::draw()
 #endif
 
 	//switch scene if necessary
+
+	if (sceneTimeCount > 60000){
+		
+		m_nextSceneNum++; 
+
+		if (m_nextSceneNum >= m_scenes.size()){
+			m_nextSceneNum = 0;	
+		}
+		sceneTimeCount = 0;
+	}
+
 	if (m_currentSceneNum != m_nextSceneNum)
 	{
 		pCurrentScene->onUnload();
@@ -147,7 +159,7 @@ void ReactiveSpaceApp::draw()
 //--------------------------------------------------------------
 void ReactiveSpaceApp::keyPressed(int key)
 {
-	switch (key){
+	/*switch (key){
 	case '1':
 		m_nextSceneNum = 0;
 		break;
@@ -160,8 +172,9 @@ void ReactiveSpaceApp::keyPressed(int key)
 	case '4':
 		m_nextSceneNum = 3;
 		break;
-	}
+	}*/
 }
+
 
 //--------------------------------------------------------------
 void ReactiveSpaceApp::keyReleased(int key)

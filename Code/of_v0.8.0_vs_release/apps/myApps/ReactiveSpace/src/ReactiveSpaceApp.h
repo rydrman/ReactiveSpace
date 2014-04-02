@@ -28,6 +28,7 @@ class ReactiveSpaceApp : public ofBaseApp{
 
 	float stepTimeDelta;
 	float stepTimeLast;
+	float sceneTimeCount;
 
 	//for kinect
 	KinectManager* kinectManager;
