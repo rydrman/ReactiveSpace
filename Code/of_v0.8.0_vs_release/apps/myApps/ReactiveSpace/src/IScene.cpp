@@ -41,6 +41,8 @@ void IScene::convertHandVector()
 	for (vector<Particle*>::iterator hOld = pHandPositions->begin(); hOld != pHandPositions->end(); ++hOld)
 	{
 		Particle* h = new Particle((*hOld)->pos);
+		h->jointIndex = (*hOld)->jointIndex;
+		h->ID = (*hOld)->ID;
 		newHands.push_back(h);
 	}
 	*pHandPositions = newHands;
