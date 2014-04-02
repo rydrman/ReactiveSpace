@@ -1,6 +1,6 @@
 #include "OpenCVManager.h"
 
-//#define DO_CAMERA
+#define DO_CAMERA
 
 static CvSize s_frameSize = cvSize(160, 120);
 static ofVec2f s_frameSizeInv = ofVec2f(1.f/s_frameSize.width, 1.f/s_frameSize.height);
