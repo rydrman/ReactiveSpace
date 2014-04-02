@@ -80,7 +80,7 @@ HRESULT KinectManager::startKinect()
 		cout << "Kinect couldn't initialize\n";
 	//else
 		//cout << "Kinect color stream successfully initialized\n";
-
+	
 	return hr;
 }
 
