@@ -75,7 +75,7 @@ GridScene::GridScene(vector<Particle*>* people, vector<Particle*>* hands, AudioM
 
 	//load resources
 	m_backgroundImage = ofImage();
-	m_backgroundImage.loadImage("GridScene/GridBackground.png");
+	m_backgroundImage.loadImage("GridScene/GridBackground_FINAL.png");
 	m_particleImage = ofImage();
 	m_particleImage.loadImage("GridScene/GridParticle.png");
 	m_particleShader = ofShader();
