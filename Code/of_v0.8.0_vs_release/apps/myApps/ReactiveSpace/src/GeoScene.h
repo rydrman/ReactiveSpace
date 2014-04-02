@@ -17,11 +17,11 @@ class GeoScene : public IScene
 	//ofImage geo1;
 	//ofImage geo2;
 	//ofImage geo3;
-	ofImage geoBack;
-	ofImage geoHands;
-	ofImage m_confettiImg;
+	ofImage* geoBack;
+	ofImage* geoHands;
+	ofImage* m_confettiImg;
 	
-	ofImage m_gradients;
+	ofImage* m_gradients;
 	ofSoundPlayer* geoBackSound;
 	ofSoundPlayer* geoExplosionSound;
 	ofSoundPlayer* geoExplosionSound2;
@@ -30,8 +30,8 @@ class GeoScene : public IScene
 	int screenW;
 	int screenH;
 public:
-	ofImage explosionSprite;
-	GeoScene(vector<Particle*>* people, vector<Particle*>* hands, AudioManager* audioManager);
+	ofImage* explosionSprite;
+	GeoScene(vector<Particle*>* people, vector<Particle*>* hands, AudioManager* audioManager, imageManager* imageManager);
 	
 	virtual void Render();
 	virtual void Update(float timeScale);

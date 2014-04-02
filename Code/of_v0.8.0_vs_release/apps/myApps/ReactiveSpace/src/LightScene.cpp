@@ -7,8 +7,8 @@ const ofVec2f s_fogTexCoords[] = {
 	ofVec2f(0.0f, 1.0f)
 };
 
-LightScene::LightScene(vector<Particle*>* people, vector<Particle*>* hands, AudioManager* audioManager)
-: IScene(people, hands, audioManager)
+LightScene::LightScene(vector<Particle*>* people, vector<Particle*>* hands, AudioManager* audioManager, imageManager* imageManager)
+: IScene(people, hands, audioManager, imageManager)
 {
 	const ofVec2f fogVerts[] = {
 		ofVec2f(0.f, 0.f),
@@ -16,9 +16,6 @@ LightScene::LightScene(vector<Particle*>* people, vector<Particle*>* hands, Audi
 		ofVec2f(ofGetWidth(), ofGetHeight()),
 		ofVec2f(0.0f, ofGetHeight())
 	};
-	
-	screenWidth = ofGetWidth();
-	screenHeight = ofGetHeight();
 
 	pBackgroundSound = pAudioManager->load("LightScene/Scene2_Background2.mp3");
 	pBackgroundSound->setLoop(true);
@@ -28,19 +25,19 @@ LightScene::LightScene(vector<Particle*>* people, vector<Particle*>* hands, Audi
 	m_connectedParticles = vector<HexagonParticle*>();
 
 	//load background image
-	m_backgroundImg.loadImage("LightScene/lightsBackground.png");
+	m_backgroundImg = pImageManager->load("LightScene/lightsBackground.png");
 
 	//load hex images
-	m_hexImgBorder.loadImage("LightScene/Hexagon.png");
-	m_hexImgInner.loadImage("LightScene/hexagonFill.png");
-	m_hexLineImg.loadImage("LightScene/hexLine_FINAL.png");
+	m_hexImgBorder = pImageManager->load("LightScene/Hexagon.png");
+	m_hexImgInner = pImageManager->load("LightScene/hexagonFill.png");
+	m_hexLineImg = pImageManager->load("LightScene/hexLine_FINAL.png");
 
 	//load light images
-	m_lightImg.loadImage("LightScene/light.png"); 
-	m_lightTube.loadImage("LightScene/lightTube.png");	
+	m_lightImg = pImageManager->load("LightScene/light.png");
+	m_lightTube = pImageManager->load("LightScene/lightTube.png");
 
 	//load hand image
-	m_handsImage.loadImage("LightScene/handsImage.png");
+	m_handsImage = pImageManager->load("LightScene/handsImage.png");
 
 	//for fog
 	m_fogShader.load("LightScene/fogShader");
@@ -54,7 +51,7 @@ LightScene::LightScene(vector<Particle*>* people, vector<Particle*>* hands, Audi
 	
 	//for lights
 	m_lights = vector<Light>();
-	for(int i = 0; i < ofGetWidth(); i += m_lightImg.width * 0.7){
+	for(int i = 0; i < ofGetWidth(); i += m_lightImg->width * 0.7){
 		Light l = Light();
 		l.x = i;
 		m_lights.push_back(l);	
@@ -71,14 +68,14 @@ void LightScene::Render()
 	ofEnableBlendMode(OF_BLENDMODE_ADD);
 	for (vector<Light>::iterator l = m_lights.begin(); l != m_lights.end(); ++l){
 		if (l->isOn() == true){
-			m_lightImg.draw(l->x - m_lightImg.width * 0.5, 0, 0);
+			m_lightImg->draw(l->x - m_lightImg->width * 0.5, 0, 0);
 		}
 	}
 	ofDisableBlendMode();
 
 	//draw background image
 	ofEnableBlendMode(OF_BLENDMODE_MULTIPLY);
-	m_backgroundImg.draw(0, 0);
+	m_backgroundImg->draw(0, 0);
 	ofDisableBlendMode();
 
 	ofEnableAlphaBlending();
@@ -86,7 +83,7 @@ void LightScene::Render()
 	//draw light tubes
 	for (vector<Light>::iterator l = m_lights.begin(); l != m_lights.end(); ++l){
 		if (l->isOn() == true){
-			m_lightTube.draw(l->x - m_lightImg.width * 0.5, 0, 0);
+			m_lightTube->draw(l->x - m_lightImg->width * 0.5, 0, 0);
 		}
 	}
 
@@ -103,10 +100,10 @@ void LightScene::Render()
 		ofRotate(hp->hexRotation); //give random rotation
 		ofScale(hp->hexSize, hp->hexSize); //set scale, this changes if connected
 		ofSetColor(hp->hexColor); //set color, this changes if connected
-		m_hexImgInner.draw(0, 0);
+		m_hexImgInner->draw(0, 0);
 
 		ofSetColor(255);
-		m_hexImgBorder.draw(0, 0);
+		m_hexImgBorder->draw(0, 0);
 		ofPopMatrix();
 
 		ofSetRectMode(OF_RECTMODE_CORNER);
@@ -122,7 +119,7 @@ void LightScene::Render()
 					ofTranslate((*connectedhands)->pos.x, (*connectedhands)->pos.y);
 					ofRotate(angle);
 					ofScale(1, dist);
-					m_hexLineImg.draw(0,0);
+					m_hexLineImg->draw(0,0);
 					ofPopMatrix();
 				}
 			}
@@ -163,7 +160,7 @@ void LightScene::Render()
 	for (vector<Particle*>::iterator hands = pHandPositions->begin(); hands != pHandPositions->end(); ++hands){
 		ofPushMatrix();
 		ofTranslate((*hands)->pos);
-		m_handsImage.draw(0, 0);
+		m_handsImage->draw(0, 0);
 		ofPopMatrix();
 	}
 	ofSetRectMode(OF_RECTMODE_CORNER);
@@ -180,7 +177,7 @@ void LightScene::Update(float timeScale)
 		for (vector<Particle*>::iterator p = pPeople->begin(); p != pPeople->end(); ++p)
 		{
 			hp = (HexagonParticle*)(*p);
-			if (hp->pos.x < l->x + m_lightImg.width*0.5 && hp->pos.x + (m_hexImgBorder.width*hp->hexSize)*0.5 > l->x)
+			if (hp->pos.x < l->x + m_lightImg->width*0.5 && hp->pos.x + (m_hexImgBorder->width*hp->hexSize)*0.5 > l->x)
 			{
 				l->turnOn();
 				turnedOn = true;

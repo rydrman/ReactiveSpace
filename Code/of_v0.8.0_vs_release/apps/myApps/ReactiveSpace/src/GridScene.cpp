@@ -22,8 +22,8 @@ const ofVec2f s_quadTexCoords[] = {
 	ofVec2f(0.0f, 1.0f)
 };
 
-GridScene::GridScene(vector<Particle*>* people, vector<Particle*>* hands, AudioManager* audioManager)
-: IScene(people, hands, audioManager)
+GridScene::GridScene(vector<Particle*>* people, vector<Particle*>* hands, AudioManager* audioManager, imageManager* imageManager)
+: IScene(people, hands, audioManager, imageManager)
 {
 
 	int screenHeight = ofGetHeight();

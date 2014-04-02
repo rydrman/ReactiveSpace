@@ -14,6 +14,7 @@
 #include "KinectManager.h"
 #include "OpenCVManager.h"
 #include "AudioManager.h"
+#include "imageManager.h"
 
 using std::vector;
 
@@ -25,6 +26,7 @@ class ReactiveSpaceApp : public ofBaseApp{
 	IScene* pCurrentScene;
 
 	AudioManager m_audioManager;
+	imageManager m_imageManager;
 
 	float stepTimeDelta;
 	float stepTimeLast;

@@ -27,7 +27,7 @@ class GridScene : public IScene
 	ofSoundPlayer* gridBackSound;
 
 public:
-	GridScene(vector<Particle*>* people, vector<Particle*>* hands, AudioManager* audioManager);
+	GridScene(vector<Particle*>* people, vector<Particle*>* hands, AudioManager* audioManager, imageManager* imageManager);
 	
 	virtual void Render();
 	virtual void Update(float timeScalee);

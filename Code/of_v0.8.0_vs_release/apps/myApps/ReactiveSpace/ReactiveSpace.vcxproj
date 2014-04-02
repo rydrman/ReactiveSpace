@@ -92,8 +92,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\imageManager.cpp" />
     <ClCompile Include="src\AudioManager.cpp" />
-    <ClCompile Include="lightHands.cpp" />
+    <ClCompile Include="src\lightHands.cpp" />
     <ClCompile Include="src\BirdParticle.cpp" />
     <ClCompile Include="src\GeoHands.cpp" />
     <ClCompile Include="src\GeoParticle.cpp" />
@@ -212,8 +213,9 @@
     <ClInclude Include="..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\video\background_segm.hpp" />
     <ClInclude Include="..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\video\tracking.hpp" />
     <ClInclude Include="..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\video\video.hpp" />
+    <ClInclude Include="src\imageManager.h" />
     <ClInclude Include="src\AudioManager.h" />
-    <ClInclude Include="lightHands.h" />
+    <ClInclude Include="src\lightHands.h" />
     <ClInclude Include="src\BirdParticle.h" />
     <ClInclude Include="src\GeoHands.h" />
     <ClInclude Include="src\GeoParticle.h" />

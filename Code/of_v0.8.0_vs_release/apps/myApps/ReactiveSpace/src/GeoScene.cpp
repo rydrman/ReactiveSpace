@@ -2,17 +2,17 @@
 
 static int s_radius = 100;
 static int s_numConfetti = 1000;
-GeoScene::GeoScene(vector<Particle*>* people, vector<Particle*>* hands, AudioManager* audioManager)
-: IScene(people, hands, audioManager)
+GeoScene::GeoScene(vector<Particle*>* people, vector<Particle*>* hands, AudioManager* audioManager, imageManager* imageManager)
+: IScene(people, hands, audioManager, imageManager)
 {
 	screenW = ofGetWidth();
 	screenH = ofGetHeight();	
 
-	geoBack.loadImage("GeoScene/Geometric_Background.jpg");
-	geoHands.loadImage("GeoScene/Hand_White.png");
-	m_gradients.loadImage("GeoScene/gradients.png");
-	explosionSprite.loadImage("GeoScene/Particles2.png");
-	m_confettiImg.loadImage("GeoScene/Particles.png");
+	geoBack = pImageManager->load("GeoScene/Geometric_Background.jpg");
+	geoHands = pImageManager->load("GeoScene/Hand_White.png");
+	m_gradients = pImageManager->load("GeoScene/gradients.png");
+	explosionSprite = pImageManager->load("GeoScene/Particles2.png");
+	m_confettiImg = pImageManager->load("GeoScene/Particles.png");
 
 	geoBackSound = pAudioManager->load("GeoScene/Scene3Back.mp3");
 	geoBackSound->setLoop(true); 
@@ -35,7 +35,7 @@ void GeoScene::Render()
 	ofBackground(0, 255);
 	ofSetColor(255);
 	ofPushMatrix();
-		geoBack.draw(0,0,0);
+		geoBack->draw(0,0,0);
 	ofPopMatrix();
 
 	//draw confetti
@@ -48,7 +48,7 @@ void GeoScene::Render()
 			ofPushMatrix();
 				ofSetColor(c->color);
 				ofTranslate(c->p.pos);
-				m_confettiImg.drawSubsection(0.f, 0.f, 10.f, 10.f, c->spriteX * 10, c->spriteY * 10);
+				m_confettiImg->drawSubsection(0.f, 0.f, 10.f, 10.f, c->spriteX * 10, c->spriteY * 10);
 			ofPopMatrix();
 		}
 	}
@@ -58,7 +58,7 @@ void GeoScene::Render()
 	for (vector<Particle*>::iterator p = pPeople->begin(); p != pPeople->end(); ++p)
 	{
 		gp = (GeoParticle*)(*p);
-		gp->draw(&m_gradients, &explosionSprite);
+		gp->draw(m_gradients, explosionSprite);
 	}
 
 	GeoHands* gh;

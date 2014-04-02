@@ -26,7 +26,7 @@ class RainScene : public IScene
 	ofSoundPlayer* rainBackSound;
 
 public:
-	RainScene(vector<Particle*>* people, vector<Particle*>* hands, AudioManager* audioManager);
+	RainScene(vector<Particle*>* people, vector<Particle*>* hands, AudioManager* audioManager, imageManager* imageManager);
 
 	virtual void Render();
 	virtual void Update(float timeScale);

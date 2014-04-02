@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="lightHands.cpp" />
     <ClCompile Include="src\BirdParticle.cpp" />
     <ClCompile Include="src\GeoHands.cpp" />
     <ClCompile Include="src\GeoParticle.cpp" />
@@ -26,6 +25,8 @@
     <ClCompile Include="src\ReactiveSpaceApp.cpp" />
     <ClCompile Include="src\RainCloudParticle.cpp" />
     <ClCompile Include="src\AudioManager.cpp" />
+    <ClCompile Include="src\lightHands.cpp" />
+    <ClCompile Include="src\imageManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\addons\ofxOpenCv\src\ofxCvBlob.h" />
@@ -121,7 +122,6 @@
     <ClInclude Include="..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\video\background_segm.hpp" />
     <ClInclude Include="..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\video\tracking.hpp" />
     <ClInclude Include="..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\video\video.hpp" />
-    <ClInclude Include="lightHands.h" />
     <ClInclude Include="src\BirdParticle.h" />
     <ClInclude Include="src\GeoHands.h" />
     <ClInclude Include="src\GeoParticle.h" />
@@ -139,6 +139,8 @@
     <ClInclude Include="src\ReactiveSpaceApp.h" />
     <ClInclude Include="src\RainCloudParticle.h" />
     <ClInclude Include="src\AudioManager.h" />
+    <ClInclude Include="src\lightHands.h" />
+    <ClInclude Include="src\imageManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />

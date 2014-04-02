@@ -31,10 +31,10 @@ void ReactiveSpaceApp::setup()
 	kinectManager->initialize();
 
 	//fill scene vector
-	m_scenes.push_back(new GridScene(&pPeople, &pHandPositions, &m_audioManager));
-	m_scenes.push_back(new LightScene(&pPeople, &pHandPositions, &m_audioManager));
-	m_scenes.push_back(new RainScene(&pPeople, &pHandPositions, &m_audioManager));
-	m_scenes.push_back(new GeoScene(&pPeople, &pHandPositions, &m_audioManager));
+	m_scenes.push_back(new GridScene(&pPeople, &pHandPositions, &m_audioManager, &m_imageManager));
+	m_scenes.push_back(new LightScene(&pPeople, &pHandPositions, &m_audioManager, &m_imageManager));
+	m_scenes.push_back(new RainScene(&pPeople, &pHandPositions, &m_audioManager, &m_imageManager));
+	m_scenes.push_back(new GeoScene(&pPeople, &pHandPositions, &m_audioManager, &m_imageManager));
 	pCurrentScene = m_scenes[m_currentSceneNum];
 	pCurrentScene->convertPeopleVector();
 	pCurrentScene->onLoad();

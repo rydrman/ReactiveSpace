@@ -18,7 +18,7 @@ public:
 	int Interval;
 	bool connected;
 
-	void drawHands(ofImage geoHands);
+	void drawHands(ofImage* geoHands);
 	void update(float timeScale);
 	GeoHands(void);
 	~GeoHands(void);
