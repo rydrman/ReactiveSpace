@@ -17,7 +17,7 @@ LightScene::LightScene(vector<Particle*>* people, vector<Particle*>* hands, Audi
 		ofVec2f(0.0f, ofGetHeight())
 	};
 
-	pBackgroundSound = pAudioManager->load("LightScene/Scene2_Background.mp3");
+	pBackgroundSound = pAudioManager->load("LightScene/Scene2_Background2.mp3");
 	pBackgroundSound->setLoop(true);
 
 	//for hands
