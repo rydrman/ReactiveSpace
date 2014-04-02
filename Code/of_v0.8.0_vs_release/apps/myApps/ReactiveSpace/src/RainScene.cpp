@@ -1,5 +1,5 @@
 #include "RainScene.h"
-#define DEBUG_DRAW 1
+//#define DEBUG_DRAW 1
 
 static const int s_numRainParticles = 1000;
 static const ofVec2f s_gravity = ofVec2f(0.0, 2.f);
@@ -49,25 +49,24 @@ RainScene::RainScene(vector<Particle*>* people, vector<Particle*>* hands, AudioM
 	}
 
 	m_rainImage.loadImage("RainScene/rainDropsWhite.png");
+<<<<<<< HEAD
 	m_rainBackground.loadImage("RainScene/Background_FINAL.jpg");
 	m_cloudImage.loadImage("RainScene/Clouds_spreadsheet.png");
+=======
+	m_rainBackground.loadImage("RainScene/City_FINAL.jpg");
+	m_cloudImage.loadImage("RainScene/Clouds_spreadsheet_FINAL.png");
+>>>>>>> 216870231acbc4144f694a723237c7e2e621ec54
 	m_cloudHand.loadImage("RainScene/Hands_FINAL.png");
 	rainBackSound = pAudioManager->load("RainScene/Scene4_Background.mp3");
 	rainBackSound->setLoop(true); 
-
-
-
-
 }
 
 void RainScene::Render()
 {
 	m_rainBackground.draw(0.f, 0.f, ofGetWidth(), ofGetHeight());
 
-	
-
 	//draw hands
-	ofSetColor(255, 255, 255, 255);
+	ofSetColor(255);
 	ofFill();
 	for (vector<Particle*>::iterator h = pHandPositions->begin(); h != pHandPositions->end(); ++h)
 	{
@@ -80,7 +79,7 @@ void RainScene::Render()
 		ofSetColor(0, 0, 0, 255);
 		ofFill();
 		ofDrawBitmapString(ofToString((*h)->ID, 0), 0.f, 0.f);
-		ofSetColor(0, 0, 0, 255);
+		ofSetColor(255);
 #endif
 		ofPopMatrix();
 	}
@@ -114,8 +113,6 @@ void RainScene::Render()
 
 	//draw rain
 	ofFill();
-	//ofSetColor(6, 297, 231);
-	ofSetColor( 255 );
 	for (int i = 0; i < s_numRainParticles; ++i)
 	{
 		ofPushMatrix();
@@ -124,13 +121,13 @@ void RainScene::Render()
 			ofRotate(ofRadToDeg(angle));
 			//grey 230 230 230
 			//blue 176, 231, 255
-			ofSetColor(ofMap(angle, -PI, PI, 230, 176), 
-					ofMap(angle, -PI, PI, 230, 231), 
-					ofMap(angle, -PI, PI, 230, 255));
+			ofSetColor(ofMap(abs(angle), 0, PI, 230, 176), 
+					230, 
+					ofMap(abs(angle), 0, PI, 230, 255));
 			m_rainImage.draw(-15.f, 7.5f, 0.f, 30.f, 15.f);
-			ofSetColor(255);
 		ofPopMatrix();
 	}
+	ofSetColor(255);
 
 	//draw clouds / people
 	RainCloudParticle* rc;

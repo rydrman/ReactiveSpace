@@ -185,6 +185,7 @@ void ReactiveSpaceApp::mouseDragged(int x, int y, int button)
 		if (pHandPositions.size() == 0)
 		{
 			p = pCurrentScene->addHandOfProperType(pos);
+			p->jointIndex = -1;
 			p->timer = 0;
 		}
 		else
