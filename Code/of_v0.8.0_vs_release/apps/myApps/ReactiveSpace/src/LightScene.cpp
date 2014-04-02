@@ -31,7 +31,7 @@ LightScene::LightScene(vector<Particle*>* people, vector<Particle*>* hands, Audi
 	m_lightTube.loadImage("LightScene/lightTube.png");
 	m_backgroundImg.loadImage("LightScene/lightsBackground.png");
 	m_handsImage.loadImage("LightScene/handsImage.png");
-	m_hexLineImg.loadImage("LightScene/hexLine.png");
+	m_hexLineImg.loadImage("LightScene/hexLine_FINAL.png");
 
 	//for fog
 	m_fogShader.load("LightScene/fogShader");
@@ -102,7 +102,7 @@ void LightScene::Render()
 		//if connected and m_closest hand has a size
 		if (hp->isConnected){
 			if (m_closestHand.size() != 0){
-				for (vector<Particle*>::iterator connectedhands = m_closestHand.begin(); connectedhands != m_closestHand.end(); ++connectedhands){
+				for (vector<Particle*>::iterator connectedhands = hp->connectedHands.begin(); connectedhands != hp->connectedHands.end(); ++connectedhands){
 
 					//draw lines from hands to connected particles
 					ofPushMatrix();
@@ -188,6 +188,7 @@ void LightScene::Update(float timeScale)
 	{
 		hp = (HexagonParticle*)(*p);
 		hp->isConnected = false;
+		hp->connectedHands.clear();
 
 		float distSqrd = std::numeric_limits<float>::max();
 		for (vector<Particle*>::iterator hands = pHandPositions->begin(); hands != pHandPositions->end(); ++hands){
@@ -204,6 +205,7 @@ void LightScene::Update(float timeScale)
 			//if close to hands connect them
 			if (distSqrd < 250000){
 				hp->isConnected = true;
+				hp->connectedHands.push_back((*hands));
 				m_closestHand.push_back((*hands));
 
 				//add to connected particles array and apply separation
@@ -216,9 +218,6 @@ void LightScene::Update(float timeScale)
 				else if (distSqrd < 90000){
 					hp->applyForce(offsetAccel * distSqrd-90000);
 				}
-			}
-			else{
-				hp->isConnected = false;
 			}
 			hp->separation(&m_connectedParticles);
 		}
