@@ -300,6 +300,7 @@ void GridScene::onUnload()
 		p->mood = 0.5f;
 		p->vel *= 0.f;
 		p->isHome = true;
+		p->pos = p->originalPos;
 	}
 
 	m_angryParticles.clear();
