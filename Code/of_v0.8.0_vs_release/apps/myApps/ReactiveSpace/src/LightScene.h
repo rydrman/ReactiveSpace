@@ -31,7 +31,6 @@ class LightScene : public IScene
 	vector<Particle*> m_closestHand; 
 	Boolean m_connectedToHands;
 	vector<HexagonParticle*> m_connectedParticles;
-
 	
 public:
 	LightScene(vector<Particle*>* people, vector<Particle*>* hands, AudioManager* audioManager);

@@ -159,7 +159,7 @@ void ReactiveSpaceApp::draw()
 //--------------------------------------------------------------
 void ReactiveSpaceApp::keyPressed(int key)
 {
-	/*switch (key){
+	switch (key){
 	case '1':
 		m_nextSceneNum = 0;
 		break;
@@ -172,7 +172,7 @@ void ReactiveSpaceApp::keyPressed(int key)
 	case '4':
 		m_nextSceneNum = 3;
 		break;
-	}*/
+	}
 }
 
 
