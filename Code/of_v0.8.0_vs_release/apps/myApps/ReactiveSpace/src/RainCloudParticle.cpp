@@ -14,7 +14,7 @@ void RainCloudParticle::draw()
 		//m_cloudImage->draw(-m_size.x * 0.5f, -m_size.y * 0.5f );
 		
 		//ofScale(0.2, 0.2);
-		m_cloudImage->drawSubsection(-m_size.x * 0.125f, -m_size.y * 0.5f, 488, 278,488*rando , 0);
+		m_cloudImage->drawSubsection(-m_size.x * 0.125f, -m_size.y * 0.5f, 400, 228,400*rando , 0);
 		
 		
 	ofPopMatrix();
