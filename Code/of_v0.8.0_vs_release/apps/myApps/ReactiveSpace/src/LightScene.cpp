@@ -211,7 +211,7 @@ void LightScene::Update(float timeScale)
 			ofVec2f offsetAccel = hp->hexToHands*offsetMap;
 
 			//if close to hands connect them
-			if (distSqrd < 250000){
+			if (distSqrd < 150000){
 				hp->isConnected = true;
 				hp->connectedHands.push_back((*hands));
 				m_closestHand.push_back((*hands));

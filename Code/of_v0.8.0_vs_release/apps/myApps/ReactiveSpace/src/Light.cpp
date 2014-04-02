@@ -1,13 +1,18 @@
 #include "Light.h"
 
-int s_flickerMapLen = 3;
-int s_flickerTimeMS = 500;
+int flickerLight = 0;
+int s_flickerMapLen = 1;
+int s_flickerTimeMS = 300;
 ofVec2f s_flickerMap[] = {
 	ofVec2f(0, 50),
 	ofVec2f(100, 120),
 	ofVec2f(300, 375)
 	//ofVec2f(400, 500),
 	//ofVec2f(600, 750)
+};
+
+ofVec2f s_flickerMap1[] = {
+	ofVec2f(0, 500)
 };
 
 Light::Light(void)
@@ -39,7 +44,7 @@ void Light::update(float timeScale)
 	{
 		timer += (16.f / timeScale);
 
-		if (timer < s_flickerTimeMS)
+		if (timer < s_flickerTimeMS && flickerLight == 3)
 		{
 			m_isOn = false;
 			for (int i = 0; i < s_flickerMapLen; ++i)
@@ -50,9 +55,13 @@ void Light::update(float timeScale)
 					break;
 				}
 			}
+			flickerLight = 0;
 		}
+		
+
 		else
 		{
+			flickerLight = flickerLight + 1;
 			m_isOn = true;
 		}
 	}

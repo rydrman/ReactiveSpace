@@ -16,6 +16,7 @@ public:
 	void turnOn();
 	bool isOn();
 	void turnOff();
+	int flickerLight;
 
 	void update(float timeScale);
 

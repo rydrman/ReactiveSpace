@@ -258,7 +258,7 @@ Particle* RainScene::addParticleOfProperType(ofVec3f _pos)
 {
 	RainCloudParticle* p = new RainCloudParticle(_pos);
 	p->m_cloudImage = &m_cloudImage;
-	p->m_size = ofVec2f(m_cloudImage.getWidth(), m_cloudImage.getHeight());
+	p->m_size = ofVec2f(m_cloudImage.getWidth() * 0.25f, m_cloudImage.getHeight());
 	pPeople->push_back(p);
 	return p;
 }

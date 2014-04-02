@@ -154,7 +154,7 @@ void GridScene::Render()
 	m_particleShader.end();
 
 	//draw hands
-	ofSetColor(255, 0, 0, 255);
+	ofSetColor(122, 193, 66, 255);
 	ofFill();
 	for (vector<Particle*>::iterator h = pHandPositions->begin(); h != pHandPositions->end(); ++h)
 	{
@@ -300,6 +300,7 @@ void GridScene::onUnload()
 		p->mood = 0.5f;
 		p->vel *= 0.f;
 		p->isHome = true;
+		p->pos = p->originalPos;
 	}
 
 	m_angryParticles.clear();
