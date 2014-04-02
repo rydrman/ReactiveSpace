@@ -154,7 +154,7 @@ void GridScene::Render()
 	m_particleShader.end();
 
 	//draw hands
-	ofSetColor(255, 0, 0, 255);
+	ofSetColor(122, 193, 66, 255);
 	ofFill();
 	for (vector<Particle*>::iterator h = pHandPositions->begin(); h != pHandPositions->end(); ++h)
 	{
