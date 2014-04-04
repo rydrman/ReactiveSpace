@@ -163,7 +163,6 @@ void GeoScene::Update(float timeScale)
 	}
 }
 
-
 void GeoScene::convertPeopleVector()
 {
 	vector<Particle*> newPeople = vector<Particle*>();
@@ -209,6 +208,8 @@ void GeoScene::convertHandVector()
 	for (vector<Particle*>::iterator hOld = pHandPositions->begin(); hOld != pHandPositions->end(); ++hOld)
 	{
 		GeoHands* h = new GeoHands((*hOld)->pos);
+		h->jointIndex = (*hOld)->jointIndex;
+		h->ID = (*hOld)->ID;
 		newHands.push_back(h);
 	}
 	*pHandPositions = newHands;

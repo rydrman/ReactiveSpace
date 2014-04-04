@@ -1,10 +1,11 @@
 #include "IScene.h"
 
-IScene::IScene(vector<Particle*>* people, vector<Particle*>* hands, AudioManager* audioManager)
+IScene::IScene(vector<Particle*>* people, vector<Particle*>* hands, AudioManager* audioManager, imageManager* imageManager)
 {
 	pPeople = people;
 	pHandPositions = hands;
 	pAudioManager = audioManager;
+	pImageManager = imageManager;
 }
 
 void IScene::onUnload()
@@ -41,6 +42,8 @@ void IScene::convertHandVector()
 	for (vector<Particle*>::iterator hOld = pHandPositions->begin(); hOld != pHandPositions->end(); ++hOld)
 	{
 		Particle* h = new Particle((*hOld)->pos);
+		h->jointIndex = (*hOld)->jointIndex;
+		h->ID = (*hOld)->ID;
 		newHands.push_back(h);
 	}
 	*pHandPositions = newHands;

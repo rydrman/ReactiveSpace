@@ -149,6 +149,9 @@ void RainScene::Update(float timeScale)
 			int posX = (int)(*h)->pos.x / s_vectorFieldDensity;
 			int posY = (int)(*h)->pos.y / s_vectorFieldDensity;
 
+			if (posX >= m_rainFieldWidth) posX = m_rainFieldWidth - 1;
+			if (posY >= m_rainFieldHeight) posY = m_rainFieldHeight - 1;
+
 			m_rainVectorField[(posX * m_rainFieldHeight) + posY].vel += (*h)->vel * timeScale * 0.1f;
 			m_rainVectorField[(posX * m_rainFieldHeight) + posY].vel.limit( m_rainVectorField[(posX * m_rainFieldHeight) + posY].maxSpeed );
 		}

@@ -5,12 +5,19 @@
 
 class LightScene : public IScene
 {
-	ofImage m_hexImgBorder;
-	ofImage m_hexImgInner;
-	ofImage m_lightImg;
-	ofImage m_lightTube;
-	ofImage m_backgroundImg;
-	
+	//for hex
+	ofImage* m_hexImgBorder;
+	ofImage* m_hexImgInner;
+	ofImage* m_hexLineImg;
+
+	//for lights
+	ofImage* m_lightImg;
+	ofImage* m_lightTube;
+	vector<Light> m_lights;
+
+	//for background and sound
+	ofImage* m_backgroundImg;
+	ofSoundPlayer* pBackgroundSound;
 
 	//for fog
 	ofShader m_fogShader;
@@ -19,23 +26,20 @@ class LightScene : public IScene
 	ofFbo m_fogAlphaMask;
 	ofImage m_lightAlpha;
 
-	ofImage m_handsImage;
-	ofImage m_hexLineImg;
-
-	vector<Light> m_lights;
+	//for hands
+	ofImage* m_handsImage;
 	vector<Particle*> m_closestHand; 
-
 	Boolean m_connectedToHands;
-
 	vector<HexagonParticle*> m_connectedParticles;
 	
 public:
-	LightScene(vector<Particle*>* people, vector<Particle*>* hands, AudioManager* audioManager);
+	LightScene(vector<Particle*>* people, vector<Particle*>* hands, AudioManager* audioManager, imageManager* imageManager);
 
 	void Render();
 	void Update(float timeScale);
 
 	void onLoad();
+	void onUnload();
 
 	void convertPeopleVector();
 	Particle* addParticleOfProperType(ofVec3f _pos);

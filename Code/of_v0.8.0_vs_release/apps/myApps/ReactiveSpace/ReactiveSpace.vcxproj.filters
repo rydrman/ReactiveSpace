@@ -25,7 +25,6 @@
     <ClCompile Include="src\ReactiveSpaceApp.cpp" />
     <ClCompile Include="src\RainCloudParticle.cpp" />
     <ClCompile Include="src\AudioManager.cpp" />
-    <ClCompile Include="src\lightHands.cpp" />
     <ClCompile Include="src\imageManager.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -139,7 +138,6 @@
     <ClInclude Include="src\ReactiveSpaceApp.h" />
     <ClInclude Include="src\RainCloudParticle.h" />
     <ClInclude Include="src\AudioManager.h" />
-    <ClInclude Include="src\lightHands.h" />
     <ClInclude Include="src\imageManager.h" />
   </ItemGroup>
   <ItemGroup>

@@ -18,6 +18,7 @@ void ReactiveSpaceApp::setup()
 	//init time stuff
 	stepTimeDelta = 0;
 	stepTimeLast = ofGetElapsedTimeMillis();
+	sceneTimeCount = 0;
 
 	//open CV stuff
 	pCurrentScene = nullptr;
@@ -30,12 +31,13 @@ void ReactiveSpaceApp::setup()
 	kinectManager->initialize();
 
 	//fill scene vector
-	m_scenes.push_back(new GridScene(&pPeople, &pHandPositions, &m_audioManager));
-	m_scenes.push_back(new LightScene(&pPeople, &pHandPositions, &m_audioManager));
-	m_scenes.push_back(new RainScene(&pPeople, &pHandPositions, &m_audioManager));
-	m_scenes.push_back(new GeoScene(&pPeople, &pHandPositions, &m_audioManager));
+	m_scenes.push_back(new GridScene(&pPeople, &pHandPositions, &m_audioManager, &m_imageManager));
+	m_scenes.push_back(new LightScene(&pPeople, &pHandPositions, &m_audioManager, &m_imageManager));
+	m_scenes.push_back(new RainScene(&pPeople, &pHandPositions, &m_audioManager, &m_imageManager));
+	m_scenes.push_back(new GeoScene(&pPeople, &pHandPositions, &m_audioManager, &m_imageManager));
 	pCurrentScene = m_scenes[m_currentSceneNum];
 	pCurrentScene->convertPeopleVector();
+	pCurrentScene->onLoad();
 
 #ifdef DEBUG_DRAW
 	kinectUpdateMS = 0;
@@ -51,7 +53,7 @@ void ReactiveSpaceApp::update()
 	//get time since last step
 	float stepTime = ofGetElapsedTimeMillis();
 	stepTimeDelta = stepTime - stepTimeLast;
-
+	sceneTimeCount += stepTimeDelta;
 	float timeScale = stepTimeDelta / 16.f;
 
 #ifdef DEBUG_DRAW
@@ -132,6 +134,17 @@ void ReactiveSpaceApp::draw()
 #endif
 
 	//switch scene if necessary
+
+	if (sceneTimeCount > 60000){
+		
+		m_nextSceneNum++; 
+
+		if (m_nextSceneNum >= m_scenes.size()){
+			m_nextSceneNum = 0;	
+		}
+		sceneTimeCount = 0;
+	}
+
 	if (m_currentSceneNum != m_nextSceneNum)
 	{
 		pCurrentScene->onUnload();
@@ -162,6 +175,7 @@ void ReactiveSpaceApp::keyPressed(int key)
 	}
 }
 
+
 //--------------------------------------------------------------
 void ReactiveSpaceApp::keyReleased(int key)
 {
@@ -177,13 +191,14 @@ void ReactiveSpaceApp::mouseMoved(int x, int y)
 //--------------------------------------------------------------
 void ReactiveSpaceApp::mouseDragged(int x, int y, int button)
 {
-	if (kinectManager->isFailed())
-	{
+	//if (kinectManager->isFailed())
+	//{
 		ofVec3f pos = ofVec3f(x, y);
 		Particle* p;
 		if (pHandPositions.size() == 0)
 		{
 			p = pCurrentScene->addHandOfProperType(pos);
+			p->jointIndex = -1;
 			p->timer = 0;
 		}
 		else
@@ -193,7 +208,7 @@ void ReactiveSpaceApp::mouseDragged(int x, int y, int button)
 			p->timer = 0;
 			p->update();
 		}
-	}
+	//}
 }
 
 //--------------------------------------------------------------
