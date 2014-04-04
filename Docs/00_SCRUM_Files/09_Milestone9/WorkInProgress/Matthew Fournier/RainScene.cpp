@@ -1,5 +1,5 @@
 #include "RainScene.h"
-#define DEBUG_DRAW 1
+//#define DEBUG_DRAW 1
 
 static const int s_numRainParticles = 1000;
 static const ofVec2f s_gravity = ofVec2f(0.0, 2.f);
@@ -7,8 +7,8 @@ static const ofVec2f s_gravity = ofVec2f(0.0, 2.f);
 static const int s_vectorFieldDensity = 75;
 static const float s_vectorFieldDensityInv = 1.f / s_vectorFieldDensity;
 
-RainScene::RainScene(vector<Particle*>* people, vector<Particle*>* hands)
-: IScene(people, hands)
+RainScene::RainScene(vector<Particle*>* people, vector<Particle*>* hands, AudioManager* audioManager, imageManager* imageManager)
+: IScene(people, hands, audioManager, imageManager)
 {
 
 	int screenW = ofGetWidth();
@@ -48,49 +48,35 @@ RainScene::RainScene(vector<Particle*>* people, vector<Particle*>* hands)
 		}
 	}
 
-	m_rainImage.loadImage("RainScene/RainDrops.png");
-	m_rainBackground.loadImage("RainScene/RainBackground.png");
-	m_cloudImage.loadImage("RainScene/Clouds_spreadsheet.png");
+	m_rainImage.loadImage("RainScene/rainDropsWhite.png");
+
+	m_rainBackground.loadImage("RainScene/City_FINAL.jpg");
+	m_cloudImage.loadImage("RainScene/Clouds_spreadsheet_FINAL.png");
+
+	m_cloudHand.loadImage("RainScene/Hands_Lighter.png");
+	rainBackSound = pAudioManager->load("RainScene/Scene4_Background.mp3");
+	rainBackSound->setLoop(true); 
 }
 
 void RainScene::Render()
 {
 	m_rainBackground.draw(0.f, 0.f, ofGetWidth(), ofGetHeight());
 
-	//draw rain
-	ofFill();
-	//ofSetColor(6, 297, 231);
-	ofSetColor( 255 );
-	for (int i = 0; i < s_numRainParticles; ++i)
-	{
-		ofPushMatrix();
-			ofTranslate(m_rainParticles[i].pos);
-			m_rainImage.draw(0.f, 0.f, 0.f, 15.f, 30.f);
-		ofPopMatrix();
-	}
-
-	//draw clouds / people
-	RainCloudParticle* rc;
-	for (vector<Particle*>::iterator p = pPeople->begin(); p != pPeople->end(); ++p)
-	{
-		rc = (RainCloudParticle*)(*p);
-		rc->draw();
-	}
-
 	//draw hands
-	ofSetColor(255, 255, 255, 255);
+	ofSetColor(255);
 	ofFill();
 	for (vector<Particle*>::iterator h = pHandPositions->begin(); h != pHandPositions->end(); ++h)
 	{
 		ofPushMatrix();
-		ofTranslate((*h)->pos);
-		ofCircle(0.f, 0.f, 0.f, 20.f);
+		//ofTranslate((*h)->pos);
+		m_cloudHand.draw((*h)->pos.x -203/2,(*h)->pos.y-200/2,203,200); 
+		//ofCircle(0.f, 0.f, 0.f, 20.f);
 
 #ifdef DEBUG_DRAW
 		ofSetColor(0, 0, 0, 255);
 		ofFill();
 		ofDrawBitmapString(ofToString((*h)->ID, 0), 0.f, 0.f);
-		ofSetColor(0, 0, 0, 255);
+		ofSetColor(255);
 #endif
 		ofPopMatrix();
 	}
@@ -101,29 +87,55 @@ void RainScene::Render()
 	ofSetColor(180, 0, 0, 255);
 	ofTranslate(s_vectorFieldDensity *0.5f, s_vectorFieldDensity * 0.5f);
 
-	Particle* vector;
+	Particle* vect;
 	for (int i = 0; i < m_rainFieldWidth; ++i)
 	{
 		for (int j = 0; j < m_rainFieldHeight; ++j)
 		{
-			vector = &m_rainVectorField[(i*m_rainFieldHeight) + j];
-			float len = vector->vel.length();
+			vect = &m_rainVectorField[(i*m_rainFieldHeight) + j];
+			float len = vect->vel.length();
 
 			ofPushMatrix();
-			ofTranslate(vector->pos);
+			ofTranslate(vect->pos);
 			ofFill();
 			ofRect(-2.f, -2.f, 2.f, 2.f);
 			ofNoFill();
-			ofRotate(ofRadToDeg(atan2f(vector->vel.y, vector->vel.x)));
+			ofRotate(ofRadToDeg(atan2f(vect->vel.y, vect->vel.x)));
 			ofLine(0.f, 0.f, len * 10.f, 0.f);
 			ofPopMatrix();
 		}
 	}
 	ofPopMatrix();
 #endif
+
+	//draw rain
+	ofFill();
+	for (int i = 0; i < s_numRainParticles; ++i)
+	{
+		ofPushMatrix();
+			ofTranslate(m_rainParticles[i].pos);
+			float angle = atan2f(m_rainParticles[i].vel.y, m_rainParticles[i].vel.x);
+			ofRotate(ofRadToDeg(angle));
+			//grey 230 230 230
+			//blue 176, 231, 255
+			ofSetColor(ofMap(abs(angle), 0, PI, 230, 176), 
+					230, 
+					ofMap(abs(angle), 0, PI, 230, 255));
+			m_rainImage.draw(-15.f, 7.5f, 0.f, 30.f, 15.f);
+		ofPopMatrix();
+	}
+	ofSetColor(255);
+
+	//draw clouds / people
+	RainCloudParticle* rc;
+	for (vector<Particle*>::iterator p = pPeople->begin(); p != pPeople->end(); ++p)
+	{
+		rc = (RainCloudParticle*)(*p);
+		rc->draw();
+	}
 }
 
-void RainScene::Update(int timeScale)
+void RainScene::Update(float timeScale)
 {
 	int screenH = ofGetHeight();
 
@@ -206,12 +218,16 @@ void RainScene::addNewRainDrop(Particle* p)
 	if (whichStart < ratio)
 	{
 		
-		if (m_createNextInCloudNum > pPeople->size()-1)
-			
+		if (m_createNextInCloudNum > pPeople->size() - 1)
+		{
 			m_createNextInCloudNum = 0;
-		RainCloudParticle* rc = (RainCloudParticle*)(pPeople->at(m_createNextInCloudNum));
-		rc->addRainDrop(p);
-		++m_createNextInCloudNum;
+		}
+		if (pPeople->size() > 0)
+		{
+			RainCloudParticle* rc = (RainCloudParticle*)(pPeople->at(m_createNextInCloudNum));
+			rc->addRainDrop(p);
+			++m_createNextInCloudNum;
+		}
 
 	}
 	else
@@ -233,7 +249,7 @@ void RainScene::convertPeopleVector()
 	{
 		RainCloudParticle* p = new RainCloudParticle((*pOld)->pos);
 		p->m_cloudImage = &m_cloudImage;
-		p->m_size = ofVec2f(m_cloudImage.getWidth(), m_cloudImage.getHeight());
+		p->m_size = ofVec2f(m_cloudImage.getWidth()/4, m_cloudImage.getHeight());
 		newPeople.push_back(p);
 	}
 	*pPeople = newPeople;
@@ -242,11 +258,20 @@ Particle* RainScene::addParticleOfProperType(ofVec3f _pos)
 {
 	RainCloudParticle* p = new RainCloudParticle(_pos);
 	p->m_cloudImage = &m_cloudImage;
-	p->m_size = ofVec2f(m_cloudImage.getWidth(), m_cloudImage.getHeight());
+	p->m_size = ofVec2f(m_cloudImage.getWidth() * 0.25f, m_cloudImage.getHeight());
 	pPeople->push_back(p);
 	return p;
 }
 
 RainScene::~RainScene()
 {
+}
+void RainScene::onLoad()
+{
+	rainBackSound->play();
+}
+
+void RainScene::onUnload()
+{
+	rainBackSound->stop();
 }
