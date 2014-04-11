@@ -19,10 +19,10 @@ class RainScene : public IScene
 	int m_createNextInCloudNum;
 	int ratio;
 
-	ofImage m_rainImage;
-	ofImage m_rainBackground;
-	ofImage m_cloudImage;
-	ofImage m_cloudHand;
+	ofImage* m_rainImage;
+	ofImage* m_rainBackground;
+	ofImage* m_cloudImage;
+	ofImage* m_cloudHand;
 	ofSoundPlayer* rainBackSound;
 
 public:

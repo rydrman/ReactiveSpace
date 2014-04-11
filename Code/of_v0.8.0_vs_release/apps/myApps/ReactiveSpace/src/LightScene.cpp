@@ -30,7 +30,7 @@ LightScene::LightScene(vector<Particle*>* people, vector<Particle*>* hands, Audi
 	//load hex images
 	m_hexImgBorder = pImageManager->load("LightScene/Hexagon.png");
 	m_hexImgInner = pImageManager->load("LightScene/hexagonFill.png");
-	m_hexLineImg = pImageManager->load("LightScene/hexLine1_FINAL.png");
+	m_hexLineImg = pImageManager->load("LightScene/hexLine1_FINAL.png", false);
 
 	//load light images
 	m_lightImg = pImageManager->load("LightScene/light.png");

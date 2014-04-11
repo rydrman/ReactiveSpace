@@ -23,7 +23,7 @@ void ReactiveSpaceApp::setup()
 	//open CV stuff
 	pCurrentScene = nullptr;
 	pPeople = vector<Particle*>();
-	openCVManager = new OpenCVManager(&pPeople, &pCurrentScene);
+	openCVManager = new OpenCVManager(&pPeople, &pCurrentScene, m_imageManager.getScaleFactor());
 
 	//kinect
 	pHandPositions = vector<Particle*>();

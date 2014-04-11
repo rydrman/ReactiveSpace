@@ -5,7 +5,6 @@ static const int s_numRainParticles = 1000;
 static const ofVec2f s_gravity = ofVec2f(0.0, 2.f);
 
 static const int s_vectorFieldDensity = 75;
-static const float s_vectorFieldDensityInv = 1.f / s_vectorFieldDensity;
 
 RainScene::RainScene(vector<Particle*>* people, vector<Particle*>* hands, AudioManager* audioManager, ImageManager* imageManager)
 : IScene(people, hands, audioManager, imageManager)
@@ -30,8 +29,8 @@ RainScene::RainScene(vector<Particle*>* people, vector<Particle*>* hands, AudioM
 	float particleSize = sqrt(scale) / 50.f;
 
 	//create vector field
-	m_rainFieldWidth = ofGetWidth() / s_vectorFieldDensity;
-	m_rainFieldHeight = ofGetHeight() / s_vectorFieldDensity;
+	m_rainFieldWidth = ofGetWidth() / (s_vectorFieldDensity * pImageManager->getScaleFactor());
+	m_rainFieldHeight = ofGetHeight() / (s_vectorFieldDensity * pImageManager->getScaleFactor());
 	m_rainVectorField = new Particle[m_rainFieldWidth * m_rainFieldHeight];
 	m_rainVectorFieldNorm = m_rainFieldWidth * 0.01f;
 
@@ -42,34 +41,35 @@ RainScene::RainScene(vector<Particle*>* people, vector<Particle*>* hands, AudioM
 		for (int j = 0; j < m_rainFieldHeight; ++j)
 		{
 			int pos = (i*m_rainFieldHeight) + j;
-			m_rainVectorField[pos] = Particle(ofVec3f(i * s_vectorFieldDensity, j * s_vectorFieldDensity));
+			m_rainVectorField[pos] = Particle(ofVec3f(i * (s_vectorFieldDensity * pImageManager->getScaleFactor()), j * (s_vectorFieldDensity * pImageManager->getScaleFactor())));
 			m_rainVectorField[pos].vel = ofVec3f(m_rainVectorFieldNorm, 0.f);
-			m_rainVectorField[pos].maxSpeed = s_vectorFieldDensity * 0.2f;
+			m_rainVectorField[pos].maxSpeed = (s_vectorFieldDensity * pImageManager->getScaleFactor()) * 0.2f;
 		}
 	}
 
-	m_rainImage.loadImage("RainScene/rainDropsWhite.png");
+	m_rainImage = pImageManager->load("RainScene/rainDropsWhite.png");
 
-	m_rainBackground.loadImage("RainScene/City_FINAL.jpg");
-	m_cloudImage.loadImage("RainScene/Clouds_spreadsheet_FINAL.png");
+	m_rainBackground = pImageManager->load("RainScene/City_FINAL.jpg");
+	m_cloudImage = pImageManager->load("RainScene/Clouds_spreadsheet_FINAL.png");
 
-	m_cloudHand.loadImage("RainScene/Hands_Lighter.png");
+	m_cloudHand = pImageManager->load("RainScene/Hands_Lighter.png");
 	rainBackSound = pAudioManager->load("RainScene/Scene4_Background.mp3");
 	rainBackSound->setLoop(true); 
 }
 
 void RainScene::Render()
 {
-	m_rainBackground.draw(0.f, 0.f, ofGetWidth(), ofGetHeight());
+	m_rainBackground->draw(0.f, 0.f, ofGetWidth(), ofGetHeight());
 
 	//draw hands
 	ofSetColor(255);
 	ofFill();
+	float size = 200.f * pImageManager->getScaleFactor();
 	for (vector<Particle*>::iterator h = pHandPositions->begin(); h != pHandPositions->end(); ++h)
 	{
 		ofPushMatrix();
 		//ofTranslate((*h)->pos);
-		m_cloudHand.draw((*h)->pos.x -203/2,(*h)->pos.y-200/2,203,200); 
+		m_cloudHand->draw((*h)->pos.x - size * 0.5f,(*h)->pos.y - size * 0.5f); 
 		//ofCircle(0.f, 0.f, 0.f, 20.f);
 
 #ifdef DEBUG_DRAW
@@ -121,7 +121,7 @@ void RainScene::Render()
 			ofSetColor(ofMap(abs(angle), 0, PI, 230, 176), 
 					230, 
 					ofMap(abs(angle), 0, PI, 230, 255));
-			m_rainImage.draw(-15.f, 7.5f, 0.f, 30.f, 15.f);
+			m_rainImage->draw(-15.f, 7.5f, 0.f, 30.f, 15.f);
 		ofPopMatrix();
 	}
 	ofSetColor(255);
@@ -146,8 +146,8 @@ void RainScene::Update(float timeScale)
 		if (distSqrd > 0)
 		{
 			//find closest vector field position
-			int posX = (int)(*h)->pos.x / s_vectorFieldDensity;
-			int posY = (int)(*h)->pos.y / s_vectorFieldDensity;
+			int posX = (int)(*h)->pos.x / (s_vectorFieldDensity * pImageManager->getScaleFactor());
+			int posY = (int)(*h)->pos.y / (s_vectorFieldDensity * pImageManager->getScaleFactor());
 
 			if (posX >= m_rainFieldWidth) posX = m_rainFieldWidth - 1;
 			if (posY >= m_rainFieldHeight) posY = m_rainFieldHeight - 1;
@@ -167,8 +167,8 @@ void RainScene::Update(float timeScale)
 		ofVec3f targetVel = ofVec3f(0.f, 0.f);
 
 		//calculate vector field that's close
-		int fieldX = p->pos.x / s_vectorFieldDensity;
-		int fieldY = p->pos.y / s_vectorFieldDensity;
+		int fieldX = p->pos.x / (s_vectorFieldDensity * pImageManager->getScaleFactor());
+		int fieldY = p->pos.y / (s_vectorFieldDensity * pImageManager->getScaleFactor());
 
 		if (fieldX < 2) fieldX = 2;
 		else if (fieldX > m_rainFieldWidth - 3) fieldX = m_rainFieldWidth - 3;
@@ -251,8 +251,8 @@ void RainScene::convertPeopleVector()
 	for (vector<Particle*>::iterator pOld = pPeople->begin(); pOld != pPeople->end(); ++pOld)
 	{
 		RainCloudParticle* p = new RainCloudParticle((*pOld)->pos);
-		p->m_cloudImage = &m_cloudImage;
-		p->m_size = ofVec2f(m_cloudImage.getWidth()/4, m_cloudImage.getHeight());
+		p->m_cloudImage = m_cloudImage;
+		p->m_size = ofVec2f(m_cloudImage->getWidth()/4, m_cloudImage->getHeight());
 		newPeople.push_back(p);
 	}
 	*pPeople = newPeople;
@@ -260,8 +260,8 @@ void RainScene::convertPeopleVector()
 Particle* RainScene::addParticleOfProperType(ofVec3f _pos)
 {
 	RainCloudParticle* p = new RainCloudParticle(_pos);
-	p->m_cloudImage = &m_cloudImage;
-	p->m_size = ofVec2f(m_cloudImage.getWidth() * 0.25f, m_cloudImage.getHeight());
+	p->m_cloudImage = m_cloudImage;
+	p->m_size = ofVec2f(m_cloudImage->getWidth() * 0.25f, m_cloudImage->getHeight());
 	pPeople->push_back(p);
 	return p;
 }

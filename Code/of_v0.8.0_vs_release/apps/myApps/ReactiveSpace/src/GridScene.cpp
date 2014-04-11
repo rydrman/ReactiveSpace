@@ -74,10 +74,10 @@ GridScene::GridScene(vector<Particle*>* people, vector<Particle*>* hands, AudioM
 	}
 
 	//load resources
-	m_backgroundImage = ofImage();
-	m_backgroundImage.loadImage("GridScene/GridBackground_FINAL.png");
-	m_particleImage = ofImage();
-	m_particleImage.loadImage("GridScene/GridParticle.png");
+	//m_backgroundImage = ofImage();
+	m_backgroundImage = pImageManager->load("GridScene/GridBackground_FINAL.png");
+	//m_particleImage = ofImage();
+	m_particleImage = pImageManager->load("GridScene/GridParticle.png");
 	m_particleShader = ofShader();
 	m_particleShader.load("GridScene/gridParticle");
 	
@@ -88,10 +88,10 @@ GridScene::GridScene(vector<Particle*>* people, vector<Particle*>* hands, AudioM
 void GridScene::Render()
 {
 	ofSetColor(255);
-	m_backgroundImage.draw(0.f, 0.f, 0.f);
+	m_backgroundImage->draw(0.f, 0.f, 0.f);
 
 	m_particleShader.begin();
-	m_particleImage.getTextureReference().bind();
+	m_particleImage->getTextureReference().bind();
 	m_particleVbo.bind();
 	
 	BirdParticle* p;
@@ -138,40 +138,32 @@ void GridScene::Render()
 		ofPopMatrix();
 	}
 	
-	//draw people
+	//draw people and hands
+	float size = 20.f * pImageManager->getScaleFactor();
 	m_particleShader.setUniform4f("uColor", 1.f, 1.f, 1.f, 1.f);
+	//draw people
 	for (vector<Particle*>::iterator p = pPeople->begin(); p != pPeople->end(); ++p)
 	{
 		ofPushMatrix();
 			ofTranslate((*p)->pos);
-			ofScale(20.0, 20.0);
+			ofScale(size, size);
+			glDrawArrays(GL_QUADS, 0, 4);
+		ofPopMatrix();
+	}
+	//draw hands
+	m_particleShader.setUniform4f("uColor", 0.54f, 0.76f, 0.26f, 1.f);
+	for (vector<Particle*>::iterator h = pHandPositions->begin(); h != pHandPositions->end(); ++h)
+	{
+		ofPushMatrix();
+			ofTranslate((*h)->pos);
+			ofScale(size, size);
 			glDrawArrays(GL_QUADS, 0, 4);
 		ofPopMatrix();
 	}
 
-	m_particleImage.getTextureReference().unbind();
+	m_particleImage->getTextureReference().unbind();
 	m_particleVbo.unbind();
 	m_particleShader.end();
-
-	//draw hands
-	
-	ofFill();
-	float size = 20.f * pImageManager->getScaleFactor();
-	for (vector<Particle*>::iterator h = pHandPositions->begin(); h != pHandPositions->end(); ++h)
-	{
-		ofSetColor(122, 193, 66, 255);
-		ofPushMatrix();
-		ofTranslate((*h)->pos);
-		m_particleImage.draw(-20.f, -20.f, 40.f, 40.f); // ofCircle(0.f, 0.f, 0.f, 20.f);
-
-#ifdef DEBUG_DRAW
-		ofSetColor(0, 0, 0, 255);
-		ofFill();
-		ofDrawBitmapString(ofToString((*h)->ID, 0), 0.f, 0.f);
-		ofSetColor(255, 0, 0, 255);
-#endif
-		ofPopMatrix();
-	}
 }
 
 void GridScene::Update(float timeScale)
@@ -295,7 +287,7 @@ void GridScene::Update(float timeScale)
 void GridScene::onUnload()
 {
 	BirdParticle* p;
-	for (int i = (particleUpdateOffset) ? 0 : 1; i < m_numParticles; i+=2)
+	for (int i = 0; i < m_numParticles; i++)
 	{
 		p = &m_particleList[i];
 

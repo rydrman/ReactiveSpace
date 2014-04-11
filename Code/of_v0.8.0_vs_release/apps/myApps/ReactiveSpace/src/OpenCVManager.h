@@ -39,13 +39,15 @@ class OpenCVManager
 	IplImage * m_pyramidOld;
 
 	//vector field
+	float m_fieldDensity;
+	float m_fieldDensityInv;
 	int m_fieldWidth;
 	int m_fieldHeight;
 	Particle* m_vectorField;
 	float m_vectorFieldNorm;
 
 public:
-	OpenCVManager(vector<Particle*>* people, IScene** currentScene);
+	OpenCVManager(vector<Particle*>* people, IScene** currentScene, float renderScale);
 
 	void update(int deltaTime);
 	void debugDraw();

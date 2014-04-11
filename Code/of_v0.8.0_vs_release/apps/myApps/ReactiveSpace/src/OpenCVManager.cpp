@@ -7,11 +7,10 @@ static CvSize s_frameSize = cvSize(160, 120);
 static ofVec2f s_frameSizeInv = ofVec2f(1.f/s_frameSize.width, 1.f/s_frameSize.height);
 static int s_maxFeatures = 50;
 static int s_vectorFieldDensity = 75;
-static float s_vectorFieldDensityInv = 1.f/s_vectorFieldDensity;
 static int s_generationBuffer = 100;
 static int s_maxPeopleParticles = 10;
 
-OpenCVManager::OpenCVManager(vector<Particle*>* people, IScene** currentScene)
+OpenCVManager::OpenCVManager(vector<Particle*>* people, IScene** currentScene, float renderScale)
 {
 	pPeople = people;
 	ppCurrentScene = currentScene;
@@ -39,8 +38,11 @@ OpenCVManager::OpenCVManager(vector<Particle*>* people, IScene** currentScene)
 	learnBG = true;
 	diffThresh = 50;
 
-	m_fieldWidth = ofGetWidth() / s_vectorFieldDensity;
-	m_fieldHeight = ofGetHeight() / s_vectorFieldDensity;
+	m_fieldDensity = s_vectorFieldDensity * renderScale;
+	m_fieldDensityInv = 1.f / m_fieldDensity;
+
+	m_fieldWidth = ofGetWidth() / m_fieldDensity;
+	m_fieldHeight = ofGetHeight() / m_fieldDensity;
 	m_vectorField = new Particle[m_fieldWidth * m_fieldHeight];
 	m_vectorFieldNorm = m_fieldWidth * 0.01f;
 	
@@ -51,9 +53,9 @@ OpenCVManager::OpenCVManager(vector<Particle*>* people, IScene** currentScene)
 		for (int j = 0; j < m_fieldHeight; ++j)
 		{
 			int pos = (i*m_fieldHeight) + j;
-			m_vectorField[pos] = Particle(ofVec3f(i * s_vectorFieldDensity, j * s_vectorFieldDensity));
+			m_vectorField[pos] = Particle(ofVec3f(i * m_fieldDensity, j * m_fieldDensity));
 			m_vectorField[pos].vel = ofVec3f(m_vectorFieldNorm, 0.f);
-			m_vectorField[pos].maxSpeed = s_vectorFieldDensity * 0.3f;
+			m_vectorField[pos].maxSpeed = m_fieldDensity * 0.3f;
 		}
 	}
 
@@ -164,8 +166,8 @@ void OpenCVManager::update(int timeScale)
 						continue;
 
 					//closest field value
-					int posX = (int)m_newImgFeatures[i].x * s_frameSizeInv.x * ofGetWidth() * s_vectorFieldDensityInv;
-					int posY = (int)(s_frameSize.height - m_newImgFeatures[i].y) * s_frameSizeInv.y * ofGetHeight() * s_vectorFieldDensityInv;
+					int posX = (int)m_newImgFeatures[i].x * s_frameSizeInv.x * ofGetWidth() * m_fieldDensityInv;
+					int posY = (int)(s_frameSize.height - m_newImgFeatures[i].y) * s_frameSizeInv.y * ofGetHeight() * m_fieldDensityInv;
 
 					if (posX >= m_fieldWidth) continue;
 					if (posY >= m_fieldHeight) continue;
@@ -225,7 +227,7 @@ void OpenCVManager::update(int timeScale)
 			ofVec2f(x, y)
 			);
 		
-		p->maxSpeed = s_vectorFieldDensity * 0.1f;
+		p->maxSpeed = m_fieldDensity * 0.1f;
 		p->vel = ofVec2f( (x < 0) ? 0.5f : -0.5f, 0.f);
 		crowdLastGenerated = stepTime;
 	}
@@ -237,8 +239,8 @@ void OpenCVManager::update(int timeScale)
 
 		//calculate vector field that's close
 
-		int fieldX = (*p)->pos.x / s_vectorFieldDensity;
-		int fieldY = (*p)->pos.y / s_vectorFieldDensity;
+		int fieldX = (*p)->pos.x / m_fieldDensity;
+		int fieldY = (*p)->pos.y / m_fieldDensity;
 
 		if (fieldX < 2) fieldX = 2;
 		else if (fieldX > m_fieldWidth - 3) fieldX = m_fieldWidth - 3;
@@ -310,7 +312,7 @@ void OpenCVManager::debugDraw()
 
 	ofPushMatrix();
 		ofSetColor(180, 0, 0, 255);
-		ofTranslate(s_vectorFieldDensity / 2, s_vectorFieldDensity / 2);
+		ofTranslate(m_fieldDensity / 2, m_fieldDensity / 2);
 
 		Particle* vector;
 		for (int i = 0; i < m_fieldWidth; ++i)
