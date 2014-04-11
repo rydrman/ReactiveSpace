@@ -22,7 +22,7 @@ const ofVec2f s_quadTexCoords[] = {
 	ofVec2f(0.0f, 1.0f)
 };
 
-GridScene::GridScene(vector<Particle*>* people, vector<Particle*>* hands, AudioManager* audioManager, imageManager* imageManager)
+GridScene::GridScene(vector<Particle*>* people, vector<Particle*>* hands, AudioManager* audioManager, ImageManager* imageManager)
 : IScene(people, hands, audioManager, imageManager)
 {
 
@@ -88,7 +88,7 @@ GridScene::GridScene(vector<Particle*>* people, vector<Particle*>* hands, AudioM
 void GridScene::Render()
 {
 	ofSetColor(255);
-	m_backgroundImage.draw(0.f, 0.f, 0.f, ofGetWidth(), ofGetHeight());
+	m_backgroundImage.draw(0.f, 0.f, 0.f);
 
 	m_particleShader.begin();
 	m_particleImage.getTextureReference().bind();
@@ -154,10 +154,12 @@ void GridScene::Render()
 	m_particleShader.end();
 
 	//draw hands
-	ofSetColor(122, 193, 66, 255);
+	
 	ofFill();
+	float size = 20.f * pImageManager->getScaleFactor();
 	for (vector<Particle*>::iterator h = pHandPositions->begin(); h != pHandPositions->end(); ++h)
 	{
+		ofSetColor(122, 193, 66, 255);
 		ofPushMatrix();
 		ofTranslate((*h)->pos);
 		m_particleImage.draw(-20.f, -20.f, 40.f, 40.f); // ofCircle(0.f, 0.f, 0.f, 20.f);

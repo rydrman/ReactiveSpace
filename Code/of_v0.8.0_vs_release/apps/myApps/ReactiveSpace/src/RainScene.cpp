@@ -7,7 +7,7 @@ static const ofVec2f s_gravity = ofVec2f(0.0, 2.f);
 static const int s_vectorFieldDensity = 75;
 static const float s_vectorFieldDensityInv = 1.f / s_vectorFieldDensity;
 
-RainScene::RainScene(vector<Particle*>* people, vector<Particle*>* hands, AudioManager* audioManager, imageManager* imageManager)
+RainScene::RainScene(vector<Particle*>* people, vector<Particle*>* hands, AudioManager* audioManager, ImageManager* imageManager)
 : IScene(people, hands, audioManager, imageManager)
 {
 

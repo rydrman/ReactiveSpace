@@ -5,7 +5,7 @@
 
 static CvSize s_frameSize = cvSize(160, 120);
 static ofVec2f s_frameSizeInv = ofVec2f(1.f/s_frameSize.width, 1.f/s_frameSize.height);
-static int s_maxFeatures = 200;
+static int s_maxFeatures = 50;
 static int s_vectorFieldDensity = 75;
 static float s_vectorFieldDensityInv = 1.f/s_vectorFieldDensity;
 static int s_generationBuffer = 100;
@@ -207,7 +207,7 @@ void OpenCVManager::update(int timeScale)
 	//////////////////////
 
 	//generate a person each 5 seconds
-	if (stepTime - crowdLastGenerated > 2000
+	if (stepTime - crowdLastGenerated > 800
 		&& pPeople->size() < s_maxPeopleParticles)
 	{
 		float y = ofGetWindowHeight();

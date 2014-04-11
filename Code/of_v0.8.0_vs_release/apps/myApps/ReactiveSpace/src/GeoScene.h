@@ -31,7 +31,7 @@ class GeoScene : public IScene
 	int screenH;
 public:
 	ofImage* explosionSprite;
-	GeoScene(vector<Particle*>* people, vector<Particle*>* hands, AudioManager* audioManager, imageManager* imageManager);
+	GeoScene(vector<Particle*>* people, vector<Particle*>* hands, AudioManager* audioManager, ImageManager* imageManager);
 	
 	virtual void Render();
 	virtual void Update(float timeScale);

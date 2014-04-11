@@ -7,16 +7,20 @@ struct imageObj
 {
 	ofImage* image;
 	string filename;
+	bool scaled;
 };
 
-class imageManager
+class ImageManager
 {
 	vector<imageObj> m_loadedImages;
+	float scaleFactor;
+
 public:
-	imageManager();
+	ImageManager();
 
-	ofImage* load(string filename);
+	ofImage* load(string filename, bool scale = true);
+	float getScaleFactor();
 
-	~imageManager();
+	~ImageManager();
 };
 

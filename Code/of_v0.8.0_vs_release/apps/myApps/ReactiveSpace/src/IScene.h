@@ -13,9 +13,9 @@ public:
 	vector<Particle*>* pPeople;
 	vector<Particle*>* pHandPositions;
 	AudioManager* pAudioManager;
-	imageManager* pImageManager;
+	ImageManager* pImageManager;
 
-	IScene(vector<Particle*>* people, vector<Particle*>* hands, AudioManager* audioManager, imageManager* imageManager);
+	IScene(vector<Particle*>* people, vector<Particle*>* hands, AudioManager* audioManager, ImageManager* imageManager);
 	
 	virtual void Render() = 0;
 	virtual void Update(float timeScale) = 0;

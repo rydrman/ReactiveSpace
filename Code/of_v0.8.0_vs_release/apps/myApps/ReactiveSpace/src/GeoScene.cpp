@@ -2,7 +2,7 @@
 
 static int s_radius = 100;
 static int s_numConfetti = 1000;
-GeoScene::GeoScene(vector<Particle*>* people, vector<Particle*>* hands, AudioManager* audioManager, imageManager* imageManager)
+GeoScene::GeoScene(vector<Particle*>* people, vector<Particle*>* hands, AudioManager* audioManager, ImageManager* imageManager)
 : IScene(people, hands, audioManager, imageManager)
 {
 	screenW = ofGetWidth();
@@ -12,7 +12,7 @@ GeoScene::GeoScene(vector<Particle*>* people, vector<Particle*>* hands, AudioMan
 	geoHands = pImageManager->load("GeoScene/Hand_White.png");
 	m_gradients = pImageManager->load("GeoScene/gradients.png");
 	explosionSprite = pImageManager->load("GeoScene/Particles2.png");
-	m_confettiImg = pImageManager->load("GeoScene/Particles.png");
+	m_confettiImg = pImageManager->load("GeoScene/Particles.png", false);
 
 	geoBackSound = pAudioManager->load("GeoScene/Scene3Back.mp3");
 	geoBackSound->setLoop(true); 

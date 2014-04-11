@@ -1,6 +1,6 @@
 #include "IScene.h"
 
-IScene::IScene(vector<Particle*>* people, vector<Particle*>* hands, AudioManager* audioManager, imageManager* imageManager)
+IScene::IScene(vector<Particle*>* people, vector<Particle*>* hands, AudioManager* audioManager, ImageManager* imageManager)
 {
 	pPeople = people;
 	pHandPositions = hands;

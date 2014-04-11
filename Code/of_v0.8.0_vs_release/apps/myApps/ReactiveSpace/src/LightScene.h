@@ -33,7 +33,7 @@ class LightScene : public IScene
 	vector<HexagonParticle*> m_connectedParticles;
 	
 public:
-	LightScene(vector<Particle*>* people, vector<Particle*>* hands, AudioManager* audioManager, imageManager* imageManager);
+	LightScene(vector<Particle*>* people, vector<Particle*>* hands, AudioManager* audioManager, ImageManager* imageManager);
 
 	void Render();
 	void Update(float timeScale);
