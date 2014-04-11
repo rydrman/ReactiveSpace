@@ -74,10 +74,10 @@ GridScene::GridScene(vector<Particle*>* people, vector<Particle*>* hands, AudioM
 	}
 
 	//load resources
-	m_backgroundImage = ofImage();
-	m_backgroundImage.loadImage("GridScene/GridBackground_FINAL.png");
-	m_particleImage = ofImage();
-	m_particleImage.loadImage("GridScene/GridParticle.png");
+	//m_backgroundImage = ofImage();
+	m_backgroundImage = pImageManager->load("GridScene/GridBackground_FINAL.png");
+	//m_particleImage = ofImage();
+	m_particleImage = pImageManager->load("GridScene/GridParticle.png");
 	m_particleShader = ofShader();
 	m_particleShader.load("GridScene/gridParticle");
 	
@@ -88,10 +88,10 @@ GridScene::GridScene(vector<Particle*>* people, vector<Particle*>* hands, AudioM
 void GridScene::Render()
 {
 	ofSetColor(255);
-	m_backgroundImage.draw(0.f, 0.f, 0.f, ofGetWidth(), ofGetHeight());
+	m_backgroundImage->draw(0.f, 0.f, 0.f, ofGetWidth(), ofGetHeight());
 
 	m_particleShader.begin();
-	m_particleImage.getTextureReference().bind();
+	m_particleImage->getTextureReference().bind();
 	m_particleVbo.bind();
 	
 	BirdParticle* p;
@@ -149,7 +149,7 @@ void GridScene::Render()
 		ofPopMatrix();
 	}
 
-	m_particleImage.getTextureReference().unbind();
+	m_particleImage->getTextureReference().unbind();
 	m_particleVbo.unbind();
 	m_particleShader.end();
 
@@ -160,7 +160,7 @@ void GridScene::Render()
 	{
 		ofPushMatrix();
 		ofTranslate((*h)->pos);
-		m_particleImage.draw(-20.f, -20.f, 40.f, 40.f); // ofCircle(0.f, 0.f, 0.f, 20.f);
+		m_particleImage->draw(-20.f, -20.f, 40.f, 40.f); // ofCircle(0.f, 0.f, 0.f, 20.f);
 
 #ifdef DEBUG_DRAW
 		ofSetColor(0, 0, 0, 255);

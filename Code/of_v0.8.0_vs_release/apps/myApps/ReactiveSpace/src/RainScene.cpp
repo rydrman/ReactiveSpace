@@ -48,19 +48,19 @@ RainScene::RainScene(vector<Particle*>* people, vector<Particle*>* hands, AudioM
 		}
 	}
 
-	m_rainImage.loadImage("RainScene/rainDropsWhite.png");
+	m_rainImage = pImageManager->load("RainScene/rainDropsWhite.png");
 
-	m_rainBackground.loadImage("RainScene/City_FINAL.jpg");
-	m_cloudImage.loadImage("RainScene/Clouds_spreadsheet_FINAL.png");
+	m_rainBackground = pImageManager->load("RainScene/City_FINAL.jpg");
+	m_cloudImage = pImageManager->load("RainScene/Clouds_spreadsheet_FINAL.png");
 
-	m_cloudHand.loadImage("RainScene/Hands_Lighter.png");
+	m_cloudHand = pImageManager->load("RainScene/Hands_Lighter.png");
 	rainBackSound = pAudioManager->load("RainScene/Scene4_Background.mp3");
 	rainBackSound->setLoop(true); 
 }
 
 void RainScene::Render()
 {
-	m_rainBackground.draw(0.f, 0.f, ofGetWidth(), ofGetHeight());
+	m_rainBackground->draw(0.f, 0.f, ofGetWidth(), ofGetHeight());
 
 	//draw hands
 	ofSetColor(255);
@@ -69,7 +69,7 @@ void RainScene::Render()
 	{
 		ofPushMatrix();
 		//ofTranslate((*h)->pos);
-		m_cloudHand.draw((*h)->pos.x -203/2,(*h)->pos.y-200/2,203,200); 
+		m_cloudHand->draw((*h)->pos.x -203/2,(*h)->pos.y-200/2,203,200); 
 		//ofCircle(0.f, 0.f, 0.f, 20.f);
 
 #ifdef DEBUG_DRAW
@@ -121,7 +121,7 @@ void RainScene::Render()
 			ofSetColor(ofMap(abs(angle), 0, PI, 230, 176), 
 					230, 
 					ofMap(abs(angle), 0, PI, 230, 255));
-			m_rainImage.draw(-15.f, 7.5f, 0.f, 30.f, 15.f);
+			m_rainImage->draw(-15.f, 7.5f, 0.f, 30.f, 15.f);
 		ofPopMatrix();
 	}
 	ofSetColor(255);
@@ -251,8 +251,8 @@ void RainScene::convertPeopleVector()
 	for (vector<Particle*>::iterator pOld = pPeople->begin(); pOld != pPeople->end(); ++pOld)
 	{
 		RainCloudParticle* p = new RainCloudParticle((*pOld)->pos);
-		p->m_cloudImage = &m_cloudImage;
-		p->m_size = ofVec2f(m_cloudImage.getWidth()/4, m_cloudImage.getHeight());
+		p->m_cloudImage = m_cloudImage;
+		p->m_size = ofVec2f(m_cloudImage->getWidth()/4, m_cloudImage->getHeight());
 		newPeople.push_back(p);
 	}
 	*pPeople = newPeople;
@@ -260,8 +260,8 @@ void RainScene::convertPeopleVector()
 Particle* RainScene::addParticleOfProperType(ofVec3f _pos)
 {
 	RainCloudParticle* p = new RainCloudParticle(_pos);
-	p->m_cloudImage = &m_cloudImage;
-	p->m_size = ofVec2f(m_cloudImage.getWidth() * 0.25f, m_cloudImage.getHeight());
+	p->m_cloudImage = m_cloudImage;
+	p->m_size = ofVec2f(m_cloudImage->getWidth() * 0.25f, m_cloudImage->getHeight());
 	pPeople->push_back(p);
 	return p;
 }
