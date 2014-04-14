@@ -3,10 +3,10 @@
 
 ImageManager::ImageManager()
 {
-	if (ofGetWidth() != 1920 || ofGetHeight() != 1080)
+	if (ofGetWindowWidth() != 1920 || ofGetWindowHeight() != 1080)
 	{
-		float scaleX = ofGetWidth() / 1920.f;
-		float scaleY = ofGetHeight() / 1080.f;
+		float scaleX = ofGetWindowWidth() / 1920.f;
+		float scaleY = ofGetWindowHeight() / 1080.f;
 		scaleFactor = (scaleX > scaleY) ? scaleX : scaleY;
 	}
 	else

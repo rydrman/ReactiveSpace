@@ -5,7 +5,7 @@
 
 static CvSize s_frameSize = cvSize(160, 120);
 static ofVec2f s_frameSizeInv = ofVec2f(1.f/s_frameSize.width, 1.f/s_frameSize.height);
-static int s_maxFeatures = 50;
+static int s_maxFeatures = 100;
 static int s_vectorFieldDensity = 75;
 static int s_generationBuffer = 100;
 static int s_maxPeopleParticles = 10;
@@ -41,8 +41,8 @@ OpenCVManager::OpenCVManager(vector<Particle*>* people, IScene** currentScene, f
 	m_fieldDensity = s_vectorFieldDensity * renderScale;
 	m_fieldDensityInv = 1.f / m_fieldDensity;
 
-	m_fieldWidth = ofGetWidth() / m_fieldDensity;
-	m_fieldHeight = ofGetHeight() / m_fieldDensity;
+	m_fieldWidth = ofGetWindowWidth() / m_fieldDensity;
+	m_fieldHeight = ofGetWindowHeight() / m_fieldDensity;
 	m_vectorField = new Particle[m_fieldWidth * m_fieldHeight];
 	m_vectorFieldNorm = m_fieldWidth * 0.01f;
 	
@@ -156,8 +156,8 @@ void OpenCVManager::update(int timeScale)
 					if (!m_pointFound[i]
 						|| m_newImgFeatures[i].x < 0
 						|| m_newImgFeatures[i].y < 0
-						|| m_newImgFeatures[i].x >= ofGetWidth()
-						|| m_newImgFeatures[i].y >= ofGetHeight())
+						|| m_newImgFeatures[i].x >= ofGetWindowWidth()
+						|| m_newImgFeatures[i].y >= ofGetWindowHeight())
 						continue;
 
 					deltaVec = ofVec2f(m_newImgFeatures[i].x - m_oldImgFeatures[i].x, m_newImgFeatures[i].y - m_oldImgFeatures[i].y);
@@ -166,8 +166,8 @@ void OpenCVManager::update(int timeScale)
 						continue;
 
 					//closest field value
-					int posX = (int)m_newImgFeatures[i].x * s_frameSizeInv.x * ofGetWidth() * m_fieldDensityInv;
-					int posY = (int)(s_frameSize.height - m_newImgFeatures[i].y) * s_frameSizeInv.y * ofGetHeight() * m_fieldDensityInv;
+					int posX = (int)m_newImgFeatures[i].x * s_frameSizeInv.x * ofGetWindowWidth() * m_fieldDensityInv;
+					int posY = (int)(s_frameSize.height - m_newImgFeatures[i].y) * s_frameSizeInv.y * ofGetWindowHeight() * m_fieldDensityInv;
 
 					if (posX >= m_fieldWidth) continue;
 					if (posY >= m_fieldHeight) continue;
@@ -217,11 +217,11 @@ void OpenCVManager::update(int timeScale)
 
 		float x = -s_generationBuffer;
 		if (ofRandom(1) > 0.5)
-			x = ofGetWidth() + s_generationBuffer;
+			x = ofGetWindowWidth() + s_generationBuffer;
 
 		//debug
-		x = ofRandom(ofGetWidth());
-		y = ofRandom(ofGetHeight());
+		x = ofRandom(ofGetWindowWidth());
+		y = ofRandom(ofGetWindowHeight());
 
 		Particle* p = ppCurrentScene[0]->addParticleOfProperType(
 			ofVec2f(x, y)
@@ -263,7 +263,7 @@ void OpenCVManager::update(int timeScale)
 
 		if ((*p)->pos.x > ofGetWindowWidth() + s_generationBuffer*1.5f
 			|| (*p)->pos.x < -s_generationBuffer * 1.5f
-			|| (*p)->pos.y > ofGetHeight() + s_generationBuffer * 1.5f
+			|| (*p)->pos.y > ofGetWindowHeight() + s_generationBuffer * 1.5f
 			|| (*p)->pos.y < -s_generationBuffer * 1.5f)
 		{
 			p = pPeople->erase(p);
@@ -284,7 +284,7 @@ void OpenCVManager::debugDraw()
 	ofSetColor(255);
 	ofSetLineWidth(2);
 	ofPushMatrix();
-		ofTranslate(ofGetWidth() - m_curImg.getWidth() * 2.f, 0);
+		ofTranslate(ofGetWindowWidth() - m_curImg.getWidth() * 2.f, 0);
 		ofScale(2.f, 2.f);
 
 		m_curImg.mirror(false, true);

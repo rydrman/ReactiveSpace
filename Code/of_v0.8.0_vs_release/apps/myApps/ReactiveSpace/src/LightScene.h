@@ -22,9 +22,9 @@ class LightScene : public IScene
 	//for fog
 	ofShader m_fogShader;
 	ofVbo m_fogVbo;
-	ofImage m_fogImg;
+	ofImage* m_fogImg;
 	ofFbo m_fogAlphaMask;
-	ofImage m_lightAlpha;
+	ofImage* m_lightAlpha;
 
 	//for hands
 	ofImage* m_handsImage;

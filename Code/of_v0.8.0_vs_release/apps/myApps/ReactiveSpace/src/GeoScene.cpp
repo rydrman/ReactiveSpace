@@ -5,8 +5,8 @@ static int s_numConfetti = 1000;
 GeoScene::GeoScene(vector<Particle*>* people, vector<Particle*>* hands, AudioManager* audioManager, ImageManager* imageManager)
 : IScene(people, hands, audioManager, imageManager)
 {
-	screenW = ofGetWidth();
-	screenH = ofGetHeight();	
+	screenW = ofGetWindowWidth();
+	screenH = ofGetWindowHeight();	
 
 	geoBack = pImageManager->load("GeoScene/Geometric_Background.jpg");
 	geoHands = pImageManager->load("GeoScene/Hand_White.png");
