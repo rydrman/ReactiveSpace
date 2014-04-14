@@ -10,12 +10,6 @@ const ofVec2f s_fogTexCoords[] = {
 LightScene::LightScene(vector<Particle*>* people, vector<Particle*>* hands, AudioManager* audioManager, ImageManager* imageManager)
 : IScene(people, hands, audioManager, imageManager)
 {
-	const ofVec2f fogVerts[] = {
-		ofVec2f(0.f, 0.f),
-		ofVec2f(ofGetWidth(), 0.f),
-		ofVec2f(ofGetWidth(), ofGetHeight()),
-		ofVec2f(0.0f, ofGetHeight())
-	};
 
 	pBackgroundSound = pAudioManager->load("LightScene/Scene2_Background2.mp3");
 	pBackgroundSound->setLoop(true);
@@ -41,9 +35,17 @@ LightScene::LightScene(vector<Particle*>* people, vector<Particle*>* hands, Audi
 
 	//for fog
 	m_fogShader.load("LightScene/fogShader");
-	m_fogImg.loadImage("LightScene/fog.png");
-	m_lightAlpha.loadImage("LightScene/lightAlpha.png");
-	m_fogAlphaMask.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
+	m_fogImg = pImageManager->load("LightScene/fog.png");
+	m_lightAlpha = pImageManager->load("LightScene/lightAlpha.png");
+
+	m_fogAlphaMask.allocate(ofGetWindowWidth(), ofGetWindowHeight(), GL_RGBA);
+
+	const ofVec2f fogVerts[] = {
+		ofVec2f(0.f, 0.f),
+		ofVec2f(ofGetWindowWidth(), 0.f),
+		ofVec2f(ofGetWindowWidth(), ofGetWindowHeight()),
+		ofVec2f(0.0f, ofGetWindowHeight())
+	};
 
 	m_fogVbo.disableVAOs();
 	m_fogVbo.setVertexData(fogVerts, 4, GL_STATIC_DRAW);
@@ -51,7 +53,7 @@ LightScene::LightScene(vector<Particle*>* people, vector<Particle*>* hands, Audi
 	
 	//for lights
 	m_lights = vector<Light>();
-	for(int i = 0; i < ofGetWidth(); i += m_lightImg->width * 0.7){
+	for(int i = 0; i < ofGetWindowWidth(); i += m_lightImg->width * 0.7){
 		Light l = Light();
 		l.x = i;
 		m_lights.push_back(l);	
@@ -133,10 +135,10 @@ void LightScene::Render()
 	m_fogAlphaMask.begin();
 	//ofEnableAlphaBlending();
 	ofClear(0, 0);
-	int dif = m_lightAlpha.width * 0.5;
+	int dif = m_lightAlpha->width * 0.5;
 	for (vector<Light>::iterator l = m_lights.begin(); l != m_lights.end(); ++l){
 		if (l->isOn() == true){
-			m_lightAlpha.draw(l->x - dif, 0, 0);
+			m_lightAlpha->draw(l->x - dif, 0, 0);
 		}
 	}
 	m_fogAlphaMask.end();
@@ -144,13 +146,13 @@ void LightScene::Render()
 	//draw fog with shader
 	m_fogShader.begin();
 
-	m_fogImg.getTextureReference().bind();
+	m_fogImg->getTextureReference().bind();
 	m_fogShader.setUniformTexture("imageMask", m_fogAlphaMask.getTextureReference(), 1);
 	m_fogVbo.bind();
 
 	glDrawArrays(GL_QUADS, 0, 4);
 
-	m_fogImg.getTextureReference().unbind();
+	m_fogImg->getTextureReference().unbind();
 	m_fogVbo.unbind();
 
 	m_fogShader.end();
@@ -285,9 +287,9 @@ void LightScene::onLoad()
 
 	const ofVec2f fogVerts[] = {
 		ofVec2f(0.f, 0.f),
-		ofVec2f(ofGetWidth(), 0.f),
-		ofVec2f(ofGetWidth(), ofGetHeight()),
-		ofVec2f(0.0f, ofGetHeight())
+		ofVec2f(ofGetWindowWidth(), 0.f),
+		ofVec2f(ofGetWindowWidth(), ofGetWindowHeight()),
+		ofVec2f(0.0f, ofGetWindowHeight())
 	};
 
 	m_fogVbo.setVertexData(fogVerts, 4, GL_STATIC_DRAW);

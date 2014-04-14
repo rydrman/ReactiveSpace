@@ -19,7 +19,7 @@ GeoParticle::GeoParticle(ofVec3f _pos, ofSoundPlayer* explosionSound)
 	pExplosionSound = explosionSound;
 
 	//get a random radius
-	GeoSize = ofRandom(ofGetWidth() * 0.05, ofGetWidth() * 0.1);
+	GeoSize = ofRandom(ofGetWindowWidth() * 0.05, ofGetWindowWidth() * 0.1);
 
 	//choose random gradient
 	m_gradNum = floor(ofRandom(0, 6));

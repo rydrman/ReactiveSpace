@@ -26,8 +26,8 @@ GridScene::GridScene(vector<Particle*>* people, vector<Particle*>* hands, AudioM
 : IScene(people, hands, audioManager, imageManager)
 {
 
-	int screenHeight = ofGetHeight();
-	int screenWidth = ofGetWidth();
+	int screenHeight = ofGetWindowHeight();
+	int screenWidth = ofGetWindowWidth();
 	float scale = screenHeight * screenWidth;
 	float particleSize = sqrt(scale) / 30.f;
 	m_particleSize = particleSize * 0.4;
@@ -257,8 +257,8 @@ void GridScene::Update(float timeScale)
 		p->mood = ofClamp(p->mood, 0.f, 1.f);
 
 		//reverse speed if at edge of screen
-		int screenW = ofGetWidth();
-		int screenH = ofGetHeight();
+		int screenW = ofGetWindowWidth();
+		int screenH = ofGetWindowHeight();
 		if (p->pos.x > screenW)
 		{
 			p->pos.x = screenW;

@@ -10,8 +10,8 @@ RainScene::RainScene(vector<Particle*>* people, vector<Particle*>* hands, AudioM
 : IScene(people, hands, audioManager, imageManager)
 {
 
-	int screenW = ofGetWidth();
-	int screenH = ofGetHeight();
+	int screenW = ofGetWindowWidth();
+	int screenH = ofGetWindowHeight();
 	whichStart = 0;
 	m_createNextInCloud = false;
 	m_createNextInCloudNum = 0;
@@ -29,8 +29,8 @@ RainScene::RainScene(vector<Particle*>* people, vector<Particle*>* hands, AudioM
 	float particleSize = sqrt(scale) / 50.f;
 
 	//create vector field
-	m_rainFieldWidth = ofGetWidth() / (s_vectorFieldDensity * pImageManager->getScaleFactor());
-	m_rainFieldHeight = ofGetHeight() / (s_vectorFieldDensity * pImageManager->getScaleFactor());
+	m_rainFieldWidth = ofGetWindowWidth() / (s_vectorFieldDensity * pImageManager->getScaleFactor());
+	m_rainFieldHeight = ofGetWindowHeight() / (s_vectorFieldDensity * pImageManager->getScaleFactor());
 	m_rainVectorField = new Particle[m_rainFieldWidth * m_rainFieldHeight];
 	m_rainVectorFieldNorm = m_rainFieldWidth * 0.01f;
 
@@ -59,7 +59,7 @@ RainScene::RainScene(vector<Particle*>* people, vector<Particle*>* hands, AudioM
 
 void RainScene::Render()
 {
-	m_rainBackground->draw(0.f, 0.f, ofGetWidth(), ofGetHeight());
+	m_rainBackground->draw(0.f, 0.f, ofGetWindowWidth(), ofGetWindowHeight());
 
 	//draw hands
 	ofSetColor(255);
@@ -137,7 +137,7 @@ void RainScene::Render()
 
 void RainScene::Update(float timeScale)
 {
-	int screenH = ofGetHeight();
+	int screenH = ofGetWindowHeight();
 
 	//update vector field values from hands
 	for (vector<Particle*>::iterator h = pHandPositions->begin(); h != pHandPositions->end(); ++h)
@@ -236,8 +236,8 @@ void RainScene::addNewRainDrop(Particle* p)
 	else
 	{
 		
-		p->pos = ofVec2f(ofRandom(0.f, ofGetWidth()), 0.f);
-		p->vel = ofVec2f(0.f, ofRandom(ofGetHeight() * 0.005f, ofGetHeight() * 0.01f));
+		p->pos = ofVec2f(ofRandom(0.f, ofGetWindowWidth()), 0.f);
+		p->vel = ofVec2f(0.f, ofRandom(ofGetWindowHeight() * 0.005f, ofGetWindowHeight() * 0.01f));
 	whichStart = 0;
 	}
 	whichStart++;

@@ -24,7 +24,7 @@ void RainCloudParticle::draw()
 void RainCloudParticle::addRainDrop(Particle* p)
 {
 	p->pos = ofVec3f(pos.x + m_size.x * 0.1f + ofRandom(m_size.x * 0.6f), pos.y, 0.f);
-	p->vel = ofVec2f(0.f, ofRandom(ofGetHeight() * 0.005f, ofGetHeight() * 0.01f));
+	p->vel = ofVec2f(0.f, ofRandom(ofGetWindowHeight() * 0.005f, ofGetWindowHeight() * 0.01f));
 }
 
 RainCloudParticle::~RainCloudParticle(void)
